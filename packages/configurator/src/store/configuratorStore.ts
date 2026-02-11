@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings } from '@care/shared-types'
+import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
   'about', 'manifesto', 'schedule', 'process', 'instructors',
@@ -39,6 +40,7 @@ interface ConfiguratorState {
   layouts: Record<string, string>
   sections: Record<string, boolean>
   sectionOrder: string[]
+  sectionItems: Record<string, number>
   mediaUploads: Record<string, MediaUpload>
 
   // Actions
@@ -62,6 +64,8 @@ interface ConfiguratorState {
   toggleSection: (sectionId: string) => void
   setSectionOrder: (order: string[]) => void
   moveSectionOrder: (fromIndex: number, toIndex: number) => void
+  addSectionItem: (sectionId: string) => void
+  removeSectionItem: (sectionId: string) => void
   setMediaUpload: (slotId: string, file: File) => void
   clearMediaUpload: (slotId: string) => void
   showToast: (message: string) => void
@@ -90,6 +94,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   layouts: {},
   sections: { ...DEFAULT_SECTIONS },
   sectionOrder: [...DEFAULT_SECTION_ORDER],
+  sectionItems: Object.fromEntries(
+    Object.entries(SECTION_ITEM_CONFIGS).map(([k, v]) => [k, v.default])
+  ),
   mediaUploads: {},
 
   // --- Actions ---
@@ -202,6 +209,24 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       return { sectionOrder: order }
     }),
 
+  addSectionItem: (sectionId) =>
+    set(s => {
+      const cfg = SECTION_ITEM_CONFIGS[sectionId]
+      if (!cfg) return s
+      const current = s.sectionItems[sectionId] ?? cfg.default
+      if (current >= cfg.max) return s
+      return { sectionItems: { ...s.sectionItems, [sectionId]: current + 1 } }
+    }),
+
+  removeSectionItem: (sectionId) =>
+    set(s => {
+      const cfg = SECTION_ITEM_CONFIGS[sectionId]
+      if (!cfg) return s
+      const current = s.sectionItems[sectionId] ?? cfg.default
+      if (current <= cfg.min) return s
+      return { sectionItems: { ...s.sectionItems, [sectionId]: current - 1 } }
+    }),
+
   setMediaUpload: (slotId, file) => {
     const prev = get().mediaUploads[slotId]
     if (prev) URL.revokeObjectURL(prev.blobUrl)
@@ -271,6 +296,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       layouts: s.layouts,
       sections: s.sections,
       sectionOrder: s.sectionOrder,
+      sectionItems: s.sectionItems,
       mediaUploads: Object.fromEntries(
         Object.entries(s.mediaUploads).map(([k, v]) => [
           k,

@@ -703,8 +703,8 @@
 
 .cfg-section-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0;
   padding: 8px 10px;
   border-radius: var(--cfg-radius-sm);
   transition: background var(--cfg-transition), opacity 0.2s ease;
@@ -714,6 +714,13 @@
 
 .cfg-section-row:hover {
   background: var(--cfg-highlight);
+}
+
+.cfg-section-row__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .cfg-section-row--dragging {
@@ -759,6 +766,51 @@
   font-size: 8px;
   color: var(--cfg-text-muted);
   padding-right: 10px;
+}
+
+/* Item count controls */
+.cfg-section-row__items {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding-left: 20px;
+}
+
+.cfg-item-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--cfg-border);
+  background: transparent;
+  color: var(--cfg-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--cfg-transition);
+  flex-shrink: 0;
+}
+
+.cfg-item-btn:hover:not(:disabled) {
+  color: var(--cfg-text);
+  border-color: var(--cfg-border-hover);
+  background: var(--cfg-highlight);
+}
+
+.cfg-item-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.cfg-item-count {
+  font-family: var(--cfg-font);
+  font-size: 10px;
+  color: var(--cfg-text-muted);
+  letter-spacing: 0.02em;
+  min-width: 60px;
+  text-align: center;
 }
 
 .cfg-toggle {

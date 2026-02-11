@@ -1,17 +1,21 @@
 import { MediaSlot } from '../components/MediaSlot'
+import { useConfiguratorStore } from '@care/configurator'
 
 export function StudioTour() {
+  const count = useConfiguratorStore(s => s.sectionItems.studioTour ?? 4)
+  const items = Array.from({ length: count }, (_, i) => i + 1)
+
   return (
     <section className="studio-tour" id="studioTour">
       <div className="studio-tour__inner">
         <p className="section-eyebrow reveal">Our Space</p>
         <h2 className="section-heading reveal">The Studio</h2>
         <div className="studio-tour__grid">
-          {[1, 2, 3, 4].map(i => (
+          {items.map(i => (
             <MediaSlot
               key={i}
               slotId={`tour-img-${i}`}
-              className={`studio-tour__img reveal reveal-delay-${i}`}
+              className={`studio-tour__img reveal reveal-delay-${Math.min(i, 4)}`}
               aspectRatio={i <= 2 ? '16/10' : '1/1'}
             >
               <div className="studio-tour__placeholder">

@@ -1,12 +1,14 @@
 import { CopyElement } from '../components/CopyElement'
 import { MediaSlot } from '../components/MediaSlot'
+import { useConfiguratorStore } from '@care/configurator'
 
 interface InstructorsProps {
   layout: string
 }
 
 export function Instructors({ layout }: InstructorsProps) {
-  const team = [1, 2, 3, 4]
+  const count = useConfiguratorStore(s => s.sectionItems.instructors ?? 4)
+  const team = Array.from({ length: count }, (_, i) => i + 1)
 
   return (
     <section className={`instructors instructors--${layout}`} id="instructors">
@@ -16,7 +18,7 @@ export function Instructors({ layout }: InstructorsProps) {
         <CopyElement id="instructors-subtitle" as="p" className="instructors__subtitle reveal" />
         <div className="instructors__grid">
           {team.map(i => (
-            <div className={`instructors__card reveal reveal-delay-${i}`} key={i}>
+            <div className={`instructors__card reveal reveal-delay-${Math.min(i, 4)}`} key={i}>
               <MediaSlot slotId={`instructor-${i}-photo`} className="instructors__photo" aspectRatio="1/1">
                 <div className="instructors__photo-placeholder">
                   <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.3">

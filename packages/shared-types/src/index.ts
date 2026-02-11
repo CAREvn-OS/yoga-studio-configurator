@@ -86,3 +86,25 @@ export interface LayoutGroup {
 }
 
 export type CopyAlternatives = Record<string, string[]>
+
+export interface SectionItemConfig {
+  min: number
+  max: number
+  default: number
+  label: string
+  labelPlural: string
+  hasImage: boolean
+}
+
+export const SECTION_ITEM_CONFIGS: Record<string, SectionItemConfig> = {
+  schedule: { min: 1, max: 12, default: 6, label: 'class', labelPlural: 'classes', hasImage: true },
+  instructors: { min: 1, max: 8, default: 4, label: 'instructor', labelPlural: 'instructors', hasImage: true },
+  pricing: { min: 1, max: 6, default: 4, label: 'tier', labelPlural: 'tiers', hasImage: false },
+  testimonials: { min: 1, max: 8, default: 3, label: 'testimonial', labelPlural: 'testimonials', hasImage: true },
+  faq: { min: 1, max: 10, default: 4, label: 'question', labelPlural: 'questions', hasImage: false },
+  process: { min: 2, max: 8, default: 4, label: 'step', labelPlural: 'steps', hasImage: false },
+  studioTour: { min: 1, max: 8, default: 4, label: 'image', labelPlural: 'images', hasImage: true },
+  events: { min: 1, max: 6, default: 3, label: 'event', labelPlural: 'events', hasImage: true },
+  blog: { min: 1, max: 6, default: 3, label: 'post', labelPlural: 'posts', hasImage: true },
+  partners: { min: 1, max: 10, default: 5, label: 'partner', labelPlural: 'partners', hasImage: true },
+}

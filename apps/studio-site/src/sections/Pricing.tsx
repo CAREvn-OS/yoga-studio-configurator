@@ -1,11 +1,13 @@
 import { CopyElement } from '../components/CopyElement'
+import { useConfiguratorStore } from '@care/configurator'
 
 interface PricingProps {
   layout: string
 }
 
 export function Pricing({ layout }: PricingProps) {
-  const tiers = [1, 2, 3, 4]
+  const count = useConfiguratorStore(s => s.sectionItems.pricing ?? 4)
+  const tiers = Array.from({ length: count }, (_, i) => i + 1)
 
   return (
     <section className={`pricing pricing--${layout}`} id="pricing">
@@ -15,7 +17,7 @@ export function Pricing({ layout }: PricingProps) {
         <CopyElement id="pricing-subtitle" as="p" className="pricing__subtitle reveal" />
         <div className="pricing__grid">
           {tiers.map(i => (
-            <div className={`pricing__card reveal reveal-delay-${i} ${i === 3 ? 'pricing__card--featured' : ''}`} key={i}>
+            <div className={`pricing__card reveal reveal-delay-${Math.min(i, 4)} ${i === 3 ? 'pricing__card--featured' : ''}`} key={i}>
               <CopyElement id={`pricing-${i}-name`} as="h3" className="pricing__name" />
               <div className="pricing__price-wrap">
                 <CopyElement id={`pricing-${i}-price`} as="span" className="pricing__price" />

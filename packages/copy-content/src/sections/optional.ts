@@ -238,6 +238,58 @@ export const optionalCopy: CopyAlternatives = {
     'Deepen Your Practice',
   ],
 
+  'event-1-title': [
+    'Weekend Yoga Retreat',
+    'Relax & Restore Weekend',
+    'The Signature Retreat',
+    'Community Retreat Day',
+    'Performance Retreat',
+    'Stillness & Movement Retreat',
+  ],
+  'event-1-date': ['March 15–16', 'This March', 'March 15–16', 'March 15', 'March 15–16', 'March 15–16'],
+  'event-1-desc': [
+    'A two-day immersive retreat combining yoga, Pilates, and mindfulness practices in a stunning countryside setting.',
+    'Leave the city behind for a weekend of gentle movement, good food, and meaningful connection.',
+    'An exclusive two-day wellness experience at a private estate, featuring world-class instructors and gourmet nutrition.',
+    'A weekend open to all levels — come alone, bring a friend, or join as a family. Everyone is welcome.',
+    'Two days of focused training, recovery protocols, and nutrition workshops to accelerate your progress.',
+    'A weekend dedicated to reconnecting with your breath, your body, and the natural world around you.',
+  ],
+  'event-2-title': [
+    'Handstand Workshop',
+    'Flip Your Perspective',
+    'The Art of Inversion',
+    'Upside-Down Together',
+    'Inversion Masterclass',
+    'Finding Balance Inverted',
+  ],
+  'event-2-date': ['April 5', 'Early April', 'April 5', 'April 5', 'April 5', 'April 5'],
+  'event-2-desc': [
+    'Build the strength and technique for confident handstands with progressive drills and expert spotting.',
+    'Always wanted to nail a handstand? This playful workshop breaks it down step by step — falls and giggles included.',
+    'A masterclass in inversion technique led by our senior instructor, covering alignment, entry methods, and holds.',
+    'From wall-supported to freestanding — learn together, spot each other, and celebrate every small victory.',
+    'Systematic drills targeting shoulder stability, core activation, and balance. Leave with a clear training protocol.',
+    'Explore the world upside down. Inversions shift our perspective — physically, energetically, and spiritually.',
+  ],
+  'event-3-title': [
+    'Beginners\u2019 Series',
+    'Start Here',
+    'Foundations Programme',
+    'Welcome Series',
+    'Fundamentals Course',
+    'First Steps on the Mat',
+  ],
+  'event-3-date': ['Monthly', 'Every month', 'Monthly intake', 'Monthly', 'Monthly', 'Monthly'],
+  'event-3-desc': [
+    'A four-week introductory series covering the essential postures and principles of yoga and Pilates.',
+    'Four weeks of friendly, no-pressure classes designed to build your confidence from scratch.',
+    'A structured four-week programme introducing the foundational elements of our signature methodology.',
+    'A welcoming four-week series for anyone new to movement — zero experience required, just curiosity.',
+    'A structured four-week course covering fundamental movement patterns, breathing technique, and progressive loading.',
+    'Four weeks to build a foundation of awareness. Learn to listen to your body and honour its wisdom.',
+  ],
+
   /* ================================================================== */
   /*  BLOG                                                               */
   /* ================================================================== */
@@ -260,6 +312,58 @@ export const optionalCopy: CopyAlternatives = {
     'Musings from the Mat',
   ],
 
+  'blog-1-tag': ['Wellness', 'Wellness', 'Wellness', 'Wellness', 'Science', 'Mindfulness'],
+  'blog-1-title': [
+    'Benefits of a Regular Practice',
+    'Why Showing Up Matters More Than Being Perfect',
+    'The Science of Consistent Movement',
+    'How Community Makes You Healthier',
+    'The Evidence for Daily Movement',
+    'Finding Stillness in Motion',
+  ],
+  'blog-1-excerpt': [
+    'Discover how consistency transforms both body and mind over time.',
+    'Spoiler: it\u2019s not about touching your toes. It\u2019s about what you learn on the way down.',
+    'Emerging research confirms what practitioners have known for centuries.',
+    'When we move together, we heal together. Here\u2019s the science behind it.',
+    'A review of peer-reviewed studies on the benefits of regular yoga and Pilates practice.',
+    'The paradox of effort and surrender, and why your mat is the best teacher you\u2019ll ever have.',
+  ],
+  'blog-2-tag': ['Technique', 'Beginners', 'Method', 'Beginners', 'Technique', 'Practice'],
+  'blog-2-title': [
+    'Pilates for Beginners',
+    'Your First Reformer Class: What to Expect',
+    'The Reformer: A Complete Guide',
+    'New to Pilates? Start Here.',
+    'Mastering the Fundamentals',
+    'Beginner\u2019s Mind, Beginner\u2019s Body',
+  ],
+  'blog-2-excerpt': [
+    'Everything you need to know before your first reformer class.',
+    'It\u2019s way less intimidating than it looks. Here\u2019s what actually happens.',
+    'From spring tension to footwork: a definitive guide to the reformer apparatus.',
+    'A friendly, jargon-free guide to getting started with Pilates.',
+    'The essential movement patterns every practitioner should master first.',
+    'Approaching the reformer with curiosity and openness transforms the experience.',
+  ],
+  'blog-3-tag': ['Lifestyle', 'Daily Life', 'Living', 'Community', 'Recovery', 'Awareness'],
+  'blog-3-title': [
+    'Mindful Movement Daily',
+    'Tiny Habits for a More Mindful Day',
+    'Elevating Your Daily Routine',
+    'Movement Beyond the Studio',
+    'Active Recovery Strategies',
+    'Carrying Your Practice into the World',
+  ],
+  'blog-3-excerpt': [
+    'Simple ways to bring awareness into your everyday routine.',
+    'Five small things you can do right now to feel a little bit better. No mat required.',
+    'How to extend the benefits of your studio practice into every aspect of daily life.',
+    'How our members bring mindful movement into their workplaces, homes, and friendships.',
+    'Evidence-based recovery methods to maximise the benefits of your training sessions.',
+    'Your practice doesn\u2019t end when you roll up your mat. Here\u2019s how to keep it alive.',
+  ],
+
   /* ================================================================== */
   /*  PARTNERS                                                           */
   /* ================================================================== */
@@ -272,4 +376,10 @@ export const optionalCopy: CopyAlternatives = {
     'Performance Partners',
     'Aligned Partners',
   ],
+
+  'partner-1-name': ['Balanced Body', 'Balanced Body', 'Balanced Body', 'Balanced Body', 'Balanced Body', 'Balanced Body'],
+  'partner-2-name': ['Lululemon', 'Lululemon', 'Lululemon', 'Lululemon', 'Lululemon', 'Lululemon'],
+  'partner-3-name': ['Manduka', 'Manduka', 'Manduka', 'Manduka', 'Manduka', 'Manduka'],
+  'partner-4-name': ['Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga'],
+  'partner-5-name': ['STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates'],
 };

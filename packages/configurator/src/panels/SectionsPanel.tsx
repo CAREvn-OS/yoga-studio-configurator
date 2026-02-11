@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { useConfiguratorStore } from '../store/configuratorStore'
+import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const SECTION_LABELS: Record<string, string> = {
   about: 'About',
@@ -25,8 +26,11 @@ const OPTIONAL_SECTIONS = new Set([
 export function SectionsPanel() {
   const sectionOrder = useConfiguratorStore(s => s.sectionOrder)
   const sections = useConfiguratorStore(s => s.sections)
+  const sectionItems = useConfiguratorStore(s => s.sectionItems)
   const toggleSection = useConfiguratorStore(s => s.toggleSection)
   const moveSectionOrder = useConfiguratorStore(s => s.moveSectionOrder)
+  const addSectionItem = useConfiguratorStore(s => s.addSectionItem)
+  const removeSectionItem = useConfiguratorStore(s => s.removeSectionItem)
 
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
@@ -36,7 +40,6 @@ export function SectionsPanel() {
     setDragIndex(index)
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('text/plain', String(index))
-    // Make drag image semi-transparent
     if (e.currentTarget instanceof HTMLElement) {
       e.currentTarget.style.opacity = '0.5'
     }
@@ -90,6 +93,8 @@ export function SectionsPanel() {
         const isOn = isOptional ? (sections[id] ?? true) : true
         const isDragging = dragIndex === index
         const isDragOver = dragOverIndex === index && dragIndex !== index
+        const itemCfg = SECTION_ITEM_CONFIGS[id]
+        const itemCount = itemCfg ? (sectionItems[id] ?? itemCfg.default) : null
 
         return (
           <div
@@ -103,33 +108,63 @@ export function SectionsPanel() {
             onDragOver={handleDragOver}
             onDrop={e => handleDrop(e, index)}
           >
-            <div className="cfg-section-row__left">
-              <span className="cfg-section-row__grip" title="Drag to reorder">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
-                  <circle cx="9" cy="6" r="1.5" />
-                  <circle cx="15" cy="6" r="1.5" />
-                  <circle cx="9" cy="12" r="1.5" />
-                  <circle cx="15" cy="12" r="1.5" />
-                  <circle cx="9" cy="18" r="1.5" />
-                  <circle cx="15" cy="18" r="1.5" />
-                </svg>
-              </span>
-              <span className={`cfg-section-row__label ${!isOn ? 'cfg-section-row__label--off' : ''}`}>
-                {SECTION_LABELS[id] ?? id}
-              </span>
+            <div className="cfg-section-row__top">
+              <div className="cfg-section-row__left">
+                <span className="cfg-section-row__grip" title="Drag to reorder">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                    <circle cx="9" cy="6" r="1.5" />
+                    <circle cx="15" cy="6" r="1.5" />
+                    <circle cx="9" cy="12" r="1.5" />
+                    <circle cx="15" cy="12" r="1.5" />
+                    <circle cx="9" cy="18" r="1.5" />
+                    <circle cx="15" cy="18" r="1.5" />
+                  </svg>
+                </span>
+                <span className={`cfg-section-row__label ${!isOn ? 'cfg-section-row__label--off' : ''}`}>
+                  {SECTION_LABELS[id] ?? id}
+                </span>
+              </div>
+              {isOptional ? (
+                <button
+                  className={`cfg-toggle ${isOn ? 'cfg-toggle--on' : ''}`}
+                  onClick={() => toggleSection(id)}
+                  role="switch"
+                  aria-checked={isOn}
+                  aria-label={`Toggle ${SECTION_LABELS[id]}`}
+                >
+                  <span className="cfg-toggle__knob" />
+                </button>
+              ) : (
+                <span className="cfg-section-row__always" title="Always visible">●</span>
+              )}
             </div>
-            {isOptional ? (
-              <button
-                className={`cfg-toggle ${isOn ? 'cfg-toggle--on' : ''}`}
-                onClick={() => toggleSection(id)}
-                role="switch"
-                aria-checked={isOn}
-                aria-label={`Toggle ${SECTION_LABELS[id]}`}
-              >
-                <span className="cfg-toggle__knob" />
-              </button>
-            ) : (
-              <span className="cfg-section-row__always" title="Always visible">●</span>
+            {itemCfg && isOn && (
+              <div className="cfg-section-row__items">
+                <button
+                  className="cfg-item-btn"
+                  onClick={() => removeSectionItem(id)}
+                  disabled={itemCount! <= itemCfg.min}
+                  aria-label={`Remove ${itemCfg.label}`}
+                >
+                  <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2.5" fill="none">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <span className="cfg-item-count">
+                  {itemCount} {itemCount === 1 ? itemCfg.label : itemCfg.labelPlural}
+                </span>
+                <button
+                  className="cfg-item-btn"
+                  onClick={() => addSectionItem(id)}
+                  disabled={itemCount! >= itemCfg.max}
+                  aria-label={`Add ${itemCfg.label}`}
+                >
+                  <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2.5" fill="none">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
         )

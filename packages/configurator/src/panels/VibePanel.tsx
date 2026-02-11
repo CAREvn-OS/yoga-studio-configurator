@@ -1,12 +1,12 @@
 import { useConfiguratorStore } from '../store/configuratorStore'
 
 const VIBE_PRESETS: { id: string; name: string; desc: string; icon: string }[] = [
-  { id: 'zen', name: 'Zen', desc: 'Gentle fades, soft parallax, minimal motion', icon: '🧘' },
-  { id: 'pulse', name: 'Pulse', desc: 'Rhythmic reveals, breathing scale effects', icon: '💓' },
-  { id: 'bloom', name: 'Bloom', desc: 'Organic growth, petal unfurl, gentle sway', icon: '🌸' },
-  { id: 'drift', name: 'Drift', desc: 'Smooth glides, floating elements, slow easing', icon: '🌊' },
-  { id: 'spark', name: 'Spark', desc: 'Quick snaps, playful bounces, energetic pops', icon: '✨' },
-  { id: 'wave', name: 'Wave', desc: 'Staggered cascades, ripple effects, fluid motion', icon: '🌀' },
+  { id: 'zen', name: 'Zen', desc: 'Soft & calm', icon: '🧘' },
+  { id: 'pulse', name: 'Pulse', desc: 'Breathe & grow', icon: '💓' },
+  { id: 'bloom', name: 'Bloom', desc: 'Open & unfold', icon: '🌸' },
+  { id: 'drift', name: 'Drift', desc: 'Float & glide', icon: '🌊' },
+  { id: 'spark', name: 'Spark', desc: 'Pop & bounce', icon: '✨' },
+  { id: 'wave', name: 'Wave', desc: 'Flow & ripple', icon: '🌀' },
 ]
 
 function getIntensityLabel(value: number): string {
@@ -17,14 +17,6 @@ function getIntensityLabel(value: number): string {
   return 'Wild'
 }
 
-function getIntensityHint(value: number): string {
-  if (value <= 20) return 'Subtle fades & micro-transitions only'
-  if (value <= 40) return 'Soft entrance animations & hover effects'
-  if (value <= 60) return 'Scroll-triggered reveals & parallax layers'
-  if (value <= 80) return 'Staggered animations & motion depth'
-  return 'Full kinetic expression — use sparingly'
-}
-
 export function VibePanel() {
   const vibe = useConfiguratorStore(s => s.vibe)
   const setVibe = useConfiguratorStore(s => s.setVibe)
@@ -32,7 +24,7 @@ export function VibePanel() {
   return (
     <div className="cfg-vibe-panel">
       <p className="cfg-copy-instructions" style={{ marginBottom: 12 }}>
-        Choose a <strong>motion personality</strong> for your site. Slide right for more experimental animation.
+        Choose a <strong>motion personality</strong> for your site. Slide right for more.
       </p>
 
       <div className="cfg-vibe-presets">
@@ -69,7 +61,6 @@ export function VibePanel() {
           <span>Safe</span>
           <span>Experimental</span>
         </div>
-        <p className="cfg-vibe-intensity__hint">{getIntensityHint(vibe.intensity)}</p>
       </div>
     </div>
   )
