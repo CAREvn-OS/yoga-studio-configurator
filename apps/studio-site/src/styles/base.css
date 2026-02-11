@@ -232,13 +232,13 @@ body::after {
   .nav--scrolled { padding: 0.9rem 2rem; }
 }
 @media (max-width: 650px) {
-  .nav { padding: 1.2rem 1.5rem; }
+  .nav { padding: 1.2rem 1.5rem; position: fixed; top: 0; z-index: 100; }
   .nav--scrolled { padding: 0.8rem 1.5rem; }
   .nav__links {
     display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: color-mix(in srgb, var(--color-cream) 98%, transparent);
+    inset: 0;
+    background: var(--color-cream);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
@@ -249,6 +249,6 @@ body::after {
   }
   .nav__links--open { display: flex; }
   .nav__links a { font-size: 0.85rem; letter-spacing: 0.18em; color: var(--color-warm); }
-  .nav__toggle { display: block; z-index: 101; }
+  .nav__toggle { display: block; z-index: 101; position: relative; }
   .back-to-top { display: none; }
 }

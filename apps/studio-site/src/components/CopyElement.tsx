@@ -17,7 +17,6 @@ export function CopyElement({ id, as: Tag = 'span', className }: CopyElementProp
   const styleMode = useConfiguratorStore(s => s.styleMode)
   const activeStyleElement = useConfiguratorStore(s => s.activeStyleElement)
   const setActiveStyleElement = useConfiguratorStore(s => s.setActiveStyleElement)
-  const elementStyle = useConfiguratorStore(s => s.elementStyles[id])
 
   const alternatives = allCopy[id]
   if (!alternatives) return null
@@ -41,10 +40,8 @@ export function CopyElement({ id, as: Tag = 'span', className }: CopyElementProp
     }
   }
 
-  // Build inline styles from element overrides
-  const inlineStyle: React.CSSProperties = {}
-  if (elementStyle?.color) inlineStyle.color = elementStyle.color
-  if (elementStyle?.fontWeight) inlineStyle.fontWeight = elementStyle.fontWeight
+  // Styles are now applied globally via <style> tag in StyleModeHandler (App.tsx)
+  // so we don't need inline styles here — just data-style-id
 
   return (
     <Tag
@@ -52,7 +49,6 @@ export function CopyElement({ id, as: Tag = 'span', className }: CopyElementProp
       data-style-id={id}
       className={`${className ?? ''} ${copyMode ? 'copy-target' : ''} ${isCopyActive ? 'copy-active' : ''} ${styleMode ? 'style-target' : ''} ${isStyleActive ? 'style-active' : ''}`}
       onClick={handleClick}
-      style={inlineStyle}
       dangerouslySetInnerHTML={{ __html: displayText }}
     />
   )

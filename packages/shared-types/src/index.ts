@@ -48,9 +48,21 @@ export interface MediaUpload {
   remoteUrl?: string
 }
 
+// Per-element style overrides
 export interface ElementStyle {
   color?: string
+  gradient?: string // CSS gradient string, e.g. "linear-gradient(135deg, #ff6b6b, #9b59b6)"
   fontWeight?: number
+  animation?: string // animation preset ID
+}
+
+// Typography category system
+export type TypoCategory = 'headers' | 'subheaders' | 'body' | 'buttons' | 'captions'
+
+export interface TypoCategorySettings {
+  fontFamily?: string // style ID from FONT_STYLES
+  fontWeight?: number
+  color?: string
 }
 
 export type PanelId = 'theme' | 'copy' | 'style' | 'layout' | 'sections' | 'effects' | 'typography' | 'share'

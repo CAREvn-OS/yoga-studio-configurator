@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors, ElementStyle } from '@care/shared-types'
+import type { PanelId, MediaUpload, ThemeColors, ElementStyle, TypoCategory, TypoCategorySettings } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
   'about', 'manifesto', 'schedule', 'process', 'instructors',
@@ -34,6 +34,7 @@ interface ConfiguratorState {
   theme: string
   colorOverrides: Partial<ThemeColors> | null
   typographyOverride: string | null
+  typoCategorySettings: Partial<Record<TypoCategory, TypoCategorySettings>>
   copySelections: Record<string, number>
   customCopy: Record<string, string>
   layouts: Record<string, string>
@@ -55,6 +56,9 @@ interface ConfiguratorState {
   setColorOverride: (key: string, value: string) => void
   clearColorOverrides: () => void
   setTypographyOverride: (id: string | null) => void
+  setTypoCategorySetting: (category: TypoCategory, setting: Partial<TypoCategorySettings>) => void
+  clearTypoCategorySetting: (category: TypoCategory) => void
+  clearAllTypoCategorySettings: () => void
   setCopySelection: (elementId: string, index: number) => void
   setCustomCopy: (elementId: string, text: string) => void
   clearCustomCopy: (elementId: string) => void
@@ -89,6 +93,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   theme: 'warm-earth',
   colorOverrides: null,
   typographyOverride: null,
+  typoCategorySettings: {},
   copySelections: {},
   customCopy: {},
   layouts: {},
@@ -160,6 +165,24 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   setTypographyOverride: (id) =>
     set({ typographyOverride: id }),
 
+  setTypoCategorySetting: (category, setting) =>
+    set(s => ({
+      typoCategorySettings: {
+        ...s.typoCategorySettings,
+        [category]: { ...(s.typoCategorySettings[category] ?? {}), ...setting },
+      },
+    })),
+
+  clearTypoCategorySetting: (category) =>
+    set(s => {
+      const next = { ...s.typoCategorySettings }
+      delete next[category]
+      return { typoCategorySettings: next }
+    }),
+
+  clearAllTypoCategorySettings: () =>
+    set({ typoCategorySettings: {} }),
+
   setCopySelection: (elementId, index) =>
     set(s => ({
       copySelections: { ...s.copySelections, [elementId]: index },
@@ -216,13 +239,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
         [slotId]: { blobUrl, name: file.name, type: file.type, size: file.size },
       },
     }))
-    // Async remote upload (fire-and-forget)
     const uploadRemote = async () => {
       try {
         const { uploadMedia } = await import('@care/media-storage')
         const result = await uploadMedia(file, slotId)
         if (!result) return
-        // Stale check — user may have changed the slot since
         const current = get().mediaUploads[slotId]
         if (!current || current.blobUrl !== blobUrl) return
         set(s => ({
@@ -232,7 +253,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
           },
         }))
       } catch {
-        // Supabase unavailable — blob URL continues to work
+        // Supabase unavailable
       }
     }
     uploadRemote()
@@ -285,6 +306,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       theme: s.theme,
       colorOverrides: s.colorOverrides,
       typographyOverride: s.typographyOverride,
+      typoCategorySettings: s.typoCategorySettings,
       copySelections: s.copySelections,
       customCopy: s.customCopy,
       layouts: s.layouts,
