@@ -57,6 +57,7 @@ export function ThemePanel() {
   const setGradientSettings = useConfiguratorStore(s => s.setGradientSettings)
   const logoScale = useConfiguratorStore(s => s.logoScale)
   const setLogoScale = useConfiguratorStore(s => s.setLogoScale)
+  const logoNaturalWidth = useConfiguratorStore(s => s.logoNaturalWidth)
 
   const [stylizeExpanded, setStylizeExpanded] = useState(false)
   const logoInputRef = useRef<HTMLInputElement>(null)
@@ -117,7 +118,7 @@ export function ThemePanel() {
                 <input
                   type="range"
                   min="30"
-                  max="300"
+                  max={logoNaturalWidth}
                   step="5"
                   value={logoScale}
                   onChange={e => setLogoScale(Number(e.target.value))}

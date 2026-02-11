@@ -45,6 +45,7 @@ interface ConfiguratorState {
   imageDisplayStyle: ImageDisplayStyle
   logoUpload: MediaUpload | null
   logoScale: number
+  logoNaturalWidth: number
   mediaSlotSettings: Record<string, MediaSlotSettings>
   borderRadiusOverride: number | null
   buttonStyle: ButtonStyle
@@ -81,6 +82,7 @@ interface ConfiguratorState {
   setLogoUpload: (file: File) => void
   clearLogoUpload: () => void
   setLogoScale: (scale: number) => void
+  setMediaUploadResponsiveUrls: (slotId: string, urls: { mobile: string; tablet: string; desktop: string }) => void
   setMediaSlotSetting: (slotId: string, settings: Partial<MediaSlotSettings>) => void
   clearMediaSlotSetting: (slotId: string) => void
   setBorderRadiusOverride: (value: number | null) => void
@@ -123,6 +125,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   imageDisplayStyle: 'none' as ImageDisplayStyle,
   logoUpload: null,
   logoScale: 180,
+  logoNaturalWidth: 300,
   mediaSlotSettings: {},
   borderRadiusOverride: null,
   buttonStyle: 'rounded' as ButtonStyle,
@@ -313,6 +316,16 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     set({
       logoUpload: { blobUrl, name: file.name, type: file.type, size: file.size },
     })
+    // Detect natural width for dynamic slider max
+    const img = new Image()
+    img.onload = () => {
+      const naturalW = img.naturalWidth
+      set(s => ({
+        logoNaturalWidth: naturalW,
+        logoScale: Math.min(s.logoScale, naturalW),
+      }))
+    }
+    img.src = blobUrl
     const uploadRemote = async () => {
       try {
         const { uploadMedia } = await import('@care/media-storage')
@@ -340,11 +353,19 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
           .catch(() => {})
       }
     }
-    set({ logoUpload: null })
+    set({ logoUpload: null, logoNaturalWidth: 300 })
   },
 
   setLogoScale: (scale) =>
     set({ logoScale: scale }),
+
+  setMediaUploadResponsiveUrls: (slotId, urls) =>
+    set(s => ({
+      mediaUploads: {
+        ...s.mediaUploads,
+        [slotId]: { ...s.mediaUploads[slotId], responsiveUrls: urls },
+      },
+    })),
 
   setMediaSlotSetting: (slotId, settings) =>
     set(s => ({
@@ -460,6 +481,15 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.logoUpload && config.logoUpload.remoteUrl) {
       const l = config.logoUpload
       updates.logoUpload = { blobUrl: l.remoteUrl, name: l.name, type: l.type, size: l.size, remotePath: l.remotePath, remoteUrl: l.remoteUrl }
+      // Detect natural width from remote logo
+      const img = new Image()
+      img.onload = () => {
+        set(s => ({
+          logoNaturalWidth: img.naturalWidth,
+          logoScale: Math.min(s.logoScale, img.naturalWidth),
+        }))
+      }
+      img.src = l.remoteUrl
     }
     set(updates)
   },

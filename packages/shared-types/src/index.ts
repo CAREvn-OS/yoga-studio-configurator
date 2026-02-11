@@ -47,6 +47,7 @@ export interface MediaUpload {
   size: number
   remotePath?: string
   remoteUrl?: string
+  responsiveUrls?: { mobile: string; tablet: string; desktop: string }
 }
 
 // Typography category system
@@ -65,6 +66,7 @@ export interface MediaSlotSettings {
   displayStyle: ImageDisplayStyle
   aspectRatio?: string
   objectPosition?: string
+  imageScale?: number
 }
 
 export type ButtonStyle = 'rounded' | 'sharp' | 'pill'

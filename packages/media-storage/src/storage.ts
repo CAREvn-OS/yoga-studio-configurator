@@ -43,6 +43,34 @@ export async function uploadMedia(
 }
 
 /**
+ * Upload a Blob (e.g. processed WebP variant) to Supabase Storage.
+ * Returns the remote path and public URL, or null if Supabase is unavailable.
+ */
+export async function uploadBlob(
+  blob: Blob,
+  path: string
+): Promise<{ path: string; url: string } | null> {
+  const client = getClient()
+  if (!client) return null
+
+  const { error } = await client.storage
+    .from(STORAGE_BUCKET)
+    .upload(path, blob, {
+      contentType: blob.type || 'image/webp',
+      cacheControl: '3600',
+      upsert: true,
+    })
+
+  if (error) {
+    console.warn('[media-storage] Blob upload failed:', error.message)
+    return null
+  }
+
+  const { data } = client.storage.from(STORAGE_BUCKET).getPublicUrl(path)
+  return { path, url: data.publicUrl }
+}
+
+/**
  * Delete a media file from Supabase Storage.
  */
 export async function deleteMedia(path: string): Promise<void> {

@@ -47,9 +47,27 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
   const displayStyle = slotSettings?.displayStyle ?? 'none'
   const styleClass = media && displayStyle !== 'none' ? `media-slot--${displayStyle}` : ''
 
-  // Per-slot aspect ratio and object position
+  // Per-slot aspect ratio, object position, and zoom
   const slotAspect = slotSettings?.aspectRatio ?? aspectRatio
   const slotPosition = slotSettings?.objectPosition
+  const imageScale = slotSettings?.imageScale ?? 1
+
+  // Build image style with position + zoom
+  const imgStyle: React.CSSProperties = {}
+  if (slotPosition) imgStyle.objectPosition = slotPosition
+  if (imageScale !== 1) {
+    imgStyle.transform = `scale(${imageScale})`
+    imgStyle.transformOrigin = slotPosition ?? 'center'
+  }
+
+  // Responsive srcSet if optimized
+  const hasResponsive = media?.responsiveUrls
+  const srcSetStr = hasResponsive
+    ? `${media.responsiveUrls!.mobile} 480w, ${media.responsiveUrls!.tablet} 768w, ${media.responsiveUrls!.desktop} 1200w`
+    : undefined
+  const sizesStr = hasResponsive
+    ? '(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px'
+    : undefined
 
   return (
     <div
@@ -63,9 +81,11 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
           {type === 'image' ? (
             <img
               src={displayUrl}
+              srcSet={srcSetStr}
+              sizes={sizesStr}
               alt={media.name}
               className="media-slot__img"
-              style={slotPosition ? { objectPosition: slotPosition } : undefined}
+              style={Object.keys(imgStyle).length > 0 ? imgStyle : undefined}
             />
           ) : (
             <video src={displayUrl} className="media-slot__video" controls />

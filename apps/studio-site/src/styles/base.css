@@ -272,10 +272,13 @@ body.preview-mode .media-slot--uploadable:hover { outline: none; }
 @media (max-width: 900px) {
   .nav { padding: 1.4rem 2rem; }
   .nav--scrolled { padding: 0.9rem 2rem; }
+  .nav__links { gap: 2rem; }
+  .nav__cta { padding: 0.5rem 1rem !important; }
 }
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   .nav { padding: 1.2rem 1.5rem; position: fixed; top: 0; z-index: 100; }
   .nav--scrolled { padding: 0.8rem 1.5rem; }
+  .nav__logo-img { max-height: 30px; }
   .nav__links {
     display: none;
     position: fixed;
