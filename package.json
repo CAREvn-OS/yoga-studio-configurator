@@ -1,0 +1,13 @@
+{
+  "name": "yoga-studio-configurator",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @care/studio-site dev",
+    "build": "pnpm --filter @care/studio-site build",
+    "preview": "pnpm --filter @care/studio-site preview",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

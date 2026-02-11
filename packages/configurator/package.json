@@ -1,0 +1,15 @@
+{
+  "name": "@care/configurator",
+  "private": true,
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@care/shared-types": "workspace:*",
+    "@care/theme-engine": "workspace:*",
+    "@care/copy-content": "workspace:*",
+    "zustand": "^4.5.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@care/configurator": ["../../packages/configurator/src"],
+      "@care/configurator/*": ["../../packages/configurator/src/*"],
+      "@care/theme-engine": ["../../packages/theme-engine/src"],
+      "@care/theme-engine/*": ["../../packages/theme-engine/src/*"],
+      "@care/copy-content": ["../../packages/copy-content/src"],
+      "@care/copy-content/*": ["../../packages/copy-content/src/*"],
+      "@care/shared-types": ["../../packages/shared-types/src"],
+      "@care/shared-types/*": ["../../packages/shared-types/src/*"]
+    }
+  },
+  "include": ["src", "../../packages/*/src"]
+}

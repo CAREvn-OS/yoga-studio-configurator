@@ -1,0 +1,29 @@
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===== ANIMATION VARIANTS ===== */
+body.anim-none .reveal { opacity: 1; transform: none; transition: none; }
+body.anim-subtle .reveal { transition-duration: 0.5s; }
+body.anim-dramatic .reveal { transform: translateY(50px); transition-duration: 1.2s; }
+body.anim-slide .reveal { transform: translateX(-40px); transition-duration: 0.8s; }
+body.anim-slide .reveal.visible { transform: translateX(0); }
+
+/* ===== SECTION PREVIEWING ===== */
+@keyframes sectionPulse {
+  0% { box-shadow: inset 0 0 0 0 transparent; }
+  40% { box-shadow: inset 0 0 0 2px var(--color-accent); }
+  100% { box-shadow: inset 0 0 0 0 transparent; }
+}
+.section-previewing { animation: sectionPulse 1.2s ease-out; }
+
+/* ===== FADE KEYFRAMES ===== */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

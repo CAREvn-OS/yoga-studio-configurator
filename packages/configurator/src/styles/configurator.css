@@ -1,0 +1,1002 @@
+/* ===================================================================
+   Configurator Overlay UI
+   Glass-morphism dark panels floating over the studio website.
+   =================================================================== */
+
+:root {
+  --cfg-bg: rgba(18, 18, 22, 0.82);
+  --cfg-bg-solid: rgba(18, 18, 22, 0.94);
+  --cfg-border: rgba(255, 255, 255, 0.08);
+  --cfg-border-hover: rgba(255, 255, 255, 0.16);
+  --cfg-text: rgba(255, 255, 255, 0.88);
+  --cfg-text-dim: rgba(255, 255, 255, 0.50);
+  --cfg-text-muted: rgba(255, 255, 255, 0.32);
+  --cfg-accent: rgba(255, 255, 255, 0.95);
+  --cfg-highlight: rgba(255, 255, 255, 0.06);
+  --cfg-highlight-hover: rgba(255, 255, 255, 0.10);
+  --cfg-active: rgba(255, 255, 255, 0.14);
+  --cfg-radius: 12px;
+  --cfg-radius-sm: 8px;
+  --cfg-blur: 24px;
+  --cfg-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+  --cfg-transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --cfg-font: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  --cfg-z: 99990;
+}
+
+
+/* ---------------------------------------------------------------
+   Pill (toggle button)
+   --------------------------------------------------------------- */
+
+.cfg-pill {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: var(--cfg-z);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--cfg-bg);
+  backdrop-filter: blur(var(--cfg-blur));
+  -webkit-backdrop-filter: blur(var(--cfg-blur));
+  border: 1px solid var(--cfg-border);
+  box-shadow: var(--cfg-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--cfg-transition), transform var(--cfg-transition), background var(--cfg-transition);
+  color: var(--cfg-text);
+  padding: 0;
+  outline: none;
+  font-family: var(--cfg-font);
+}
+
+.cfg-pill:hover,
+.cfg-pill:focus-visible {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.cfg-pill--open {
+  opacity: 1;
+  background: var(--cfg-bg-solid);
+}
+
+.cfg-pill svg {
+  width: 17px;
+  height: 17px;
+  transition: transform var(--cfg-transition);
+}
+
+.cfg-pill--open svg {
+  transform: rotate(90deg);
+}
+
+
+/* ---------------------------------------------------------------
+   Dock (horizontal icon row)
+   --------------------------------------------------------------- */
+
+.cfg-dock-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 72px;
+  z-index: var(--cfg-z);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: opacity var(--cfg-transition), transform var(--cfg-transition);
+}
+
+.cfg-dock-wrapper--open {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.cfg-dock {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--cfg-bg);
+  backdrop-filter: blur(var(--cfg-blur));
+  -webkit-backdrop-filter: blur(var(--cfg-blur));
+  border: 1px solid var(--cfg-border);
+  border-radius: 22px;
+  padding: 4px 6px;
+  box-shadow: var(--cfg-shadow);
+}
+
+.cfg-dock-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color var(--cfg-transition), background var(--cfg-transition);
+  padding: 0;
+  outline: none;
+  font-family: var(--cfg-font);
+}
+
+.cfg-dock-btn:hover,
+.cfg-dock-btn:focus-visible {
+  color: var(--cfg-accent);
+  background: var(--cfg-highlight-hover);
+}
+
+.cfg-dock-btn--active {
+  color: var(--cfg-accent);
+  background: var(--cfg-active);
+}
+
+.cfg-dock-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Tooltip */
+.cfg-dock-btn .cfg-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--cfg-bg-solid);
+  color: var(--cfg-text);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding: 5px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--cfg-border);
+  font-family: var(--cfg-font);
+}
+
+.cfg-dock-btn:hover .cfg-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* ---------------------------------------------------------------
+   Panel (flyout)
+   --------------------------------------------------------------- */
+
+.cfg-panel-wrapper {
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  z-index: var(--cfg-z);
+  width: 280px;
+  max-height: calc(100vh - 120px);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity var(--cfg-transition), transform var(--cfg-transition);
+}
+
+.cfg-panel-wrapper--open {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.cfg-panel {
+  background: var(--cfg-bg);
+  backdrop-filter: blur(var(--cfg-blur));
+  -webkit-backdrop-filter: blur(var(--cfg-blur));
+  border: 1px solid var(--cfg-border);
+  border-radius: var(--cfg-radius);
+  box-shadow: var(--cfg-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cfg-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--cfg-border);
+}
+
+.cfg-panel-title {
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cfg-text);
+  margin: 0;
+}
+
+.cfg-panel-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0;
+  transition: color var(--cfg-transition), background var(--cfg-transition);
+}
+
+.cfg-panel-close:hover {
+  color: var(--cfg-accent);
+  background: var(--cfg-highlight-hover);
+}
+
+.cfg-panel-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cfg-panel-body {
+  padding: 12px 16px 16px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--cfg-highlight-hover) transparent;
+}
+
+.cfg-panel-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cfg-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cfg-panel-body::-webkit-scrollbar-thumb {
+  background: var(--cfg-highlight-hover);
+  border-radius: 2px;
+}
+
+
+/* ---------------------------------------------------------------
+   Theme Panel
+   --------------------------------------------------------------- */
+
+.cfg-theme-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cfg-theme-swatch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--cfg-radius-sm);
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background var(--cfg-transition), border-color var(--cfg-transition);
+  width: 100%;
+  text-align: left;
+  font-family: var(--cfg-font);
+}
+
+.cfg-theme-swatch:hover {
+  background: var(--cfg-highlight);
+  border-color: var(--cfg-border);
+}
+
+.cfg-theme-swatch--active {
+  background: var(--cfg-active);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-theme-swatch__color {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  border: 1px solid var(--cfg-border);
+}
+
+.cfg-theme-swatch__color-half {
+  width: 50%;
+  height: 100%;
+}
+
+.cfg-theme-swatch__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cfg-theme-swatch__name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cfg-text);
+  line-height: 1.2;
+}
+
+.cfg-theme-swatch__sub {
+  font-size: 10px;
+  color: var(--cfg-text-dim);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Customize Colors section */
+.cfg-colors-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 8px;
+  border: none;
+  border-top: 1px solid var(--cfg-border);
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: color var(--cfg-transition);
+}
+
+.cfg-colors-toggle:hover {
+  color: var(--cfg-text);
+}
+
+.cfg-colors-toggle svg {
+  width: 12px;
+  height: 12px;
+  transition: transform var(--cfg-transition);
+}
+
+.cfg-colors-toggle--open svg {
+  transform: rotate(180deg);
+}
+
+.cfg-colors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.cfg-color-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-color-input__label {
+  font-size: 10px;
+  color: var(--cfg-text-dim);
+  text-transform: capitalize;
+  font-family: var(--cfg-font);
+}
+
+.cfg-color-input__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cfg-highlight);
+  border: 1px solid var(--cfg-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  transition: border-color var(--cfg-transition);
+}
+
+.cfg-color-input__wrapper:hover {
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-color-input input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+}
+
+.cfg-color-input input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.cfg-color-input input[type="color"]::-webkit-color-swatch {
+  border: 1px solid var(--cfg-border);
+  border-radius: 4px;
+}
+
+.cfg-color-input__hex {
+  font-size: 10px;
+  font-family: var(--cfg-font);
+  color: var(--cfg-text-dim);
+  letter-spacing: 0.02em;
+}
+
+.cfg-colors-reset {
+  margin-top: 8px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--cfg-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color var(--cfg-transition), border-color var(--cfg-transition);
+}
+
+.cfg-colors-reset:hover {
+  color: var(--cfg-text);
+  border-color: var(--cfg-border-hover);
+}
+
+
+/* ---------------------------------------------------------------
+   Copy Panel
+   --------------------------------------------------------------- */
+
+.cfg-copy-instructions {
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--cfg-text-dim);
+}
+
+.cfg-copy-instructions strong {
+  color: var(--cfg-text);
+  font-weight: 500;
+}
+
+/* Copy target outlines on site elements */
+.copy-target {
+  outline: 1.5px dashed rgba(255, 255, 255, 0.35) !important;
+  outline-offset: 3px;
+  cursor: pointer !important;
+  border-radius: 3px;
+  transition: outline-color 0.2s ease;
+}
+
+.copy-target:hover {
+  outline-color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.copy-active {
+  outline-color: rgba(255, 255, 255, 0.8) !important;
+  outline-style: solid !important;
+}
+
+
+/* ---------------------------------------------------------------
+   Copy Popover
+   --------------------------------------------------------------- */
+
+.cfg-copy-popover {
+  position: fixed;
+  z-index: calc(var(--cfg-z) + 10);
+  width: 280px;
+  background: var(--cfg-bg-solid);
+  backdrop-filter: blur(var(--cfg-blur));
+  -webkit-backdrop-filter: blur(var(--cfg-blur));
+  border: 1px solid var(--cfg-border);
+  border-radius: var(--cfg-radius);
+  box-shadow: var(--cfg-shadow);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-family: var(--cfg-font);
+  overflow: hidden;
+}
+
+.cfg-copy-popover--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cfg-copy-popover__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--cfg-border);
+}
+
+.cfg-copy-popover__title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cfg-text);
+}
+
+.cfg-copy-popover__close {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0;
+  transition: color var(--cfg-transition), background var(--cfg-transition);
+}
+
+.cfg-copy-popover__close:hover {
+  color: var(--cfg-accent);
+  background: var(--cfg-highlight-hover);
+}
+
+.cfg-copy-popover__close svg {
+  width: 12px;
+  height: 12px;
+}
+
+.cfg-copy-popover__options {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cfg-highlight-hover) transparent;
+}
+
+.cfg-copy-popover__options::-webkit-scrollbar {
+  width: 3px;
+}
+
+.cfg-copy-popover__options::-webkit-scrollbar-thumb {
+  background: var(--cfg-highlight-hover);
+  border-radius: 2px;
+}
+
+.cfg-copy-option {
+  width: 100%;
+  text-align: left;
+  padding: 7px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: background var(--cfg-transition), color var(--cfg-transition);
+}
+
+.cfg-copy-option:hover {
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+}
+
+.cfg-copy-option--active {
+  background: var(--cfg-active);
+  color: var(--cfg-accent);
+}
+
+/* Custom text area */
+.cfg-copy-popover__custom {
+  padding: 8px 14px 12px;
+  border-top: 1px solid var(--cfg-border);
+}
+
+.cfg-copy-popover__custom-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cfg-text-dim);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.cfg-copy-popover__textarea {
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: 1px solid var(--cfg-border);
+  border-radius: 6px;
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  line-height: 1.45;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--cfg-transition);
+}
+
+.cfg-copy-popover__textarea:focus {
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-copy-popover__textarea::placeholder {
+  color: var(--cfg-text-muted);
+}
+
+.cfg-copy-popover__actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.cfg-copy-popover__btn {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid var(--cfg-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color var(--cfg-transition), background var(--cfg-transition), border-color var(--cfg-transition);
+}
+
+.cfg-copy-popover__btn:hover {
+  color: var(--cfg-text);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-copy-popover__btn--apply {
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+}
+
+.cfg-copy-popover__btn--apply:hover {
+  background: var(--cfg-active);
+}
+
+
+/* ---------------------------------------------------------------
+   Layout Panel
+   --------------------------------------------------------------- */
+
+.cfg-layout-group {
+  margin-bottom: 14px;
+}
+
+.cfg-layout-group:last-child {
+  margin-bottom: 0;
+}
+
+.cfg-layout-group__label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cfg-text-dim);
+  margin-bottom: 6px;
+  font-family: var(--cfg-font);
+}
+
+.cfg-layout-group__options {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cfg-layout-option {
+  padding: 5px 10px;
+  border: 1px solid var(--cfg-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--cfg-transition);
+  white-space: nowrap;
+}
+
+.cfg-layout-option:hover {
+  color: var(--cfg-text);
+  border-color: var(--cfg-border-hover);
+  background: var(--cfg-highlight);
+}
+
+.cfg-layout-option--active {
+  color: var(--cfg-accent);
+  border-color: var(--cfg-border-hover);
+  background: var(--cfg-active);
+}
+
+
+/* ---------------------------------------------------------------
+   Sections Panel
+   --------------------------------------------------------------- */
+
+.cfg-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: var(--cfg-radius-sm);
+  transition: background var(--cfg-transition);
+}
+
+.cfg-section-row:hover {
+  background: var(--cfg-highlight);
+}
+
+.cfg-section-row__label {
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  color: var(--cfg-text);
+}
+
+.cfg-toggle {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: var(--cfg-highlight);
+  border: 1px solid var(--cfg-border);
+  transition: background var(--cfg-transition), border-color var(--cfg-transition);
+}
+
+.cfg-toggle--on {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.cfg-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cfg-text-dim);
+  transition: transform var(--cfg-transition), background var(--cfg-transition);
+}
+
+.cfg-toggle--on .cfg-toggle__knob {
+  transform: translateX(16px);
+  background: var(--cfg-accent);
+}
+
+
+/* ---------------------------------------------------------------
+   Effects Panel
+   --------------------------------------------------------------- */
+
+.cfg-effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-effect-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--cfg-radius-sm);
+  background: transparent;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background var(--cfg-transition), color var(--cfg-transition);
+}
+
+.cfg-effect-option:hover {
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+}
+
+.cfg-effect-option--active {
+  background: var(--cfg-active);
+  color: var(--cfg-accent);
+}
+
+.cfg-effect-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cfg-text-muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--cfg-transition);
+}
+
+.cfg-effect-option--active .cfg-effect-radio {
+  border-color: var(--cfg-accent);
+}
+
+.cfg-effect-radio__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cfg-accent);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity var(--cfg-transition), transform var(--cfg-transition);
+}
+
+.cfg-effect-option--active .cfg-effect-radio__dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* ---------------------------------------------------------------
+   Typography Panel
+   --------------------------------------------------------------- */
+
+.cfg-typo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cfg-typo-card {
+  padding: 12px;
+  border: 1px solid var(--cfg-border);
+  border-radius: var(--cfg-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: var(--cfg-font);
+  transition: background var(--cfg-transition), border-color var(--cfg-transition);
+}
+
+.cfg-typo-card:hover {
+  background: var(--cfg-highlight);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-typo-card--active {
+  background: var(--cfg-active);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-typo-card__display {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--cfg-text);
+  margin-bottom: 4px;
+}
+
+.cfg-typo-card__sample {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--cfg-text-dim);
+  margin-bottom: 6px;
+}
+
+.cfg-typo-card__name {
+  font-size: 10px;
+  color: var(--cfg-text-muted);
+  letter-spacing: 0.03em;
+}
+
+
+/* ---------------------------------------------------------------
+   Share Panel
+   --------------------------------------------------------------- */
+
+.cfg-share-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cfg-share-panel__desc {
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cfg-text-dim);
+}
+
+.cfg-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--cfg-border);
+  border-radius: var(--cfg-radius-sm);
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--cfg-transition), border-color var(--cfg-transition);
+}
+
+.cfg-share-btn:hover {
+  background: var(--cfg-active);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-share-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ---------------------------------------------------------------
+   Toast
+   --------------------------------------------------------------- */
+
+.cfg-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  z-index: calc(var(--cfg-z) + 20);
+  background: var(--cfg-bg-solid);
+  backdrop-filter: blur(var(--cfg-blur));
+  -webkit-backdrop-filter: blur(var(--cfg-blur));
+  border: 1px solid var(--cfg-border);
+  border-radius: 20px;
+  padding: 8px 18px;
+  box-shadow: var(--cfg-shadow);
+  font-family: var(--cfg-font);
+  font-size: 12px;
+  color: var(--cfg-text);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cfg-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

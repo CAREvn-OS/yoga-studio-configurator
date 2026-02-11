@@ -1,0 +1,59 @@
+/* ===== HERO LAYOUT VARIANTS ===== */
+.hero--left { text-align: left; justify-content: flex-start; padding-left: 8%; }
+.hero--left .hero__content { text-align: left; }
+.hero--left .hero__sub { margin-left: 0; }
+.hero--left .hero__ctas { justify-content: flex-start; }
+
+.hero--split { justify-content: flex-start; padding-left: 5%; }
+.hero--split .hero__content { text-align: left; max-width: 600px; }
+.hero--split .hero__sub { margin-left: 0; }
+.hero--split .hero__ctas { justify-content: flex-start; }
+
+/* ===== ABOUT LAYOUT VARIANTS ===== */
+.about--reverse { direction: rtl; }
+.about--reverse > * { direction: ltr; }
+.about--stacked { grid-template-columns: 1fr; max-width: 750px; text-align: center; }
+.about--stacked .about__image { max-width: 300px; margin: 0 auto; }
+.about--stacked .about__stats { justify-items: center; }
+.about--stacked .about__content .section-eyebrow,
+.about--stacked .about__content .section-heading { text-align: center; }
+
+/* ===== SCHEDULE LAYOUT VARIANTS ===== */
+.schedule--list .schedule__grid { grid-template-columns: 1fr; max-width: 650px; margin: 0 auto; }
+.schedule--list .schedule__card {
+  display: grid; grid-template-columns: 180px 1fr; gap: 1rem; align-items: center;
+  text-align: left;
+}
+.schedule--cards .schedule__grid { grid-template-columns: repeat(2, 1fr); }
+
+/* ===== INSTRUCTORS LAYOUT VARIANTS ===== */
+.instructors--duo .instructors__grid { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto; gap: 3rem; }
+.instructors--duo .instructors__card { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
+.instructors--scroll .instructors__grid {
+  display: flex; gap: 2rem; overflow-x: auto;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+}
+.instructors--scroll .instructors__card { min-width: 250px; scroll-snap-align: start; flex-shrink: 0; }
+
+/* ===== PRICING LAYOUT VARIANTS ===== */
+.pricing--table .pricing__grid { grid-template-columns: 1fr; max-width: 700px; margin: 0 auto; }
+.pricing--table .pricing__card {
+  display: grid; grid-template-columns: 200px 1fr auto; gap: 1.5rem; align-items: center;
+  text-align: left; padding: 1.5rem 2rem;
+}
+.pricing--stacked .pricing__grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+
+/* ===== RESPONSIVE LAYOUT OVERRIDES ===== */
+@media (max-width: 900px) {
+  .about--reverse { direction: ltr; }
+  .instructors--duo .instructors__card { grid-template-columns: 1fr; text-align: center; }
+  .pricing--table .pricing__card { grid-template-columns: 1fr; text-align: center; }
+}
+@media (max-width: 650px) {
+  .hero--left, .hero--split { padding-left: 1.5rem; text-align: center; }
+  .hero--left .hero__content, .hero--split .hero__content { text-align: center; }
+  .hero--left .hero__ctas, .hero--split .hero__ctas { justify-content: center; }
+  .schedule--list .schedule__card { grid-template-columns: 1fr; }
+  .schedule--cards .schedule__grid { grid-template-columns: 1fr; }
+}
