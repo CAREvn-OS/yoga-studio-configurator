@@ -55,6 +55,8 @@ export function ThemePanel() {
   const setCardStyle = useConfiguratorStore(s => s.setCardStyle)
   const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
   const setGradientSettings = useConfiguratorStore(s => s.setGradientSettings)
+  const logoScale = useConfiguratorStore(s => s.logoScale)
+  const setLogoScale = useConfiguratorStore(s => s.setLogoScale)
 
   const [stylizeExpanded, setStylizeExpanded] = useState(false)
   const logoInputRef = useRef<HTMLInputElement>(null)
@@ -108,6 +110,25 @@ export function ThemePanel() {
         {logoUrl ? (
           <div className="cfg-logo-preview">
             <img src={logoUrl} alt="Logo" className="cfg-logo-preview__img" />
+            <div className="cfg-typo-level" style={{ marginTop: 6 }}>
+              <label className="cfg-typo-level__label">Logo Size</label>
+              <div className="cfg-typo-weight-slider">
+                <span className="cfg-typo-weight-slider__value">{logoScale}px</span>
+                <input
+                  type="range"
+                  min="30"
+                  max="300"
+                  step="5"
+                  value={logoScale}
+                  onChange={e => setLogoScale(Number(e.target.value))}
+                  className="cfg-vibe-slider cfg-vibe-slider--sm"
+                />
+                <div className="cfg-typo-weight-slider__labels">
+                  <span>Small</span>
+                  <span>Large</span>
+                </div>
+              </div>
+            </div>
             <button className="cfg-colors-reset" onClick={clearLogoUpload}>
               Remove Logo
             </button>

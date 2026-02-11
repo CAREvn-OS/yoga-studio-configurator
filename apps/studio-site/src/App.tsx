@@ -179,6 +179,7 @@ function StylizeApplier() {
   const buttonStyle = useConfiguratorStore(s => s.buttonStyle)
   const cardStyle = useConfiguratorStore(s => s.cardStyle)
   const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
+  const logoScale = useConfiguratorStore(s => s.logoScale)
 
   useEffect(() => {
     const root = document.documentElement
@@ -186,6 +187,10 @@ function StylizeApplier() {
       root.style.setProperty('--border-radius', `${borderRadiusOverride}px`)
     }
   }, [borderRadiusOverride])
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--logo-scale', `${logoScale}px`)
+  }, [logoScale])
 
   useEffect(() => {
     const body = document.body
@@ -231,6 +236,9 @@ function PreviewModeApplier() {
       document.body.classList.add('preview-mode')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
+      document.body.classList.remove('preview-mode')
+    }
+    return () => {
       document.body.classList.remove('preview-mode')
     }
   }, [previewMode])

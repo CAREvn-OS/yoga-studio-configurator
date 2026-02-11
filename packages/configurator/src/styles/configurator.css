@@ -1552,3 +1552,12 @@
 .cfg-media-popover__section {
   margin-bottom: 8px;
 }
+
+.cfg-media-popover__sublabel {
+  font-size: 9px;
+  color: var(--cfg-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}

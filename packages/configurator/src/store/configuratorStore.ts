@@ -44,6 +44,7 @@ interface ConfiguratorState {
   mediaUploads: Record<string, MediaUpload>
   imageDisplayStyle: ImageDisplayStyle
   logoUpload: MediaUpload | null
+  logoScale: number
   mediaSlotSettings: Record<string, MediaSlotSettings>
   borderRadiusOverride: number | null
   buttonStyle: ButtonStyle
@@ -79,6 +80,7 @@ interface ConfiguratorState {
   setImageDisplayStyle: (style: ImageDisplayStyle) => void
   setLogoUpload: (file: File) => void
   clearLogoUpload: () => void
+  setLogoScale: (scale: number) => void
   setMediaSlotSetting: (slotId: string, settings: Partial<MediaSlotSettings>) => void
   clearMediaSlotSetting: (slotId: string) => void
   setBorderRadiusOverride: (value: number | null) => void
@@ -120,6 +122,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   mediaUploads: {},
   imageDisplayStyle: 'none' as ImageDisplayStyle,
   logoUpload: null,
+  logoScale: 180,
   mediaSlotSettings: {},
   borderRadiusOverride: null,
   buttonStyle: 'rounded' as ButtonStyle,
@@ -132,7 +135,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   toggleDock: () =>
     set(s => {
       if (s.dockOpen) {
-        return { dockOpen: false, activePanel: null, copyMode: false, activeCopyElement: null }
+        return { dockOpen: false, activePanel: null, activeCopyElement: null }
       }
       return { dockOpen: true }
     }),
@@ -340,6 +343,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     set({ logoUpload: null })
   },
 
+  setLogoScale: (scale) =>
+    set({ logoScale: scale }),
+
   setMediaSlotSetting: (slotId, settings) =>
     set(s => ({
       mediaSlotSettings: {
@@ -372,9 +378,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   togglePreviewMode: () =>
     set(s => {
       if (s.previewMode) {
-        return { previewMode: false, copyMode: true, dockOpen: true }
+        return { previewMode: false, copyMode: true, dockOpen: true, activePanel: null, activeCopyElement: null }
       }
-      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null }
+      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null, dockOpen: false }
     }),
 
   showToast: (message) => {
@@ -401,6 +407,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       sectionOrder: s.sectionOrder,
       sectionItems: s.sectionItems,
       imageDisplayStyle: s.imageDisplayStyle,
+      logoScale: s.logoScale,
       mediaSlotSettings: s.mediaSlotSettings,
       borderRadiusOverride: s.borderRadiusOverride,
       buttonStyle: s.buttonStyle,
@@ -434,6 +441,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.sectionOrder) updates.sectionOrder = config.sectionOrder
     if (config.sectionItems) updates.sectionItems = config.sectionItems
     if (config.imageDisplayStyle) updates.imageDisplayStyle = config.imageDisplayStyle as ImageDisplayStyle
+    if (config.logoScale !== undefined) updates.logoScale = config.logoScale
     if (config.mediaSlotSettings) updates.mediaSlotSettings = config.mediaSlotSettings
     if (config.borderRadiusOverride !== undefined) updates.borderRadiusOverride = config.borderRadiusOverride
     if (config.buttonStyle) updates.buttonStyle = config.buttonStyle as ButtonStyle

@@ -131,10 +131,11 @@ body::after {
   font-family: var(--font-display); font-size: 1.35rem; font-weight: 400;
   letter-spacing: 0.06em; color: var(--color-warm);
   text-decoration: none; transition: opacity 0.3s ease;
+  flex-shrink: 0; overflow: hidden;
 }
 .nav__logo:hover { opacity: 0.7; }
-.nav__logo-img { max-height: 36px; width: auto; object-fit: contain; display: block; }
-.nav__links { display: flex; gap: 2.8rem; list-style: none; align-items: center; }
+.nav__logo-img { max-height: 36px; max-width: var(--logo-scale, 180px); width: auto; object-fit: contain; display: block; }
+.nav__links { display: flex; gap: 2.8rem; list-style: none; align-items: center; min-width: 0; }
 .nav__links a {
   font-family: var(--font-body); font-size: 0.72rem; font-weight: 400;
   letter-spacing: 0.14em; text-transform: uppercase;
@@ -234,7 +235,7 @@ body.card-style-outline [class*="card"] {
 }
 
 /* ===== GRADIENT BACKGROUNDS ===== */
-body.gradient-enabled .hero-section {
+body.gradient-enabled .hero {
   background: var(--gradient-bg) !important;
 }
 body.gradient-enabled section:nth-child(even) {
@@ -246,6 +247,7 @@ body.preview-mode .cfg-dock-wrapper,
 body.preview-mode .cfg-panel-wrapper,
 body.preview-mode .media-slot__upload-hint,
 body.preview-mode .media-slot__clear,
+body.preview-mode .media-slot__settings,
 body.preview-mode .copy-highlight,
 body.preview-mode [data-copy-id]::after {
   display: none !important;
