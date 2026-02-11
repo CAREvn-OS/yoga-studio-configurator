@@ -13,6 +13,7 @@
     "@care/theme-engine": "workspace:*",
     "@care/copy-content": "workspace:*",
     "@care/shared-types": "workspace:*",
+    "@care/media-storage": "workspace:*",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "zustand": "^4.5.0"

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useConfiguratorStore } from '@care/configurator'
 import { applyTheme } from '@care/theme-engine'
 import { Navbar } from './components/Navbar'
@@ -24,6 +24,31 @@ const effects: Record<string, string> = {
   'grand-entrance': 'anim-dramatic',
   'slide-in': 'anim-slide',
   none: 'anim-none',
+}
+
+// Section registry — maps IDs to components
+type SectionEntry = {
+  component: React.ComponentType<any>
+  props?: Record<string, any>
+  optional?: boolean
+}
+
+function buildSectionRegistry(layouts: Record<string, string>): Record<string, SectionEntry> {
+  return {
+    about: { component: About, props: { layout: layouts.about ?? 'default' } },
+    manifesto: { component: Manifesto, optional: true },
+    schedule: { component: Schedule, props: { layout: layouts.schedule ?? 'grid' } },
+    process: { component: Process, optional: true },
+    instructors: { component: Instructors, props: { layout: layouts.instructors ?? 'grid' } },
+    pricing: { component: Pricing, props: { layout: layouts.pricing ?? 'cards' } },
+    studioTour: { component: StudioTour, optional: true },
+    testimonials: { component: Testimonials },
+    events: { component: Events, optional: true },
+    blog: { component: Blog, optional: true },
+    partners: { component: Partners, optional: true },
+    faq: { component: FAQ, optional: true },
+    contact: { component: Contact },
+  }
 }
 
 function ScrollProgress() {
@@ -104,9 +129,13 @@ export default function App() {
   const typographyOverride = useConfiguratorStore(s => s.typographyOverride)
   const layouts = useConfiguratorStore(s => s.layouts)
   const sections = useConfiguratorStore(s => s.sections)
+  const sectionOrder = useConfiguratorStore(s => s.sectionOrder)
   const effect = useConfiguratorStore(s => s.effect)
   const copyMode = useConfiguratorStore(s => s.copyMode)
-  const mediaMode = useConfiguratorStore(s => s.mediaMode)
+  const styleMode = useConfiguratorStore(s => s.styleMode)
+
+  // Build section registry with current layouts
+  const registry = useMemo(() => buildSectionRegistry(layouts), [layouts])
 
   // Apply theme
   useEffect(() => {
@@ -119,9 +148,9 @@ export default function App() {
     document.body.className = [
       cls,
       copyMode ? 'copy-mode' : '',
-      mediaMode ? 'media-mode' : '',
+      styleMode ? 'style-mode' : '',
     ].filter(Boolean).join(' ')
-  }, [effect, copyMode, mediaMode])
+  }, [effect, copyMode, styleMode])
 
   return (
     <>
@@ -137,28 +166,14 @@ export default function App() {
         <div className="divider__line" />
       </div>
 
-      <About layout={layouts.about ?? 'default'} />
+      {sectionOrder.map(id => {
+        const entry = registry[id]
+        if (!entry) return null
+        if (entry.optional && !sections[id]) return null
+        const Component = entry.component
+        return <Component key={id} {...(entry.props ?? {})} />
+      })}
 
-      {sections.manifesto && <Manifesto />}
-
-      <Schedule layout={layouts.schedule ?? 'grid'} />
-
-      {sections.process && <Process />}
-
-      <Instructors layout={layouts.instructors ?? 'grid'} />
-
-      <Pricing layout={layouts.pricing ?? 'cards'} />
-
-      {sections.studioTour && <StudioTour />}
-
-      <Testimonials />
-
-      {sections.events && <Events />}
-      {sections.blog && <Blog />}
-      {sections.partners && <Partners />}
-      {sections.faq && <FAQ />}
-
-      <Contact />
       <Footer />
       <BackToTop />
     </>

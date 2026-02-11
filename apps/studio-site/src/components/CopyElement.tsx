@@ -14,25 +14,45 @@ export function CopyElement({ id, as: Tag = 'span', className }: CopyElementProp
   const copyMode = useConfiguratorStore(s => s.copyMode)
   const activeCopyElement = useConfiguratorStore(s => s.activeCopyElement)
   const setActiveCopyElement = useConfiguratorStore(s => s.setActiveCopyElement)
+  const styleMode = useConfiguratorStore(s => s.styleMode)
+  const activeStyleElement = useConfiguratorStore(s => s.activeStyleElement)
+  const setActiveStyleElement = useConfiguratorStore(s => s.setActiveStyleElement)
+  const elementStyle = useConfiguratorStore(s => s.elementStyles[id])
 
   const alternatives = allCopy[id]
   if (!alternatives) return null
 
   const displayText = customText ?? alternatives[selectionIndex] ?? alternatives[0]
-  const isActive = activeCopyElement === id
+  const isCopyActive = activeCopyElement === id
+  const isStyleActive = activeStyleElement === id
 
   const handleClick = (e: React.MouseEvent) => {
-    if (!copyMode) return
-    e.preventDefault()
-    e.stopPropagation()
-    setActiveCopyElement(id)
+    if (styleMode) {
+      e.preventDefault()
+      e.stopPropagation()
+      setActiveStyleElement(id)
+      return
+    }
+    if (copyMode) {
+      e.preventDefault()
+      e.stopPropagation()
+      setActiveCopyElement(id)
+      return
+    }
   }
+
+  // Build inline styles from element overrides
+  const inlineStyle: React.CSSProperties = {}
+  if (elementStyle?.color) inlineStyle.color = elementStyle.color
+  if (elementStyle?.fontWeight) inlineStyle.fontWeight = elementStyle.fontWeight
 
   return (
     <Tag
       data-copy-id={id}
-      className={`${className ?? ''} ${copyMode ? 'copy-target' : ''} ${isActive ? 'copy-active' : ''}`}
+      data-style-id={id}
+      className={`${className ?? ''} ${copyMode ? 'copy-target' : ''} ${isCopyActive ? 'copy-active' : ''} ${styleMode ? 'style-target' : ''} ${isStyleActive ? 'style-active' : ''}`}
       onClick={handleClick}
+      style={inlineStyle}
       dangerouslySetInnerHTML={{ __html: displayText }}
     />
   )

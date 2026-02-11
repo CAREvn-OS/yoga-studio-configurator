@@ -11,6 +11,7 @@ export default defineConfig({
       '@care/theme-engine': path.resolve(__dirname, '../../packages/theme-engine/src'),
       '@care/copy-content': path.resolve(__dirname, '../../packages/copy-content/src'),
       '@care/shared-types': path.resolve(__dirname, '../../packages/shared-types/src'),
+      '@care/media-storage': path.resolve(__dirname, '../../packages/media-storage/src'),
     }
   },
   build: {

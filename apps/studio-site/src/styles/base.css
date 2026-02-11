@@ -188,15 +188,16 @@ body::after {
 .media-slot__img, .media-slot__video {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
-.media-slot__placeholder {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 0.5rem;
-  color: var(--color-stone); font-size: 0.72rem; letter-spacing: 0.1em;
-  text-transform: uppercase; opacity: 0; transition: opacity 0.3s ease;
+.media-slot--uploadable { cursor: pointer; }
+.media-slot--uploadable:hover { outline: 2px dashed var(--color-sand); outline-offset: -2px; }
+.media-slot__upload-hint {
+  position: absolute; bottom: 8px; right: 8px;
+  width: 28px; height: 28px;
+  background: rgba(0,0,0,0.35); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
 }
-.media-slot--active { cursor: pointer; }
-.media-slot--active .media-slot__placeholder { opacity: 1; }
-.media-slot--active:hover { outline: 2px dashed var(--color-accent); outline-offset: -2px; }
+.media-slot--uploadable:hover .media-slot__upload-hint { opacity: 1; }
 .media-slot__clear {
   position: absolute; top: 8px; right: 8px; width: 24px; height: 24px;
   background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
@@ -204,6 +205,15 @@ body::after {
   transition: background 0.2s ease;
 }
 .media-slot__clear:hover { background: rgba(220, 40, 40, 0.8); }
+
+/* ===== STYLE MODE ===== */
+.style-mode .style-target {
+  cursor: pointer; position: relative;
+  outline: 1.5px dashed rgba(153, 50, 204, 0.35); outline-offset: 4px;
+  transition: outline-color 0.3s ease; border-radius: 2px;
+}
+.style-mode .style-target:hover { outline-color: rgba(153, 50, 204, 0.65); }
+.style-mode .style-active { outline-color: rgba(153, 50, 204, 0.9) !important; outline-style: solid !important; }
 
 /* ===== LIGHT SECTION OVERRIDE (for contrast themes) ===== */
 [data-light-section] { background: var(--ls-bg, #faf8f5) !important; }
@@ -225,12 +235,20 @@ body::after {
   .nav { padding: 1.2rem 1.5rem; }
   .nav--scrolled { padding: 0.8rem 1.5rem; }
   .nav__links {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(250, 248, 245, 0.98); backdrop-filter: blur(20px);
-    flex-direction: column; align-items: center; justify-content: center; gap: 2.2rem;
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: color-mix(in srgb, var(--color-cream) 98%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.2rem;
+    z-index: 100;
   }
   .nav__links--open { display: flex; }
-  .nav__links a { font-size: 0.85rem; letter-spacing: 0.18em; }
-  .nav__toggle { display: block; }
+  .nav__links a { font-size: 0.85rem; letter-spacing: 0.18em; color: var(--color-warm); }
+  .nav__toggle { display: block; z-index: 101; }
   .back-to-top { display: none; }
 }

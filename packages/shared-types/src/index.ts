@@ -44,9 +44,16 @@ export interface MediaUpload {
   name: string
   type: string
   size: number
+  remotePath?: string
+  remoteUrl?: string
 }
 
-export type PanelId = 'theme' | 'copy' | 'layout' | 'sections' | 'effects' | 'typography' | 'share'
+export interface ElementStyle {
+  color?: string
+  fontWeight?: number
+}
+
+export type PanelId = 'theme' | 'copy' | 'style' | 'layout' | 'sections' | 'effects' | 'typography' | 'share'
 
 export interface EffectDef {
   name: string

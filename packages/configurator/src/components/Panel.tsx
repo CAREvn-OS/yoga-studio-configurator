@@ -1,6 +1,7 @@
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { ThemePanel } from '../panels/ThemePanel'
 import { CopyPanel } from '../panels/CopyPanel'
+import { StylePanel } from '../panels/StylePanel'
 import { LayoutPanel } from '../panels/LayoutPanel'
 import { SectionsPanel } from '../panels/SectionsPanel'
 import { EffectsPanel } from '../panels/EffectsPanel'
@@ -10,6 +11,7 @@ import { SharePanel } from '../panels/SharePanel'
 const PANEL_TITLES: Record<string, string> = {
   theme: 'Theme',
   copy: 'Copy',
+  style: 'Style',
   layout: 'Layout',
   sections: 'Sections',
   effects: 'Effects',
@@ -23,6 +25,8 @@ function PanelContent({ panel }: { panel: string }) {
       return <ThemePanel />
     case 'copy':
       return <CopyPanel />
+    case 'style':
+      return <StylePanel />
     case 'layout':
       return <LayoutPanel />
     case 'sections':

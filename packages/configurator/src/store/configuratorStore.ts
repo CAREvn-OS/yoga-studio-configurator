@@ -1,13 +1,30 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors } from '@care/shared-types'
+import type { PanelId, MediaUpload, ThemeColors, ElementStyle } from '@care/shared-types'
+
+const DEFAULT_SECTION_ORDER: string[] = [
+  'about', 'manifesto', 'schedule', 'process', 'instructors',
+  'pricing', 'studioTour', 'testimonials', 'events', 'blog',
+  'partners', 'faq', 'contact',
+]
+
+const DEFAULT_SECTIONS: Record<string, boolean> = {
+  manifesto: false,
+  process: false,
+  studioTour: false,
+  events: false,
+  blog: false,
+  partners: false,
+  faq: false,
+}
 
 interface ConfiguratorState {
   // UI
   dockOpen: boolean
   activePanel: PanelId | null
   copyMode: boolean
-  mediaMode: boolean
+  styleMode: boolean
   activeCopyElement: string | null
+  activeStyleElement: string | null
 
   // Toast
   toastMessage: string | null
@@ -21,16 +38,19 @@ interface ConfiguratorState {
   customCopy: Record<string, string>
   layouts: Record<string, string>
   sections: Record<string, boolean>
+  sectionOrder: string[]
   effect: string
   mediaUploads: Record<string, MediaUpload>
+  elementStyles: Record<string, ElementStyle>
 
   // Actions
   toggleDock: () => void
   openPanel: (panel: PanelId) => void
   closePanel: () => void
   setCopyMode: (on: boolean) => void
-  setMediaMode: (on: boolean) => void
+  setStyleMode: (on: boolean) => void
   setActiveCopyElement: (id: string | null) => void
+  setActiveStyleElement: (id: string | null) => void
   setTheme: (id: string) => void
   setColorOverride: (key: string, value: string) => void
   clearColorOverrides: () => void
@@ -40,21 +60,16 @@ interface ConfiguratorState {
   clearCustomCopy: (elementId: string) => void
   setLayout: (sectionId: string, layoutId: string) => void
   toggleSection: (sectionId: string) => void
+  setSectionOrder: (order: string[]) => void
+  moveSectionOrder: (fromIndex: number, toIndex: number) => void
   setEffect: (effectId: string) => void
   setMediaUpload: (slotId: string, file: File) => void
   clearMediaUpload: (slotId: string) => void
+  setElementStyle: (elementId: string, style: ElementStyle) => void
+  clearElementStyle: (elementId: string) => void
+  clearAllElementStyles: () => void
   showToast: (message: string) => void
   exportConfig: () => string
-}
-
-const DEFAULT_SECTIONS: Record<string, boolean> = {
-  manifesto: false,
-  process: false,
-  studioTour: false,
-  events: false,
-  blog: false,
-  partners: false,
-  faq: false,
 }
 
 export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
@@ -62,8 +77,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   dockOpen: false,
   activePanel: null,
   copyMode: false,
-  mediaMode: false,
+  styleMode: false,
   activeCopyElement: null,
+  activeStyleElement: null,
 
   // Toast
   toastMessage: null,
@@ -77,15 +93,24 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   customCopy: {},
   layouts: {},
   sections: { ...DEFAULT_SECTIONS },
+  sectionOrder: [...DEFAULT_SECTION_ORDER],
   effect: 'smooth-rise',
   mediaUploads: {},
+  elementStyles: {},
 
   // --- Actions ---
 
   toggleDock: () =>
     set(s => {
       if (s.dockOpen) {
-        return { dockOpen: false, activePanel: null, copyMode: false, mediaMode: false, activeCopyElement: null }
+        return {
+          dockOpen: false,
+          activePanel: null,
+          copyMode: false,
+          styleMode: false,
+          activeCopyElement: null,
+          activeStyleElement: null,
+        }
       }
       return { dockOpen: true }
     }),
@@ -93,27 +118,33 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   openPanel: (panel) =>
     set(s => {
       if (s.activePanel === panel) {
-        return { activePanel: null }
+        return { activePanel: null, copyMode: false, styleMode: false, activeCopyElement: null, activeStyleElement: null }
       }
       const isCopy = panel === 'copy'
+      const isStyle = panel === 'style'
       return {
         activePanel: panel,
         copyMode: isCopy,
+        styleMode: isStyle,
         activeCopyElement: isCopy ? s.activeCopyElement : null,
+        activeStyleElement: isStyle ? s.activeStyleElement : null,
       }
     }),
 
   closePanel: () =>
-    set({ activePanel: null, copyMode: false, activeCopyElement: null }),
+    set({ activePanel: null, copyMode: false, styleMode: false, activeCopyElement: null, activeStyleElement: null }),
 
   setCopyMode: (on) =>
-    set({ copyMode: on, activeCopyElement: on ? null : null }),
+    set({ copyMode: on, activeCopyElement: null }),
 
-  setMediaMode: (on) =>
-    set({ mediaMode: on }),
+  setStyleMode: (on) =>
+    set({ styleMode: on, activeStyleElement: null }),
 
   setActiveCopyElement: (id) =>
     set({ activeCopyElement: id }),
+
+  setActiveStyleElement: (id) =>
+    set({ activeStyleElement: id }),
 
   setTheme: (id) =>
     set({ theme: id, colorOverrides: null, typographyOverride: null }),
@@ -161,6 +192,17 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       sections: { ...s.sections, [sectionId]: !s.sections[sectionId] },
     })),
 
+  setSectionOrder: (order) =>
+    set({ sectionOrder: order }),
+
+  moveSectionOrder: (fromIndex, toIndex) =>
+    set(s => {
+      const order = [...s.sectionOrder]
+      const [moved] = order.splice(fromIndex, 1)
+      order.splice(toIndex, 0, moved)
+      return { sectionOrder: order }
+    }),
+
   setEffect: (effectId) =>
     set({ effect: effectId }),
 
@@ -174,17 +216,59 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
         [slotId]: { blobUrl, name: file.name, type: file.type, size: file.size },
       },
     }))
+    // Async remote upload (fire-and-forget)
+    const uploadRemote = async () => {
+      try {
+        const { uploadMedia } = await import('@care/media-storage')
+        const result = await uploadMedia(file, slotId)
+        if (!result) return
+        // Stale check — user may have changed the slot since
+        const current = get().mediaUploads[slotId]
+        if (!current || current.blobUrl !== blobUrl) return
+        set(s => ({
+          mediaUploads: {
+            ...s.mediaUploads,
+            [slotId]: { ...s.mediaUploads[slotId], remotePath: result.path, remoteUrl: result.url },
+          },
+        }))
+      } catch {
+        // Supabase unavailable — blob URL continues to work
+      }
+    }
+    uploadRemote()
   },
 
   clearMediaUpload: (slotId) => {
     const prev = get().mediaUploads[slotId]
-    if (prev) URL.revokeObjectURL(prev.blobUrl)
+    if (prev) {
+      URL.revokeObjectURL(prev.blobUrl)
+      if (prev.remotePath) {
+        import('@care/media-storage')
+          .then(({ deleteMedia }) => deleteMedia(prev.remotePath!))
+          .catch(() => {})
+      }
+    }
     set(s => {
       const next = { ...s.mediaUploads }
       delete next[slotId]
       return { mediaUploads: next }
     })
   },
+
+  setElementStyle: (elementId, style) =>
+    set(s => ({
+      elementStyles: { ...s.elementStyles, [elementId]: { ...(s.elementStyles[elementId] ?? {}), ...style } },
+    })),
+
+  clearElementStyle: (elementId) =>
+    set(s => {
+      const next = { ...s.elementStyles }
+      delete next[elementId]
+      return { elementStyles: next }
+    }),
+
+  clearAllElementStyles: () =>
+    set({ elementStyles: {} }),
 
   showToast: (message) => {
     const prev = get().toastTimeout
@@ -205,9 +289,14 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       customCopy: s.customCopy,
       layouts: s.layouts,
       sections: s.sections,
+      sectionOrder: s.sectionOrder,
       effect: s.effect,
+      elementStyles: s.elementStyles,
       mediaUploads: Object.fromEntries(
-        Object.entries(s.mediaUploads).map(([k, v]) => [k, { name: v.name, type: v.type, size: v.size }])
+        Object.entries(s.mediaUploads).map(([k, v]) => [
+          k,
+          { name: v.name, type: v.type, size: v.size, remotePath: v.remotePath, remoteUrl: v.remoteUrl },
+        ])
       ),
     }
     return JSON.stringify(config, null, 2)

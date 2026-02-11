@@ -8,6 +8,7 @@
     "@care/shared-types": "workspace:*",
     "@care/theme-engine": "workspace:*",
     "@care/copy-content": "workspace:*",
+    "@care/media-storage": "workspace:*",
     "zustand": "^4.5.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"

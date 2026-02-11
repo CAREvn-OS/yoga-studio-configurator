@@ -9,7 +9,9 @@
       "@care/copy-content": ["../../packages/copy-content/src"],
       "@care/copy-content/*": ["../../packages/copy-content/src/*"],
       "@care/shared-types": ["../../packages/shared-types/src"],
-      "@care/shared-types/*": ["../../packages/shared-types/src/*"]
+      "@care/shared-types/*": ["../../packages/shared-types/src/*"],
+      "@care/media-storage": ["../../packages/media-storage/src"],
+      "@care/media-storage/*": ["../../packages/media-storage/src/*"]
     }
   },
   "include": ["src", "../../packages/*/src"]
