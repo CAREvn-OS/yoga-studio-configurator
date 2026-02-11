@@ -19,9 +19,9 @@ export function StylePanel() {
 
       <p className="cfg-copy-instructions" style={{ marginTop: 10 }}>
         {styleMode ? (
-          <>Click any text element to adjust its <strong>color</strong> and <strong>font weight</strong>.</>
+          <>Click <strong>any element</strong> — text, headings, sections — to adjust its <strong>color</strong>, create <strong>gradients</strong>, change <strong>weight</strong>, or add <strong>animations</strong>.</>
         ) : (
-          <>Enable style mode to individually customize text colors and weights.</>
+          <>Enable style mode to customize any element with colors, gradients, weights, and animations.</>
         )}
       </p>
 
