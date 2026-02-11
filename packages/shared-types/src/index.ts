@@ -48,24 +48,27 @@ export interface MediaUpload {
   remoteUrl?: string
 }
 
-// Per-element style overrides
-export interface ElementStyle {
-  color?: string
-  gradient?: string // CSS gradient string, e.g. "linear-gradient(135deg, #ff6b6b, #9b59b6)"
-  fontWeight?: number
-  animation?: string // animation preset ID
-}
-
 // Typography category system
 export type TypoCategory = 'headers' | 'subheaders' | 'body' | 'buttons' | 'captions'
 
 export interface TypoCategorySettings {
-  fontFamily?: string // style ID from FONT_STYLES
+  fontFamily?: string
   fontWeight?: number
   color?: string
+  // Per-category effects
+  textShadow?: number   // 0–100 intensity
+  glow?: number          // 0–100 intensity
+  letterSpacing?: number // 0–100 intensity
+  animation?: number     // 0–100 intensity
 }
 
-export type PanelId = 'theme' | 'copy' | 'style' | 'layout' | 'sections' | 'effects' | 'typography' | 'share'
+// Vibe system — 6 global presets with intensity
+export interface VibeSettings {
+  preset: string
+  intensity: number // 0–100
+}
+
+export type PanelId = 'theme' | 'copy' | 'layout' | 'sections' | 'vibe' | 'typography' | 'share'
 
 export interface EffectDef {
   name: string

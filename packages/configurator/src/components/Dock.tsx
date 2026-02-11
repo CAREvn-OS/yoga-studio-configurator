@@ -32,17 +32,6 @@ const BUTTONS: DockButton[] = [
     ),
   },
   {
-    id: 'style',
-    label: 'Style',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-        <path d="M2 17l10 5 10-5" />
-        <path d="M2 12l10 5 10-5" />
-      </svg>
-    ),
-  },
-  {
     id: 'layout',
     label: 'Layout',
     icon: (
@@ -68,15 +57,6 @@ const BUTTONS: DockButton[] = [
     ),
   },
   {
-    id: 'effects',
-    label: 'Effects',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    ),
-  },
-  {
     id: 'typography',
     label: 'Typography',
     icon: (
@@ -84,6 +64,17 @@ const BUTTONS: DockButton[] = [
         <polyline points="4 7 4 4 20 4 20 7" />
         <line x1="9" y1="20" x2="15" y2="20" />
         <line x1="12" y1="4" x2="12" y2="20" />
+      </svg>
+    ),
+  },
+  {
+    id: 'vibe',
+    label: 'Vibe',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
       </svg>
     ),
   },

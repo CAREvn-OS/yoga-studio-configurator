@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors, ElementStyle, TypoCategory, TypoCategorySettings } from '@care/shared-types'
+import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
   'about', 'manifesto', 'schedule', 'process', 'instructors',
@@ -22,9 +22,7 @@ interface ConfiguratorState {
   dockOpen: boolean
   activePanel: PanelId | null
   copyMode: boolean
-  styleMode: boolean
   activeCopyElement: string | null
-  activeStyleElement: string | null
 
   // Toast
   toastMessage: string | null
@@ -35,23 +33,20 @@ interface ConfiguratorState {
   colorOverrides: Partial<ThemeColors> | null
   typographyOverride: string | null
   typoCategorySettings: Partial<Record<TypoCategory, TypoCategorySettings>>
+  vibe: VibeSettings
   copySelections: Record<string, number>
   customCopy: Record<string, string>
   layouts: Record<string, string>
   sections: Record<string, boolean>
   sectionOrder: string[]
-  effect: string
   mediaUploads: Record<string, MediaUpload>
-  elementStyles: Record<string, ElementStyle>
 
   // Actions
   toggleDock: () => void
   openPanel: (panel: PanelId) => void
   closePanel: () => void
   setCopyMode: (on: boolean) => void
-  setStyleMode: (on: boolean) => void
   setActiveCopyElement: (id: string | null) => void
-  setActiveStyleElement: (id: string | null) => void
   setTheme: (id: string) => void
   setColorOverride: (key: string, value: string) => void
   clearColorOverrides: () => void
@@ -59,6 +54,7 @@ interface ConfiguratorState {
   setTypoCategorySetting: (category: TypoCategory, setting: Partial<TypoCategorySettings>) => void
   clearTypoCategorySetting: (category: TypoCategory) => void
   clearAllTypoCategorySettings: () => void
+  setVibe: (vibe: Partial<VibeSettings>) => void
   setCopySelection: (elementId: string, index: number) => void
   setCustomCopy: (elementId: string, text: string) => void
   clearCustomCopy: (elementId: string) => void
@@ -66,12 +62,8 @@ interface ConfiguratorState {
   toggleSection: (sectionId: string) => void
   setSectionOrder: (order: string[]) => void
   moveSectionOrder: (fromIndex: number, toIndex: number) => void
-  setEffect: (effectId: string) => void
   setMediaUpload: (slotId: string, file: File) => void
   clearMediaUpload: (slotId: string) => void
-  setElementStyle: (elementId: string, style: ElementStyle) => void
-  clearElementStyle: (elementId: string) => void
-  clearAllElementStyles: () => void
   showToast: (message: string) => void
   exportConfig: () => string
 }
@@ -81,9 +73,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   dockOpen: false,
   activePanel: null,
   copyMode: false,
-  styleMode: false,
   activeCopyElement: null,
-  activeStyleElement: null,
 
   // Toast
   toastMessage: null,
@@ -94,28 +84,20 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   colorOverrides: null,
   typographyOverride: null,
   typoCategorySettings: {},
+  vibe: { preset: 'zen', intensity: 40 },
   copySelections: {},
   customCopy: {},
   layouts: {},
   sections: { ...DEFAULT_SECTIONS },
   sectionOrder: [...DEFAULT_SECTION_ORDER],
-  effect: 'smooth-rise',
   mediaUploads: {},
-  elementStyles: {},
 
   // --- Actions ---
 
   toggleDock: () =>
     set(s => {
       if (s.dockOpen) {
-        return {
-          dockOpen: false,
-          activePanel: null,
-          copyMode: false,
-          styleMode: false,
-          activeCopyElement: null,
-          activeStyleElement: null,
-        }
+        return { dockOpen: false, activePanel: null, copyMode: false, activeCopyElement: null }
       }
       return { dockOpen: true }
     }),
@@ -123,33 +105,24 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   openPanel: (panel) =>
     set(s => {
       if (s.activePanel === panel) {
-        return { activePanel: null, copyMode: false, styleMode: false, activeCopyElement: null, activeStyleElement: null }
+        return { activePanel: null, copyMode: false, activeCopyElement: null }
       }
       const isCopy = panel === 'copy'
-      const isStyle = panel === 'style'
       return {
         activePanel: panel,
         copyMode: isCopy,
-        styleMode: isStyle,
         activeCopyElement: isCopy ? s.activeCopyElement : null,
-        activeStyleElement: isStyle ? s.activeStyleElement : null,
       }
     }),
 
   closePanel: () =>
-    set({ activePanel: null, copyMode: false, styleMode: false, activeCopyElement: null, activeStyleElement: null }),
+    set({ activePanel: null, copyMode: false, activeCopyElement: null }),
 
   setCopyMode: (on) =>
     set({ copyMode: on, activeCopyElement: null }),
 
-  setStyleMode: (on) =>
-    set({ styleMode: on, activeStyleElement: null }),
-
   setActiveCopyElement: (id) =>
     set({ activeCopyElement: id }),
-
-  setActiveStyleElement: (id) =>
-    set({ activeStyleElement: id }),
 
   setTheme: (id) =>
     set({ theme: id, colorOverrides: null, typographyOverride: null }),
@@ -182,6 +155,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
 
   clearAllTypoCategorySettings: () =>
     set({ typoCategorySettings: {} }),
+
+  setVibe: (vibe) =>
+    set(s => ({ vibe: { ...s.vibe, ...vibe } })),
 
   setCopySelection: (elementId, index) =>
     set(s => ({
@@ -225,9 +201,6 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       order.splice(toIndex, 0, moved)
       return { sectionOrder: order }
     }),
-
-  setEffect: (effectId) =>
-    set({ effect: effectId }),
 
   setMediaUpload: (slotId, file) => {
     const prev = get().mediaUploads[slotId]
@@ -276,21 +249,6 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     })
   },
 
-  setElementStyle: (elementId, style) =>
-    set(s => ({
-      elementStyles: { ...s.elementStyles, [elementId]: { ...(s.elementStyles[elementId] ?? {}), ...style } },
-    })),
-
-  clearElementStyle: (elementId) =>
-    set(s => {
-      const next = { ...s.elementStyles }
-      delete next[elementId]
-      return { elementStyles: next }
-    }),
-
-  clearAllElementStyles: () =>
-    set({ elementStyles: {} }),
-
   showToast: (message) => {
     const prev = get().toastTimeout
     if (prev) clearTimeout(prev)
@@ -307,13 +265,12 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       colorOverrides: s.colorOverrides,
       typographyOverride: s.typographyOverride,
       typoCategorySettings: s.typoCategorySettings,
+      vibe: s.vibe,
       copySelections: s.copySelections,
       customCopy: s.customCopy,
       layouts: s.layouts,
       sections: s.sections,
       sectionOrder: s.sectionOrder,
-      effect: s.effect,
-      elementStyles: s.elementStyles,
       mediaUploads: Object.fromEntries(
         Object.entries(s.mediaUploads).map(([k, v]) => [
           k,

@@ -206,26 +206,6 @@ body::after {
 }
 .media-slot__clear:hover { background: rgba(220, 40, 40, 0.8); }
 
-/* ===== STYLE MODE ===== */
-.style-mode h1, .style-mode h2, .style-mode h3, .style-mode h4, .style-mode h5, .style-mode h6,
-.style-mode p, .style-mode span, .style-mode a, .style-mode button,
-.style-mode blockquote, .style-mode li, .style-mode section,
-.style-mode .hero, .style-mode .media-slot,
-.style-mode .style-target {
-  cursor: pointer; position: relative;
-  transition: outline-color 0.3s ease; border-radius: 2px;
-}
-.style-mode h1:hover, .style-mode h2:hover, .style-mode h3:hover, .style-mode h4:hover,
-.style-mode p:hover, .style-mode span:hover, .style-mode a:hover,
-.style-mode blockquote:hover, .style-mode li:hover,
-.style-mode .style-target:hover {
-  outline: 1.5px dashed rgba(153, 50, 204, 0.45); outline-offset: 4px;
-}
-.style-mode .style-active,
-.style-mode [data-style-id].style-active {
-  outline: 1.5px solid rgba(153, 50, 204, 0.9) !important; outline-offset: 4px;
-}
-
 /* ===== LIGHT SECTION OVERRIDE (for contrast themes) ===== */
 [data-light-section] { background: var(--ls-bg, #faf8f5) !important; }
 [data-light-section],

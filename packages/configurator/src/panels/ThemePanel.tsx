@@ -17,7 +17,7 @@ export function ThemePanel() {
   const setColorOverride = useConfiguratorStore(s => s.setColorOverride)
   const clearColorOverrides = useConfiguratorStore(s => s.clearColorOverrides)
 
-  const [colorsOpen, setColorsOpen] = useState(false)
+  const [colorsExpanded, setColorsExpanded] = useState(false)
 
   const themeList = useMemo(() => Object.values(themes), [])
 
@@ -43,8 +43,11 @@ export function ThemePanel() {
     }
   }
 
+  const hasOverrides = colorOverrides && Object.keys(colorOverrides).length > 0
+
   return (
-    <>
+    <div className="cfg-theme-cascade">
+      {/* Level 1: Theme selection */}
       <div className="cfg-theme-list">
         {themeList.map(theme => (
           <button
@@ -64,43 +67,63 @@ export function ThemePanel() {
         ))}
       </div>
 
-      <button
-        className={`cfg-colors-toggle ${colorsOpen ? 'cfg-colors-toggle--open' : ''}`}
-        onClick={() => setColorsOpen(!colorsOpen)}
-      >
-        <span>Customize Colors</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
-
-      {colorsOpen && (
-        <>
-          <div className="cfg-colors-grid">
-            {Object.keys(EDITABLE_LABELS).map(role => {
-              const value = getColorValue(role)
-              return (
-                <div key={role} className="cfg-color-input">
-                  <span className="cfg-color-input__label">{EDITABLE_LABELS[role]}</span>
-                  <div className="cfg-color-input__wrapper">
-                    <input
-                      type="color"
-                      value={value}
-                      onChange={e => handleColorChange(role, e.target.value)}
-                    />
-                    <span className="cfg-color-input__hex">{value}</span>
-                  </div>
-                </div>
-              )
-            })}
+      {/* Level 2: Inline color customization (cascading, like typography) */}
+      <div className={`cfg-typo-cat ${colorsExpanded ? 'cfg-typo-cat--open' : ''}`} style={{ marginTop: 8 }}>
+        <button
+          className={`cfg-typo-cat__header ${hasOverrides ? 'cfg-typo-cat__header--set' : ''}`}
+          onClick={() => setColorsExpanded(!colorsExpanded)}
+        >
+          <div className="cfg-typo-cat__info">
+            <span className="cfg-typo-cat__name">Customize Colors</span>
+            <span className="cfg-typo-cat__desc">Fine-tune the palette for this theme</span>
           </div>
-          {colorOverrides && (
-            <button className="cfg-colors-reset" onClick={clearColorOverrides}>
-              Reset to Theme Defaults
-            </button>
+          {hasOverrides && (
+            <span className="cfg-typo-cat__badge">Custom</span>
           )}
-        </>
-      )}
-    </>
+          <svg
+            className="cfg-typo-cat__chevron"
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+
+        {colorsExpanded && (
+          <div className="cfg-typo-cat__body">
+            <div className="cfg-theme-colors-inline">
+              {Object.keys(EDITABLE_LABELS).map(role => {
+                const value = getColorValue(role)
+                return (
+                  <div key={role} className="cfg-theme-color-row">
+                    <span className="cfg-theme-color-row__label">{EDITABLE_LABELS[role]}</span>
+                    <div className="cfg-theme-color-row__controls">
+                      <input
+                        type="color"
+                        value={value}
+                        onChange={e => handleColorChange(role, e.target.value)}
+                        className="cfg-typo-level__color-picker"
+                      />
+                      <span className="cfg-typo-level__color-hex">{value}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {hasOverrides && (
+              <button className="cfg-colors-reset" style={{ marginTop: 8 }} onClick={clearColorOverrides}>
+                Reset to Theme Defaults
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

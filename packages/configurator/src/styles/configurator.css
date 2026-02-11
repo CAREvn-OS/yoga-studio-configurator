@@ -395,101 +395,6 @@
   text-overflow: ellipsis;
 }
 
-/* Customize Colors section */
-.cfg-colors-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 8px 0;
-  margin-top: 8px;
-  border: none;
-  border-top: 1px solid var(--cfg-border);
-  background: transparent;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  transition: color var(--cfg-transition);
-}
-
-.cfg-colors-toggle:hover {
-  color: var(--cfg-text);
-}
-
-.cfg-colors-toggle svg {
-  width: 12px;
-  height: 12px;
-  transition: transform var(--cfg-transition);
-}
-
-.cfg-colors-toggle--open svg {
-  transform: rotate(180deg);
-}
-
-.cfg-colors-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding-top: 8px;
-}
-
-.cfg-color-input {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cfg-color-input__label {
-  font-size: 10px;
-  color: var(--cfg-text-dim);
-  text-transform: capitalize;
-  font-family: var(--cfg-font);
-}
-
-.cfg-color-input__wrapper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--cfg-highlight);
-  border: 1px solid var(--cfg-border);
-  border-radius: 6px;
-  padding: 4px 8px;
-  transition: border-color var(--cfg-transition);
-}
-
-.cfg-color-input__wrapper:hover {
-  border-color: var(--cfg-border-hover);
-}
-
-.cfg-color-input input[type="color"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 0;
-  background: transparent;
-}
-
-.cfg-color-input input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.cfg-color-input input[type="color"]::-webkit-color-swatch {
-  border: 1px solid var(--cfg-border);
-  border-radius: 4px;
-}
-
-.cfg-color-input__hex {
-  font-size: 10px;
-  font-family: var(--cfg-font);
-  color: var(--cfg-text-dim);
-  letter-spacing: 0.02em;
-}
 
 .cfg-colors-reset {
   margin-top: 8px;
@@ -891,73 +796,6 @@
 }
 
 
-/* ---------------------------------------------------------------
-   Effects Panel
-   --------------------------------------------------------------- */
-
-.cfg-effects-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cfg-effect-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  text-align: left;
-  padding: 8px 10px;
-  border: none;
-  border-radius: var(--cfg-radius-sm);
-  background: transparent;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  font-size: 12px;
-  cursor: pointer;
-  transition: background var(--cfg-transition), color var(--cfg-transition);
-}
-
-.cfg-effect-option:hover {
-  background: var(--cfg-highlight);
-  color: var(--cfg-text);
-}
-
-.cfg-effect-option--active {
-  background: var(--cfg-active);
-  color: var(--cfg-accent);
-}
-
-.cfg-effect-radio {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--cfg-text-muted);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color var(--cfg-transition);
-}
-
-.cfg-effect-option--active .cfg-effect-radio {
-  border-color: var(--cfg-accent);
-}
-
-.cfg-effect-radio__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cfg-accent);
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity var(--cfg-transition), transform var(--cfg-transition);
-}
-
-.cfg-effect-option--active .cfg-effect-radio__dot {
-  opacity: 1;
-  transform: scale(1);
-}
 
 
 /* ---------------------------------------------------------------
@@ -1092,315 +930,118 @@
 
 
 /* ---------------------------------------------------------------
-   Style Panel
+   Vibe Panel
    --------------------------------------------------------------- */
 
-.cfg-toggle-btn {
+.cfg-vibe-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfg-vibe-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.cfg-vibe-preset {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  padding: 8px 12px;
+  text-align: left;
+  padding: 8px 10px;
   border: 1px solid var(--cfg-border);
   border-radius: var(--cfg-radius-sm);
-  background: var(--cfg-highlight);
-  color: var(--cfg-text);
+  background: transparent;
+  color: var(--cfg-text-dim);
   font-family: var(--cfg-font);
-  font-size: 12px;
-  font-weight: 500;
   cursor: pointer;
   transition: background var(--cfg-transition), border-color var(--cfg-transition), color var(--cfg-transition);
 }
 
-.cfg-toggle-btn:hover {
-  background: var(--cfg-active);
+.cfg-vibe-preset:hover {
+  background: var(--cfg-highlight);
   border-color: var(--cfg-border-hover);
+  color: var(--cfg-text);
 }
 
-.cfg-toggle-btn--active {
-  background: rgba(153, 50, 204, 0.25);
-  border-color: rgba(153, 50, 204, 0.5);
+.cfg-vibe-preset--active {
+  background: rgba(160, 32, 192, 0.1);
+  border-color: rgba(160, 80, 200, 0.35);
   color: var(--cfg-accent);
 }
 
+.cfg-vibe-preset__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
 
-/* ---------------------------------------------------------------
-   Style Popover (Uber-modern)
-   --------------------------------------------------------------- */
+.cfg-vibe-preset__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
 
-.cfg-style-pop {
-  position: fixed;
-  z-index: calc(var(--cfg-z) + 10);
-  width: 280px;
-  background: linear-gradient(165deg, rgba(18, 18, 22, 0.95) 0%, rgba(28, 18, 34, 0.96) 100%);
-  backdrop-filter: blur(32px) saturate(1.4);
-  -webkit-backdrop-filter: blur(32px) saturate(1.4);
-  border: 1px solid rgba(160, 80, 200, 0.15);
-  border-radius: 16px;
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 0 30px rgba(106, 27, 106, 0.06);
-  opacity: 0;
-  transform: translateY(10px) scale(0.97);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: var(--cfg-font);
+.cfg-vibe-preset__name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cfg-vibe-preset__desc {
+  font-size: 9px;
+  color: var(--cfg-text-muted);
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.cfg-style-pop--visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.cfg-vibe-intensity {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--cfg-border);
 }
 
-.cfg-style-pop__header {
+.cfg-vibe-intensity__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 8px 6px 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.cfg-style-pop__tabs {
-  display: flex;
-  gap: 2px;
-}
-
-.cfg-style-pop__tab {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
+.cfg-vibe-intensity__value {
   font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  font-weight: 600;
+  color: rgba(160, 32, 192, 0.9);
+  font-family: var(--cfg-font);
+  letter-spacing: 0.04em;
 }
 
-.cfg-style-pop__tab:hover {
-  color: var(--cfg-text);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.cfg-style-pop__tab--active {
-  color: var(--cfg-accent);
-  background: linear-gradient(135deg, rgba(160, 32, 192, 0.15) 0%, rgba(123, 47, 190, 0.1) 100%);
-}
-
-.cfg-style-pop__close {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
+.cfg-vibe-intensity__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
   color: var(--cfg-text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  padding: 0;
-  transition: color 0.2s ease, background 0.2s ease;
-}
-
-.cfg-style-pop__close:hover {
-  color: var(--cfg-text);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.cfg-style-pop__close svg { width: 13px; height: 13px; }
-
-.cfg-style-pop__body {
-  padding: 12px 14px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.cfg-style-pop__footer {
-  padding: 8px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: flex-end;
-}
-
-.cfg-style-pop__reset {
-  padding: 4px 12px;
-  border: 1px solid var(--cfg-border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  font-size: 10px;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.cfg-style-pop__reset:hover {
-  color: var(--cfg-text);
-  border-color: var(--cfg-border-hover);
-}
-
-/* Color section */
-.cfg-style-pop__mode-toggle {
-  display: flex;
-  gap: 2px;
-  padding: 2px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
-}
-
-.cfg-style-pop__mode-btn {
-  flex: 1;
-  padding: 5px 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cfg-style-pop__mode-btn--active {
-  background: rgba(160, 32, 192, 0.18);
-  color: var(--cfg-accent);
-}
-
-.cfg-style-pop__color-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.cfg-style-pop__color-preview {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  flex-shrink: 0;
-}
-
-.cfg-style-pop__color-input {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 36px;
-  height: 32px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 0;
-  background: transparent;
-}
-
-.cfg-style-pop__color-input::-webkit-color-swatch-wrapper { padding: 2px; }
-.cfg-style-pop__color-input::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; }
-
-.cfg-style-pop__color-hex {
-  font-size: 11px;
-  color: var(--cfg-text-dim);
   font-family: var(--cfg-font);
   letter-spacing: 0.02em;
+  padding: 0 2px;
 }
 
-/* Gradient section */
-.cfg-style-pop__gradient-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.cfg-style-pop__gradient-preview {
-  width: 100%;
-  height: 28px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.cfg-style-pop__gradient-controls {
-  display: flex;
-  gap: 8px;
-}
-
-.cfg-style-pop__grad-stop {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 6px;
-}
-
-.cfg-style-pop__grad-stop input[type="color"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 0;
-  background: transparent;
-}
-
-.cfg-style-pop__grad-stop input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
-.cfg-style-pop__grad-stop input[type="color"]::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.12); border-radius: 3px; }
-
-.cfg-style-pop__grad-stop span {
+.cfg-vibe-intensity__hint {
   font-size: 10px;
-  color: var(--cfg-text-dim);
+  color: var(--cfg-text-muted);
   font-family: var(--cfg-font);
+  line-height: 1.4;
+  font-style: italic;
 }
 
-.cfg-style-pop__angle-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cfg-style-pop__angle-row label {
-  font-size: 10px;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  flex-shrink: 0;
-  width: 34px;
-}
-
-.cfg-style-pop__angle-row span {
-  font-size: 10px;
-  color: var(--cfg-text-dim);
-  font-family: var(--cfg-font);
-  flex-shrink: 0;
-  width: 30px;
-  text-align: right;
-}
-
-.cfg-style-pop__grad-presets {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.cfg-style-pop__grad-chip {
-  width: 32px;
-  height: 18px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.cfg-style-pop__grad-chip:hover {
-  transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Shared slider */
-.cfg-style-pop__slider {
+/* Shared range slider (used by Vibe + Typography) */
+.cfg-vibe-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
@@ -1411,7 +1052,7 @@
   cursor: pointer;
 }
 
-.cfg-style-pop__slider::-webkit-slider-thumb {
+.cfg-vibe-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 14px;
@@ -1423,7 +1064,7 @@
   box-shadow: 0 1px 6px rgba(106, 27, 106, 0.4);
 }
 
-.cfg-style-pop__slider::-moz-range-thumb {
+.cfg-vibe-slider::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -1433,26 +1074,40 @@
   box-shadow: 0 1px 6px rgba(106, 27, 106, 0.4);
 }
 
-/* Weight tab */
-.cfg-style-pop__weight-preview {
-  font-size: 28px;
-  color: var(--cfg-text);
-  text-align: center;
-  line-height: 1.2;
-  padding: 6px 0;
-  letter-spacing: 0.02em;
+.cfg-vibe-slider--sm {
+  height: 3px;
 }
 
-.cfg-style-pop__weight-value {
-  text-align: center;
-  font-size: 12px;
+.cfg-vibe-slider--sm::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.cfg-vibe-slider--sm::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+
+/* ---------------------------------------------------------------
+   Typography — Weight Slider
+   --------------------------------------------------------------- */
+
+.cfg-typo-weight-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-typo-weight-slider__value {
+  font-size: 11px;
+  font-weight: 500;
   color: rgba(160, 32, 192, 0.9);
-  font-weight: 600;
   font-family: var(--cfg-font);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
-.cfg-style-pop__weight-labels {
+.cfg-typo-weight-slider__labels {
   display: flex;
   justify-content: space-between;
   font-size: 8px;
@@ -1462,47 +1117,76 @@
   padding: 0 2px;
 }
 
-/* Animate tab */
-.cfg-style-pop__anim-list {
+
+/* ---------------------------------------------------------------
+   Typography — Effects Section
+   --------------------------------------------------------------- */
+
+.cfg-typo-effects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cfg-typo-effect-row {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.cfg-style-pop__anim-btn {
+.cfg-typo-effect-row__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cfg-typo-effect-row__name {
+  font-size: 10px;
+  color: var(--cfg-text-dim);
+  font-family: var(--cfg-font);
+  font-weight: 500;
+}
+
+.cfg-typo-effect-row__val {
+  font-size: 9px;
+  color: var(--cfg-text-muted);
+  font-family: var(--cfg-font);
+  letter-spacing: 0.02em;
+}
+
+
+/* ---------------------------------------------------------------
+   Theme — Inline Color Customization
+   --------------------------------------------------------------- */
+
+.cfg-theme-cascade {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfg-theme-colors-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cfg-theme-color-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 7px 10px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
+}
+
+.cfg-theme-color-row__label {
+  font-size: 11px;
   color: var(--cfg-text-dim);
   font-family: var(--cfg-font);
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  font-weight: 400;
 }
 
-.cfg-style-pop__anim-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--cfg-text);
-}
-
-.cfg-style-pop__anim-btn--active {
-  background: linear-gradient(135deg, rgba(160, 32, 192, 0.15) 0%, rgba(123, 47, 190, 0.1) 100%);
-  color: var(--cfg-accent);
-}
-
-.cfg-style-pop__anim-name { font-weight: 500; }
-
-.cfg-style-pop__anim-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #A020C0, #7B2FBE);
-  flex-shrink: 0;
+.cfg-theme-color-row__controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 
