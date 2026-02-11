@@ -34,6 +34,12 @@ const FONT_FAMILY_MAP: Record<string, string> = {
   'minimal': "'Jost', 'Nunito Sans', sans-serif",
   'classic': "'Source Serif 4', 'Libre Baskerville', serif",
   'bold': "'DM Sans', 'Montserrat', sans-serif",
+  'script': "'Dancing Script', cursive",
+  'elegant': "'Great Vibes', cursive",
+  'editorial': "'Playfair Display', 'EB Garamond', serif",
+  'geometric': "'Poppins', 'Raleway', sans-serif",
+  'literary': "'Bitter', 'Crimson Pro', serif",
+  'clean': "'Raleway', 'Montserrat', sans-serif",
 }
 
 const VIBE_CLASSES: Record<string, string> = {
@@ -168,6 +174,70 @@ function VibeApplier() {
   return null
 }
 
+function StylizeApplier() {
+  const borderRadiusOverride = useConfiguratorStore(s => s.borderRadiusOverride)
+  const buttonStyle = useConfiguratorStore(s => s.buttonStyle)
+  const cardStyle = useConfiguratorStore(s => s.cardStyle)
+  const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (borderRadiusOverride !== null) {
+      root.style.setProperty('--border-radius', `${borderRadiusOverride}px`)
+    }
+  }, [borderRadiusOverride])
+
+  useEffect(() => {
+    const body = document.body
+    body.classList.remove('btn-style-rounded', 'btn-style-sharp', 'btn-style-pill')
+    body.classList.add(`btn-style-${buttonStyle}`)
+  }, [buttonStyle])
+
+  useEffect(() => {
+    const body = document.body
+    body.classList.remove('card-style-flat', 'card-style-shadow', 'card-style-outline')
+    body.classList.add(`card-style-${cardStyle}`)
+  }, [cardStyle])
+
+  useEffect(() => {
+    const root = document.documentElement
+    const body = document.body
+    if (gradientSettings.type === 'none') {
+      body.classList.remove('gradient-enabled')
+      root.style.removeProperty('--gradient-bg')
+      return
+    }
+    body.classList.add('gradient-enabled')
+    const [c1, c2] = gradientSettings.colors
+    let gradient = ''
+    switch (gradientSettings.type) {
+      case 'linear': gradient = `linear-gradient(180deg, ${c1}, ${c2})`; break
+      case 'radial': gradient = `radial-gradient(ellipse at center, ${c1}, ${c2})`; break
+      case 'diagonal': gradient = `linear-gradient(135deg, ${c1}, ${c2})`; break
+      case 'mesh': gradient = `linear-gradient(135deg, ${c1} 0%, ${c2} 50%, ${c1} 100%)`; break
+      case 'subtle': gradient = `linear-gradient(180deg, ${c1} 0%, ${c2} 30%, ${c1} 100%)`; break
+    }
+    root.style.setProperty('--gradient-bg', gradient)
+  }, [gradientSettings])
+
+  return null
+}
+
+function PreviewModeApplier() {
+  const previewMode = useConfiguratorStore(s => s.previewMode)
+
+  useEffect(() => {
+    if (previewMode) {
+      document.body.classList.add('preview-mode')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      document.body.classList.remove('preview-mode')
+    }
+  }, [previewMode])
+
+  return null
+}
+
 export default function App() {
   const theme = useConfiguratorStore(s => s.theme)
   const colorOverrides = useConfiguratorStore(s => s.colorOverrides)
@@ -197,6 +267,8 @@ export default function App() {
       <RevealObserver />
       <TypoCategoryApplier />
       <VibeApplier />
+      <StylizeApplier />
+      <PreviewModeApplier />
       <Navbar />
       <Hero layout={layouts.hero ?? 'center'} />
       <div className="divider">

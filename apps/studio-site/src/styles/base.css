@@ -218,35 +218,42 @@ body::after {
   z-index: 1;
 }
 
-.media-slot--duotone .media-slot__img {
-  filter: grayscale(1) contrast(1.1);
-  mix-blend-mode: multiply;
+/* ===== BUTTON STYLE VARIANTS ===== */
+body.btn-style-sharp .btn { border-radius: 0; }
+body.btn-style-pill .btn { border-radius: 100px; }
+
+/* ===== CARD STYLE VARIANTS ===== */
+body.card-style-shadow .card,
+body.card-style-shadow [class*="card"] {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
-.media-slot--duotone::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: var(--color-accent, #9a8470);
-  opacity: 0.3;
-  mix-blend-mode: color;
-  pointer-events: none;
-  z-index: 1;
+body.card-style-outline .card,
+body.card-style-outline [class*="card"] {
+  border: 1px solid var(--color-sand);
+  box-shadow: none;
 }
 
-.media-slot--vignette::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.35) 100%);
-  pointer-events: none;
-  z-index: 1;
+/* ===== GRADIENT BACKGROUNDS ===== */
+body.gradient-enabled .hero-section {
+  background: var(--gradient-bg) !important;
+}
+body.gradient-enabled section:nth-child(even) {
+  background: var(--gradient-bg);
 }
 
-.media-slot--soft-edge::after {
-  content: '';
-  position: absolute; inset: 0;
-  box-shadow: inset 0 0 30px 15px var(--color-cream, #faf8f5);
-  pointer-events: none;
-  z-index: 1;
+/* ===== PREVIEW MODE ===== */
+body.preview-mode .cfg-dock-wrapper,
+body.preview-mode .cfg-panel-wrapper,
+body.preview-mode .media-slot__upload-hint,
+body.preview-mode .media-slot__clear,
+body.preview-mode .copy-highlight,
+body.preview-mode [data-copy-id]::after {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
+body.preview-mode .media-slot--uploadable { cursor: default; }
+body.preview-mode .media-slot--uploadable:hover { outline: none; }
 
 /* ===== LIGHT SECTION OVERRIDE (for contrast themes) ===== */
 [data-light-section] { background: var(--ls-bg, #faf8f5) !important; }

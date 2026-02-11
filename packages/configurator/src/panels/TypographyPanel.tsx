@@ -17,6 +17,12 @@ const FONT_STYLES: { id: string; name: string; family: string }[] = [
   { id: 'minimal', name: 'Minimal', family: "'Jost', 'Nunito Sans', sans-serif" },
   { id: 'classic', name: 'Classic', family: "'Source Serif 4', 'Libre Baskerville', serif" },
   { id: 'bold', name: 'Bold', family: "'DM Sans', 'Montserrat', sans-serif" },
+  { id: 'script', name: 'Script', family: "'Dancing Script', cursive" },
+  { id: 'elegant', name: 'Elegant', family: "'Great Vibes', cursive" },
+  { id: 'editorial', name: 'Editorial', family: "'Playfair Display', 'EB Garamond', serif" },
+  { id: 'geometric', name: 'Geometric', family: "'Poppins', 'Raleway', sans-serif" },
+  { id: 'literary', name: 'Literary', family: "'Bitter', 'Crimson Pro', serif" },
+  { id: 'clean', name: 'Clean', family: "'Raleway', 'Montserrat', sans-serif" },
 ]
 
 function getWeightLabel(w: number): string {

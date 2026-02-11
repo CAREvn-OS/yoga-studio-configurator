@@ -124,3 +124,127 @@ body.vibe-wave img:hover {
   transform: rotate(calc(1deg * var(--vibe-intensity, 0.4)));
   transition: transform 0.5s ease;
 }
+
+
+/* ===================================================================
+   VIBE PERSISTENT STYLES — Visible-state styling so switching vibes
+   produces an immediate visual difference on cards, images & buttons.
+   All effects scale with --vibe-intensity (0–1).
+   =================================================================== */
+
+/* --- ZEN PERSISTENT: Calm, minimal --- */
+body.vibe-zen .card,
+body.vibe-zen [class*="card"] {
+  transition: opacity 0.6s ease, box-shadow 0.6s ease;
+}
+body.vibe-zen .card:hover,
+body.vibe-zen [class*="card"]:hover {
+  opacity: calc(1 - 0.02 * var(--vibe-intensity, 0.4));
+}
+body.vibe-zen .media-slot__img {
+  transition: transform 0.6s ease;
+}
+body.vibe-zen .media-slot__img:hover {
+  transform: scale(calc(1 + 0.01 * var(--vibe-intensity, 0.4)));
+}
+
+/* --- PULSE PERSISTENT: Breathe & grow --- */
+body.vibe-pulse .card,
+body.vibe-pulse [class*="card"] {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+body.vibe-pulse .card:hover,
+body.vibe-pulse [class*="card"]:hover {
+  transform: scale(calc(1 + 0.015 * var(--vibe-intensity, 0.4)));
+  box-shadow: 0 calc(4px * var(--vibe-intensity, 0.4)) calc(16px * var(--vibe-intensity, 0.4)) rgba(0, 0, 0, 0.08);
+}
+body.vibe-pulse .media-slot__img {
+  transition: transform 0.6s ease;
+}
+body.vibe-pulse .media-slot__img:hover {
+  transform: scale(calc(1 + 0.03 * var(--vibe-intensity, 0.4)));
+}
+
+/* --- BLOOM PERSISTENT: Open & unfold, spring --- */
+body.vibe-bloom .card,
+body.vibe-bloom [class*="card"] {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-radius 0.4s ease;
+}
+body.vibe-bloom .card:hover,
+body.vibe-bloom [class*="card"]:hover {
+  transform: scale(calc(1 + 0.02 * var(--vibe-intensity, 0.4)));
+  box-shadow: 0 calc(6px * var(--vibe-intensity, 0.4)) calc(24px * var(--vibe-intensity, 0.4)) rgba(0, 0, 0, 0.06);
+  border-radius: calc(var(--border-radius, 8px) + 4px * var(--vibe-intensity, 0.4));
+}
+body.vibe-bloom .media-slot__img {
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body.vibe-bloom .media-slot__img:hover {
+  transform: scale(calc(1 + 0.05 * var(--vibe-intensity, 0.4)));
+}
+body.vibe-bloom .btn {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- DRIFT PERSISTENT: Float & glide, alternating direction --- */
+body.vibe-drift .card,
+body.vibe-drift [class*="card"] {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.vibe-drift .card:hover,
+body.vibe-drift [class*="card"]:hover {
+  transform: translateX(calc(3px * var(--vibe-intensity, 0.4)));
+}
+body.vibe-drift .card:nth-child(even):hover,
+body.vibe-drift [class*="card"]:nth-child(even):hover {
+  transform: translateX(calc(-3px * var(--vibe-intensity, 0.4)));
+}
+body.vibe-drift .media-slot__img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.vibe-drift .media-slot__img:hover {
+  transform: translateX(calc(2px * var(--vibe-intensity, 0.4)));
+}
+
+/* --- SPARK PERSISTENT: Pop & bounce, snappy --- */
+body.vibe-spark .card,
+body.vibe-spark [class*="card"] {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+}
+body.vibe-spark .card:hover,
+body.vibe-spark [class*="card"]:hover {
+  transform: translateY(calc(-5px * var(--vibe-intensity, 0.4)));
+  box-shadow: 0 calc(8px * var(--vibe-intensity, 0.4)) calc(20px * var(--vibe-intensity, 0.4)) rgba(0, 0, 0, 0.1);
+}
+body.vibe-spark .media-slot__img {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+body.vibe-spark .media-slot__img:hover {
+  transform: scale(calc(1 + 0.06 * var(--vibe-intensity, 0.4)));
+}
+
+/* --- WAVE PERSISTENT: Flow & ripple, slight rotation --- */
+body.vibe-wave .card,
+body.vibe-wave [class*="card"] {
+  transition: transform 0.5s cubic-bezier(0.45, 0, 0.55, 1);
+}
+body.vibe-wave .card:hover,
+body.vibe-wave [class*="card"]:hover {
+  transform: rotate(calc(0.3deg * var(--vibe-intensity, 0.4)));
+}
+body.vibe-wave .card:nth-child(even):hover,
+body.vibe-wave [class*="card"]:nth-child(even):hover {
+  transform: rotate(calc(-0.3deg * var(--vibe-intensity, 0.4)));
+}
+body.vibe-wave .media-slot__img {
+  transition: transform 0.5s ease;
+}
+body.vibe-wave .media-slot__img:hover {
+  transform: rotate(calc(0.5deg * var(--vibe-intensity, 0.4)));
+}
+body.vibe-wave .btn {
+  transition: all 0.5s cubic-bezier(0.45, 0, 0.55, 1);
+}
+body.vibe-wave .btn:hover {
+  transform: translateY(calc(-2px * var(--vibe-intensity, 0.4)));
+}

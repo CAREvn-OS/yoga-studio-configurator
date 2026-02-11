@@ -54,6 +54,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '8px',
     swatch: ['#faf6f1', '#c2613a'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'warm',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -86,6 +87,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '4px',
     swatch: ['#fafafa', '#1a1a1a'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'light',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -118,6 +120,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '6px',
     swatch: ['#1e1b18', '#c9a84c'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'dark',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -150,6 +153,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '10px',
     swatch: ['#f4f8f4', '#4a7c59'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'cool',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -182,6 +186,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '8px',
     swatch: ['#f3f6fa', '#2b5ea7'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'cool',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -214,6 +219,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '12px',
     swatch: ['#fbf5f8', '#c0627e'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'warm',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -246,6 +252,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '10px',
     swatch: ['#fcf7f2', '#d96a28'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'warm',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -278,6 +285,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '2px',
     swatch: ['#fafafa', '#222222'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'light',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -318,6 +326,7 @@ export const themes: Record<string, ThemeDef> = {
       hover: '#f0ebe3',
     },
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'dark',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -350,6 +359,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '8px',
     swatch: ['#201c30', '#a882d4'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'dark',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -390,6 +400,7 @@ export const themes: Record<string, ThemeDef> = {
       hover: '#efe8f8',
     },
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'dark',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -422,6 +433,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '6px',
     swatch: ['#f5f6f8', '#4a6670'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'cool',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -454,6 +466,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '8px',
     swatch: ['#fbf6ef', '#b07c3a'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'warm',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -486,6 +499,7 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '6px',
     swatch: ['#f7f3f0', '#a0503c'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'warm',
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -518,5 +532,6 @@ export const themes: Record<string, ThemeDef> = {
     borderRadius: '10px',
     swatch: ['#f2f7fa', '#3a8ab5'],
     editableColors: { primary: 'ink', secondary: 'warm', tertiary: 'sand', accent: 'accent' },
+    category: 'cool',
   },
 }

@@ -37,6 +37,7 @@ export interface ThemeDef {
     tertiary: keyof ThemeColors
     accent: keyof ThemeColors
   }
+  category: 'light' | 'dark' | 'warm' | 'cool'
 }
 
 export interface MediaUpload {
@@ -58,7 +59,22 @@ export interface TypoCategorySettings {
   letterSpacing?: number // 0–100 intensity
 }
 
-export type ImageDisplayStyle = 'none' | 'gradient-fade' | 'duotone' | 'vignette' | 'soft-edge'
+export type ImageDisplayStyle = 'none' | 'gradient-fade'
+
+export interface MediaSlotSettings {
+  displayStyle: ImageDisplayStyle
+  aspectRatio?: string
+  objectPosition?: string
+}
+
+export type ButtonStyle = 'rounded' | 'sharp' | 'pill'
+export type CardStyle = 'flat' | 'shadow' | 'outline'
+export type GradientType = 'none' | 'linear' | 'radial' | 'diagonal' | 'mesh' | 'subtle'
+
+export interface GradientSettings {
+  type: GradientType
+  colors: [string, string]
+}
 
 // Vibe system — 6 global presets with intensity
 export interface VibeSettings {
@@ -66,7 +82,7 @@ export interface VibeSettings {
   intensity: number // 0–100
 }
 
-export type PanelId = 'theme' | 'copy' | 'layout' | 'sections' | 'vibe' | 'typography' | 'share'
+export type PanelId = 'theme' | 'preview' | 'layout' | 'sections' | 'vibe' | 'typography' | 'share'
 
 export interface EffectDef {
   name: string

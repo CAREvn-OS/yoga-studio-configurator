@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle } from '@care/shared-types'
+import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, GradientSettings, MediaSlotSettings } from '@care/shared-types'
 import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
@@ -44,6 +44,12 @@ interface ConfiguratorState {
   mediaUploads: Record<string, MediaUpload>
   imageDisplayStyle: ImageDisplayStyle
   logoUpload: MediaUpload | null
+  mediaSlotSettings: Record<string, MediaSlotSettings>
+  borderRadiusOverride: number | null
+  buttonStyle: ButtonStyle
+  cardStyle: CardStyle
+  gradientSettings: GradientSettings
+  previewMode: boolean
 
   // Actions
   toggleDock: () => void
@@ -73,6 +79,13 @@ interface ConfiguratorState {
   setImageDisplayStyle: (style: ImageDisplayStyle) => void
   setLogoUpload: (file: File) => void
   clearLogoUpload: () => void
+  setMediaSlotSetting: (slotId: string, settings: Partial<MediaSlotSettings>) => void
+  clearMediaSlotSetting: (slotId: string) => void
+  setBorderRadiusOverride: (value: number | null) => void
+  setButtonStyle: (style: ButtonStyle) => void
+  setCardStyle: (style: CardStyle) => void
+  setGradientSettings: (settings: Partial<GradientSettings>) => void
+  togglePreviewMode: () => void
   showToast: (message: string) => void
   exportConfig: () => string
   restoreConfig: (config: Record<string, any>) => void
@@ -83,7 +96,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   // UI defaults
   dockOpen: false,
   activePanel: null,
-  copyMode: false,
+  copyMode: true,
   activeCopyElement: null,
 
   // Toast
@@ -107,6 +120,12 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   mediaUploads: {},
   imageDisplayStyle: 'none' as ImageDisplayStyle,
   logoUpload: null,
+  mediaSlotSettings: {},
+  borderRadiusOverride: null,
+  buttonStyle: 'rounded' as ButtonStyle,
+  cardStyle: 'flat' as CardStyle,
+  gradientSettings: { type: 'none', colors: ['#faf8f5', '#e8ddd0'] } as GradientSettings,
+  previewMode: false,
 
   // --- Actions ---
 
@@ -120,19 +139,17 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
 
   openPanel: (panel) =>
     set(s => {
+      if (panel === 'preview') {
+        return s // preview handled by togglePreviewMode
+      }
       if (s.activePanel === panel) {
-        return { activePanel: null, copyMode: false, activeCopyElement: null }
+        return { activePanel: null }
       }
-      const isCopy = panel === 'copy'
-      return {
-        activePanel: panel,
-        copyMode: isCopy,
-        activeCopyElement: isCopy ? s.activeCopyElement : null,
-      }
+      return { activePanel: panel }
     }),
 
   closePanel: () =>
-    set({ activePanel: null, copyMode: false, activeCopyElement: null }),
+    set({ activePanel: null }),
 
   setCopyMode: (on) =>
     set({ copyMode: on, activeCopyElement: null }),
@@ -323,6 +340,43 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     set({ logoUpload: null })
   },
 
+  setMediaSlotSetting: (slotId, settings) =>
+    set(s => ({
+      mediaSlotSettings: {
+        ...s.mediaSlotSettings,
+        [slotId]: { ...(s.mediaSlotSettings[slotId] ?? { displayStyle: 'none' }), ...settings },
+      },
+    })),
+
+  clearMediaSlotSetting: (slotId) =>
+    set(s => {
+      const next = { ...s.mediaSlotSettings }
+      delete next[slotId]
+      return { mediaSlotSettings: next }
+    }),
+
+  setBorderRadiusOverride: (value) =>
+    set({ borderRadiusOverride: value }),
+
+  setButtonStyle: (style) =>
+    set({ buttonStyle: style }),
+
+  setCardStyle: (style) =>
+    set({ cardStyle: style }),
+
+  setGradientSettings: (settings) =>
+    set(s => ({
+      gradientSettings: { ...s.gradientSettings, ...settings } as GradientSettings,
+    })),
+
+  togglePreviewMode: () =>
+    set(s => {
+      if (s.previewMode) {
+        return { previewMode: false, copyMode: true, dockOpen: true }
+      }
+      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null }
+    }),
+
   showToast: (message) => {
     const prev = get().toastTimeout
     if (prev) clearTimeout(prev)
@@ -347,6 +401,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       sectionOrder: s.sectionOrder,
       sectionItems: s.sectionItems,
       imageDisplayStyle: s.imageDisplayStyle,
+      mediaSlotSettings: s.mediaSlotSettings,
+      borderRadiusOverride: s.borderRadiusOverride,
+      buttonStyle: s.buttonStyle,
+      cardStyle: s.cardStyle,
+      gradientSettings: s.gradientSettings,
       logoUpload: s.logoUpload ? {
         name: s.logoUpload.name, type: s.logoUpload.type, size: s.logoUpload.size,
         remotePath: s.logoUpload.remotePath, remoteUrl: s.logoUpload.remoteUrl,
@@ -375,6 +434,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.sectionOrder) updates.sectionOrder = config.sectionOrder
     if (config.sectionItems) updates.sectionItems = config.sectionItems
     if (config.imageDisplayStyle) updates.imageDisplayStyle = config.imageDisplayStyle as ImageDisplayStyle
+    if (config.mediaSlotSettings) updates.mediaSlotSettings = config.mediaSlotSettings
+    if (config.borderRadiusOverride !== undefined) updates.borderRadiusOverride = config.borderRadiusOverride
+    if (config.buttonStyle) updates.buttonStyle = config.buttonStyle as ButtonStyle
+    if (config.cardStyle) updates.cardStyle = config.cardStyle as CardStyle
+    if (config.gradientSettings) updates.gradientSettings = config.gradientSettings as GradientSettings
     // Restore media references using remote URLs (blob URLs are not persisted)
     if (config.mediaUploads) {
       const restored: Record<string, MediaUpload> = {}

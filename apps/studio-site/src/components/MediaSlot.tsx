@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useConfiguratorStore } from '@care/configurator'
+import { MediaSlotPopover } from './MediaSlotPopover'
 
 interface MediaSlotProps {
   slotId: string
@@ -13,8 +14,11 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
   const media = useConfiguratorStore(s => s.mediaUploads[slotId])
   const setMediaUpload = useConfiguratorStore(s => s.setMediaUpload)
   const clearMediaUpload = useConfiguratorStore(s => s.clearMediaUpload)
-  const imageDisplayStyle = useConfiguratorStore(s => s.imageDisplayStyle)
+  const slotSettings = useConfiguratorStore(s => s.mediaSlotSettings[slotId])
+  const copyMode = useConfiguratorStore(s => s.copyMode)
   const inputRef = useRef<HTMLInputElement>(null)
+  const settingsBtnRef = useRef<HTMLButtonElement>(null)
+  const [popoverOpen, setPopoverOpen] = useState(false)
 
   const handleClick = () => {
     inputRef.current?.click()
@@ -31,21 +35,38 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
     clearMediaUpload(slotId)
   }
 
+  const handleSettings = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setPopoverOpen(!popoverOpen)
+  }
+
   const accept = type === 'video' ? 'video/*' : 'image/*'
   const displayUrl = media?.remoteUrl ?? media?.blobUrl
-  const styleClass = media && imageDisplayStyle !== 'none' ? `media-slot--${imageDisplayStyle}` : ''
+
+  // Per-slot display style (fallback to 'none')
+  const displayStyle = slotSettings?.displayStyle ?? 'none'
+  const styleClass = media && displayStyle !== 'none' ? `media-slot--${displayStyle}` : ''
+
+  // Per-slot aspect ratio and object position
+  const slotAspect = slotSettings?.aspectRatio ?? aspectRatio
+  const slotPosition = slotSettings?.objectPosition
 
   return (
     <div
       className={`media-slot media-slot--uploadable ${media ? 'media-slot--filled' : ''} ${styleClass} ${className ?? ''}`}
-      style={{ aspectRatio }}
+      style={{ aspectRatio: slotAspect }}
       onClick={handleClick}
     >
       <input ref={inputRef} type="file" accept={accept} onChange={handleFile} hidden />
       {media ? (
         <>
           {type === 'image' ? (
-            <img src={displayUrl} alt={media.name} className="media-slot__img" />
+            <img
+              src={displayUrl}
+              alt={media.name}
+              className="media-slot__img"
+              style={slotPosition ? { objectPosition: slotPosition } : undefined}
+            />
           ) : (
             <video src={displayUrl} className="media-slot__video" controls />
           )}
@@ -54,6 +75,27 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
+          {copyMode && (
+            <button
+              ref={settingsBtnRef}
+              className="media-slot__settings"
+              onClick={handleSettings}
+              title="Image Settings"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="9" y1="21" x2="9" y2="9" />
+              </svg>
+            </button>
+          )}
+          {popoverOpen && (
+            <MediaSlotPopover
+              slotId={slotId}
+              anchorEl={settingsBtnRef.current}
+              onClose={() => setPopoverOpen(false)}
+            />
+          )}
         </>
       ) : (
         <>

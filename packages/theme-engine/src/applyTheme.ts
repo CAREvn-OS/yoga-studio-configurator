@@ -10,6 +10,17 @@ function camelToKebab(str: string): string {
 }
 
 /**
+ * Convert a hex colour to an rgba string with the given alpha.
+ */
+function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace('#', '')
+  const r = parseInt(clean.substring(0, 2), 16)
+  const g = parseInt(clean.substring(2, 4), 16)
+  const b = parseInt(clean.substring(4, 6), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+/**
  * Determine whether a hex colour is perceptually dark (luminance <= 0.5).
  * Useful for deciding whether overlaid text should be light or dark.
  */
@@ -93,9 +104,11 @@ export function applyTheme(
   if (dark) {
     const navBg = (colorOverrides && colorOverrides.sand) || theme.colors.sand
     root.style.setProperty('--nav-bg', navBg)
+    root.style.setProperty('--nav-scrolled-bg', hexToRgba(navBg, 0.92))
     root.style.setProperty('--btn-secondary-bg', (colorOverrides && colorOverrides.sandLight) || theme.colors.sandLight)
   } else {
     root.style.setProperty('--nav-bg', linenColor)
+    root.style.setProperty('--nav-scrolled-bg', hexToRgba(linenColor, 0.92))
     root.style.setProperty('--btn-secondary-bg', (colorOverrides && colorOverrides.sand) || theme.colors.sand)
   }
 
