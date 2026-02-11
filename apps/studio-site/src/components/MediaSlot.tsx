@@ -13,6 +13,7 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
   const media = useConfiguratorStore(s => s.mediaUploads[slotId])
   const setMediaUpload = useConfiguratorStore(s => s.setMediaUpload)
   const clearMediaUpload = useConfiguratorStore(s => s.clearMediaUpload)
+  const imageDisplayStyle = useConfiguratorStore(s => s.imageDisplayStyle)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
@@ -31,12 +32,12 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
   }
 
   const accept = type === 'video' ? 'video/*' : 'image/*'
-  // Use remote URL if available, fallback to blob
   const displayUrl = media?.remoteUrl ?? media?.blobUrl
+  const styleClass = media && imageDisplayStyle !== 'none' ? `media-slot--${imageDisplayStyle}` : ''
 
   return (
     <div
-      className={`media-slot media-slot--uploadable ${media ? 'media-slot--filled' : ''} ${className ?? ''}`}
+      className={`media-slot media-slot--uploadable ${media ? 'media-slot--filled' : ''} ${styleClass} ${className ?? ''}`}
       style={{ aspectRatio }}
       onClick={handleClick}
     >

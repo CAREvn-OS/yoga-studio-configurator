@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { CopyElement } from './CopyElement'
+import { useConfiguratorStore } from '@care/configurator'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const logoUpload = useConfiguratorStore(s => s.logoUpload)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -16,10 +18,16 @@ export function Navbar() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const logoUrl = logoUpload?.remoteUrl ?? logoUpload?.blobUrl
+
   return (
     <nav className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
       <a href="#" className="nav__logo" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-        <CopyElement id="nav-logo" as="span" />
+        {logoUrl ? (
+          <img src={logoUrl} alt="Logo" className="nav__logo-img" />
+        ) : (
+          <CopyElement id="nav-logo" as="span" />
+        )}
       </a>
       <button
         className={`nav__toggle ${mobileOpen ? 'nav__toggle--open' : ''}`}

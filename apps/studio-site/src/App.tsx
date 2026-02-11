@@ -141,14 +141,6 @@ function TypoCategoryApplier() {
       }
       if (settings.fontWeight) props.push(`font-weight: ${settings.fontWeight} !important`)
       if (settings.color) props.push(`color: ${settings.color} !important`)
-      if (settings.textShadow && settings.textShadow > 0) {
-        const s = settings.textShadow / 100
-        props.push(`text-shadow: 0 ${1 + s * 4}px ${2 + s * 10}px rgba(0,0,0,${(0.05 + s * 0.25).toFixed(2)}) !important`)
-      }
-      if (settings.glow && settings.glow > 0) {
-        const g = settings.glow / 100
-        props.push(`text-shadow: 0 0 ${(4 + g * 20).toFixed(0)}px currentColor !important`)
-      }
       if (settings.letterSpacing && settings.letterSpacing > 0) {
         const ls = settings.letterSpacing / 100
         props.push(`letter-spacing: ${(ls * 0.3).toFixed(3)}em !important`)
@@ -157,20 +149,7 @@ function TypoCategoryApplier() {
       return `${selector} { ${props.join('; ')} }`
     }).filter(Boolean).join('\n')
 
-    const animRules = Object.entries(typoCategorySettings).map(([cat, settings]) => {
-      if (!settings?.animation || settings.animation === 0) return ''
-      const selector = TYPO_CATEGORY_SELECTORS[cat]
-      if (!selector) return ''
-      const i = settings.animation / 100
-      if (i < 0.3) return `${selector} { transition: transform 0.4s ease, opacity 0.4s ease !important; }`
-      if (i < 0.6) return `${selector} { animation: typoFade 0.6s ease both !important; }`
-      return `${selector} { animation: typoFloat 3s ease-in-out infinite !important; }`
-    }).filter(Boolean).join('\n')
-
-    styleEl.textContent = `${rules}\n${animRules}
-@keyframes typoFade { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
-@keyframes typoFloat { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
-`
+    styleEl.textContent = rules
   }, [typoCategorySettings])
   return null
 }
@@ -197,8 +176,11 @@ export default function App() {
   const sections = useConfiguratorStore(s => s.sections)
   const sectionOrder = useConfiguratorStore(s => s.sectionOrder)
   const copyMode = useConfiguratorStore(s => s.copyMode)
+  const initPersistence = useConfiguratorStore(s => s.initPersistence)
 
   const registry = useMemo(() => buildSectionRegistry(layouts), [layouts])
+
+  useEffect(() => { initPersistence() }, [])
 
   useEffect(() => {
     applyTheme(theme, colorOverrides, typographyOverride)

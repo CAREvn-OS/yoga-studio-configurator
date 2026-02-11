@@ -1,12 +1,12 @@
 import { useConfiguratorStore } from '../store/configuratorStore'
 
-const VIBE_PRESETS: { id: string; name: string; desc: string; icon: string }[] = [
-  { id: 'zen', name: 'Zen', desc: 'Soft & calm', icon: '🧘' },
-  { id: 'pulse', name: 'Pulse', desc: 'Breathe & grow', icon: '💓' },
-  { id: 'bloom', name: 'Bloom', desc: 'Open & unfold', icon: '🌸' },
-  { id: 'drift', name: 'Drift', desc: 'Float & glide', icon: '🌊' },
-  { id: 'spark', name: 'Spark', desc: 'Pop & bounce', icon: '✨' },
-  { id: 'wave', name: 'Wave', desc: 'Flow & ripple', icon: '🌀' },
+const VIBE_PRESETS: { id: string; name: string; desc: string }[] = [
+  { id: 'zen', name: 'Zen', desc: 'Soft & calm' },
+  { id: 'pulse', name: 'Pulse', desc: 'Breathe & grow' },
+  { id: 'bloom', name: 'Bloom', desc: 'Open & unfold' },
+  { id: 'drift', name: 'Drift', desc: 'Float & glide' },
+  { id: 'spark', name: 'Spark', desc: 'Pop & bounce' },
+  { id: 'wave', name: 'Wave', desc: 'Flow & ripple' },
 ]
 
 function getIntensityLabel(value: number): string {
@@ -34,7 +34,7 @@ export function VibePanel() {
             className={`cfg-vibe-preset ${vibe.preset === preset.id ? 'cfg-vibe-preset--active' : ''}`}
             onClick={() => setVibe({ preset: preset.id })}
           >
-            <span className="cfg-vibe-preset__icon">{preset.icon}</span>
+            <span className={`cfg-vibe-dot cfg-vibe-dot--${preset.id}`} />
             <div className="cfg-vibe-preset__info">
               <span className="cfg-vibe-preset__name">{preset.name}</span>
               <span className="cfg-vibe-preset__desc">{preset.desc}</span>

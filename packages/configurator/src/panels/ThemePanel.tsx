@@ -1,14 +1,15 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { themes, applyTheme } from '@care/theme-engine'
 import { useConfiguratorStore } from '../store/configuratorStore'
 import type { ThemeDef } from '@care/shared-types'
 
-const EDITABLE_LABELS: Record<string, string> = {
-  primary: 'Primary',
-  secondary: 'Secondary',
-  tertiary: 'Tertiary',
-  accent: 'Accent',
-}
+// Map UI labels to ThemeColors keys for bg/card/section editing
+const EDITABLE_COLORS: { role: string; label: string; colorKey: string }[] = [
+  { role: 'background', label: 'Background', colorKey: 'cream' },
+  { role: 'card', label: 'Card', colorKey: 'linen' },
+  { role: 'section', label: 'Section', colorKey: 'sectionDark' },
+  { role: 'accent', label: 'Accent', colorKey: 'accent' },
+]
 
 export function ThemePanel() {
   const currentTheme = useConfiguratorStore(s => s.theme)
@@ -16,8 +17,12 @@ export function ThemePanel() {
   const setTheme = useConfiguratorStore(s => s.setTheme)
   const setColorOverride = useConfiguratorStore(s => s.setColorOverride)
   const clearColorOverrides = useConfiguratorStore(s => s.clearColorOverrides)
+  const logoUpload = useConfiguratorStore(s => s.logoUpload)
+  const setLogoUpload = useConfiguratorStore(s => s.setLogoUpload)
+  const clearLogoUpload = useConfiguratorStore(s => s.clearLogoUpload)
 
   const [colorsExpanded, setColorsExpanded] = useState(false)
+  const logoInputRef = useRef<HTMLInputElement>(null)
 
   const themeList = useMemo(() => Object.values(themes), [])
 
@@ -28,26 +33,30 @@ export function ThemePanel() {
 
   const activeTheme = themes[currentTheme] ?? themeList[0]
 
-  const getColorValue = (role: string): string => {
-    const colorKey = activeTheme.editableColors[role as keyof typeof activeTheme.editableColors]
-    if (colorOverrides && colorKey && (colorOverrides as Record<string, string>)[colorKey]) {
+  const getColorValue = (colorKey: string): string => {
+    if (colorOverrides && (colorOverrides as Record<string, string>)[colorKey]) {
       return (colorOverrides as Record<string, string>)[colorKey]
     }
     return (activeTheme.colors as Record<string, string>)[colorKey] ?? '#000000'
   }
 
-  const handleColorChange = (role: string, value: string) => {
-    const colorKey = activeTheme.editableColors[role as keyof typeof activeTheme.editableColors]
-    if (colorKey) {
-      setColorOverride(colorKey, value)
-    }
+  const handleColorChange = (colorKey: string, value: string) => {
+    setColorOverride(colorKey, value)
   }
 
   const hasOverrides = colorOverrides && Object.keys(colorOverrides).length > 0
 
+  const handleLogoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) setLogoUpload(file)
+    if (logoInputRef.current) logoInputRef.current.value = ''
+  }
+
+  const logoUrl = logoUpload?.remoteUrl ?? logoUpload?.blobUrl
+
   return (
     <div className="cfg-theme-cascade">
-      {/* Level 1: Theme selection */}
+      {/* Theme selection */}
       <div className="cfg-theme-list">
         {themeList.map(theme => (
           <button
@@ -67,7 +76,7 @@ export function ThemePanel() {
         ))}
       </div>
 
-      {/* Level 2: Inline color customization (cascading, like typography) */}
+      {/* Color customization dropdown */}
       <div className={`cfg-typo-cat ${colorsExpanded ? 'cfg-typo-cat--open' : ''}`} style={{ marginTop: 8 }}>
         <button
           className={`cfg-typo-cat__header ${hasOverrides ? 'cfg-typo-cat__header--set' : ''}`}
@@ -75,7 +84,7 @@ export function ThemePanel() {
         >
           <div className="cfg-typo-cat__info">
             <span className="cfg-typo-cat__name">Customize Colors</span>
-            <span className="cfg-typo-cat__desc">Fine-tune the palette for this theme</span>
+            <span className="cfg-typo-cat__desc">Background, cards & accent</span>
           </div>
           {hasOverrides && (
             <span className="cfg-typo-cat__badge">Custom</span>
@@ -97,16 +106,16 @@ export function ThemePanel() {
         {colorsExpanded && (
           <div className="cfg-typo-cat__body">
             <div className="cfg-theme-colors-inline">
-              {Object.keys(EDITABLE_LABELS).map(role => {
-                const value = getColorValue(role)
+              {EDITABLE_COLORS.map(({ role, label, colorKey }) => {
+                const value = getColorValue(colorKey)
                 return (
                   <div key={role} className="cfg-theme-color-row">
-                    <span className="cfg-theme-color-row__label">{EDITABLE_LABELS[role]}</span>
+                    <span className="cfg-theme-color-row__label">{label}</span>
                     <div className="cfg-theme-color-row__controls">
                       <input
                         type="color"
                         value={value}
-                        onChange={e => handleColorChange(role, e.target.value)}
+                        onChange={e => handleColorChange(colorKey, e.target.value)}
                         className="cfg-typo-level__color-picker"
                       />
                       <span className="cfg-typo-level__color-hex">{value}</span>
@@ -122,6 +131,32 @@ export function ThemePanel() {
               </button>
             )}
           </div>
+        )}
+      </div>
+
+      {/* Logo upload */}
+      <div style={{ marginTop: 12 }}>
+        <div className="cfg-layout-group__label">Logo</div>
+        <input ref={logoInputRef} type="file" accept="image/*" onChange={handleLogoFile} hidden />
+        {logoUrl ? (
+          <div className="cfg-logo-preview">
+            <img src={logoUrl} alt="Logo" className="cfg-logo-preview__img" />
+            <button className="cfg-colors-reset" onClick={clearLogoUpload}>
+              Remove Logo
+            </button>
+          </div>
+        ) : (
+          <button
+            className="cfg-share-btn"
+            onClick={() => logoInputRef.current?.click()}
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Upload Logo
+          </button>
         )}
       </div>
     </div>

@@ -55,12 +55,10 @@ export interface TypoCategorySettings {
   fontFamily?: string
   fontWeight?: number
   color?: string
-  // Per-category effects
-  textShadow?: number   // 0–100 intensity
-  glow?: number          // 0–100 intensity
   letterSpacing?: number // 0–100 intensity
-  animation?: number     // 0–100 intensity
 }
+
+export type ImageDisplayStyle = 'none' | 'gradient-fade' | 'duotone' | 'vignette' | 'soft-edge'
 
 // Vibe system — 6 global presets with intensity
 export interface VibeSettings {

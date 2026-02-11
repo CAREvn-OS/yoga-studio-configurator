@@ -1,4 +1,5 @@
 import { useConfiguratorStore } from '../store/configuratorStore'
+import type { ImageDisplayStyle } from '@care/shared-types'
 
 interface LayoutGroupDef {
   sectionId: string
@@ -54,9 +55,19 @@ const LAYOUT_GROUPS: LayoutGroupDef[] = [
   },
 ]
 
+const IMAGE_STYLES: { id: ImageDisplayStyle; name: string }[] = [
+  { id: 'none', name: 'Default' },
+  { id: 'gradient-fade', name: 'Fade' },
+  { id: 'duotone', name: 'Duotone' },
+  { id: 'vignette', name: 'Vignette' },
+  { id: 'soft-edge', name: 'Soft Edge' },
+]
+
 export function LayoutPanel() {
   const layouts = useConfiguratorStore(s => s.layouts)
   const setLayout = useConfiguratorStore(s => s.setLayout)
+  const imageDisplayStyle = useConfiguratorStore(s => s.imageDisplayStyle)
+  const setImageDisplayStyle = useConfiguratorStore(s => s.setImageDisplayStyle)
 
   return (
     <>
@@ -79,6 +90,21 @@ export function LayoutPanel() {
           </div>
         )
       })}
+
+      <div className="cfg-layout-group">
+        <div className="cfg-layout-group__label">Image Style</div>
+        <div className="cfg-layout-group__options">
+          {IMAGE_STYLES.map(opt => (
+            <button
+              key={opt.id}
+              className={`cfg-layout-option ${imageDisplayStyle === opt.id ? 'cfg-layout-option--active' : ''}`}
+              onClick={() => setImageDisplayStyle(opt.id)}
+            >
+              {opt.name}
+            </button>
+          ))}
+        </div>
+      </div>
     </>
   )
 }
