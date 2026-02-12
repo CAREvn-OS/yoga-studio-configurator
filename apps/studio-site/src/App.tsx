@@ -3,6 +3,7 @@ import { useConfiguratorStore } from '@care/configurator'
 import { applyTheme } from '@care/theme-engine'
 import { t } from './i18n'
 import { Navbar } from './components/Navbar'
+import { SectionWrapper } from './components/SectionWrapper'
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
 import { Schedule } from './sections/Schedule'
@@ -280,7 +281,9 @@ export default function App() {
       <StylizeApplier />
       <PreviewModeApplier />
       <Navbar />
-      <Hero layout={layouts.hero ?? 'center'} />
+      <SectionWrapper sectionId="hero">
+        <Hero layout={layouts.hero ?? 'center'} />
+      </SectionWrapper>
       <div className="divider">
         <div className="divider__line" />
         <div className="divider__diamond" />
@@ -291,7 +294,11 @@ export default function App() {
         if (!entry) return null
         if (entry.optional && !sections[id]) return null
         const Component = entry.component
-        return <Component key={id} {...(entry.props ?? {})} />
+        return (
+          <SectionWrapper key={id} sectionId={id}>
+            <Component {...(entry.props ?? {})} />
+          </SectionWrapper>
+        )
       })}
       <Footer />
       <BackToTop />

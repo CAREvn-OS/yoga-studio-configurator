@@ -83,7 +83,7 @@ export interface VibeSettings {
   preset: string
 }
 
-export type PanelId = 'theme' | 'layout' | 'sections' | 'typography' | 'vibe' | 'settings'
+export type PanelId = 'theme' | 'typography' | 'vibe' | 'settings'
 
 export type Language = 'vi' | 'en'
 

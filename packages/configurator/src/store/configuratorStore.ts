@@ -25,6 +25,7 @@ interface ConfiguratorState {
   activePanel: PanelId | null
   copyMode: boolean
   activeCopyElement: string | null
+  activeSectionBlob: string | null
 
   // Toast
   toastMessage: string | null
@@ -91,6 +92,7 @@ interface ConfiguratorState {
   setButtonStyle: (style: ButtonStyle) => void
   setCardStyle: (style: CardStyle) => void
   setGradientSettings: (settings: Partial<GradientSettings>) => void
+  setActiveSectionBlob: (id: string | null) => void
   togglePreviewMode: () => void
   setLanguage: (lang: Language) => void
   showToast: (message: string) => void
@@ -105,6 +107,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   activePanel: null,
   copyMode: true,
   activeCopyElement: null,
+  activeSectionBlob: null,
 
   // Toast
   toastMessage: null,
@@ -142,20 +145,17 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   toggleDock: () =>
     set(s => {
       if (s.dockOpen) {
-        return { dockOpen: false, activePanel: null, activeCopyElement: null }
+        return { dockOpen: false, activePanel: null, activeCopyElement: null, activeSectionBlob: null }
       }
       return { dockOpen: true }
     }),
 
   openPanel: (panel) =>
     set(s => {
-      if (panel === 'preview') {
-        return s // preview handled by togglePreviewMode
-      }
       if (s.activePanel === panel) {
         return { activePanel: null }
       }
-      return { activePanel: panel }
+      return { activePanel: panel, activeSectionBlob: null }
     }),
 
   closePanel: () =>
@@ -400,12 +400,15 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       gradientSettings: { ...s.gradientSettings, ...settings } as GradientSettings,
     })),
 
+  setActiveSectionBlob: (id) =>
+    set({ activeSectionBlob: id }),
+
   togglePreviewMode: () =>
     set(s => {
       if (s.previewMode) {
         return { previewMode: false, copyMode: true, dockOpen: true, activePanel: null, activeCopyElement: null }
       }
-      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null, dockOpen: false }
+      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null, activeSectionBlob: null, dockOpen: false }
     }),
 
   setLanguage: (lang) => set({ language: lang }),

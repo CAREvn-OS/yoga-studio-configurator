@@ -1,8 +1,6 @@
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { ThemePanel } from '../panels/ThemePanel'
 import { CopyPanel } from '../panels/CopyPanel'
-import { LayoutPanel } from '../panels/LayoutPanel'
-import { SectionsPanel } from '../panels/SectionsPanel'
 import { VibePanel } from '../panels/VibePanel'
 import { TypographyPanel } from '../panels/TypographyPanel'
 import { SettingsPanel } from '../panels/SettingsPanel'
@@ -10,8 +8,6 @@ import { SettingsPanel } from '../panels/SettingsPanel'
 const PANEL_TITLES: Record<string, Record<string, string>> = {
   theme: { vi: 'Giao diện', en: 'Theme' },
   copy: { vi: 'Nội dung', en: 'Copy' },
-  layout: { vi: 'Bố cục', en: 'Layout' },
-  sections: { vi: 'Mục', en: 'Sections' },
   vibe: { vi: 'Phong cách', en: 'Vibe' },
   typography: { vi: 'Kiểu chữ', en: 'Typography' },
   settings: { vi: 'Cài đặt', en: 'Settings' },
@@ -23,10 +19,6 @@ function PanelContent({ panel }: { panel: string }) {
       return <ThemePanel />
     case 'copy':
       return <CopyPanel />
-    case 'layout':
-      return <LayoutPanel />
-    case 'sections':
-      return <SectionsPanel />
     case 'vibe':
       return <VibePanel />
     case 'typography':

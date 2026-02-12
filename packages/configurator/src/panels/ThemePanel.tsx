@@ -10,19 +10,20 @@ const EDITABLE_COLORS: { role: string; label: string; colorKey: string }[] = [
   { role: 'accent', label: 'Accent', colorKey: 'accent' },
 ]
 
-const BUTTON_STYLES: { id: ButtonStyle; label: string }[] = [
+/* Style constants exported for SectionPopover reuse */
+export const BUTTON_STYLES: { id: ButtonStyle; label: string }[] = [
   { id: 'rounded', label: 'Rounded' },
   { id: 'sharp', label: 'Sharp' },
   { id: 'pill', label: 'Pill' },
 ]
 
-const CARD_STYLES: { id: CardStyle; label: string }[] = [
+export const CARD_STYLES: { id: CardStyle; label: string }[] = [
   { id: 'flat', label: 'Flat' },
   { id: 'shadow', label: 'Shadow' },
   { id: 'outline', label: 'Outline' },
 ]
 
-const GRADIENT_TYPES: { id: GradientType; label: string }[] = [
+export const GRADIENT_TYPES: { id: GradientType; label: string }[] = [
   { id: 'none', label: 'None' },
   { id: 'linear', label: 'Linear' },
   { id: 'radial', label: 'Radial' },
@@ -47,14 +48,6 @@ export function ThemePanel() {
   const logoUpload = useConfiguratorStore(s => s.logoUpload)
   const setLogoUpload = useConfiguratorStore(s => s.setLogoUpload)
   const clearLogoUpload = useConfiguratorStore(s => s.clearLogoUpload)
-  const borderRadiusOverride = useConfiguratorStore(s => s.borderRadiusOverride)
-  const setBorderRadiusOverride = useConfiguratorStore(s => s.setBorderRadiusOverride)
-  const buttonStyle = useConfiguratorStore(s => s.buttonStyle)
-  const setButtonStyle = useConfiguratorStore(s => s.setButtonStyle)
-  const cardStyle = useConfiguratorStore(s => s.cardStyle)
-  const setCardStyle = useConfiguratorStore(s => s.setCardStyle)
-  const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
-  const setGradientSettings = useConfiguratorStore(s => s.setGradientSettings)
   const logoScale = useConfiguratorStore(s => s.logoScale)
   const setLogoScale = useConfiguratorStore(s => s.setLogoScale)
   const logoNaturalWidth = useConfiguratorStore(s => s.logoNaturalWidth)
@@ -82,9 +75,6 @@ export function ThemePanel() {
     setColorOverride(colorKey, value)
   }
 
-  const hasOverrides = colorOverrides && Object.keys(colorOverrides).length > 0
-  const hasStylize = hasOverrides || borderRadiusOverride !== null || buttonStyle !== 'rounded' || cardStyle !== 'flat' || gradientSettings.type !== 'none'
-
   const handleLogoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) setLogoUpload(file)
@@ -92,6 +82,7 @@ export function ThemePanel() {
   }
 
   const logoUrl = logoUpload?.remoteUrl ?? logoUpload?.blobUrl
+  const hasColorOverrides = colorOverrides && Object.keys(colorOverrides).length > 0
 
   // Group themes by category
   const themesByCategory = useMemo(() => {
@@ -149,17 +140,17 @@ export function ThemePanel() {
         )}
       </div>
 
-      {/* 2. Stylize Options (expandable) */}
+      {/* 2. Colors (expandable) */}
       <div className={`cfg-typo-cat ${stylizeExpanded ? 'cfg-typo-cat--open' : ''}`} style={{ marginBottom: 8 }}>
         <button
-          className={`cfg-typo-cat__header ${hasStylize ? 'cfg-typo-cat__header--set' : ''}`}
+          className={`cfg-typo-cat__header ${hasColorOverrides ? 'cfg-typo-cat__header--set' : ''}`}
           onClick={() => setStylizeExpanded(!stylizeExpanded)}
         >
           <div className="cfg-typo-cat__info">
-            <span className="cfg-typo-cat__name">Stylize Options</span>
-            <span className="cfg-typo-cat__desc">Colors, corners, buttons & cards</span>
+            <span className="cfg-typo-cat__name">Colors</span>
+            <span className="cfg-typo-cat__desc">Background, card, section & accent</span>
           </div>
-          {hasStylize && (
+          {hasColorOverrides && (
             <span className="cfg-typo-cat__badge">Custom</span>
           )}
           <svg
@@ -178,7 +169,6 @@ export function ThemePanel() {
 
         {stylizeExpanded && (
           <div className="cfg-typo-cat__body">
-            {/* Colors */}
             <div className="cfg-theme-colors-inline">
               {EDITABLE_COLORS.map(({ role, label, colorKey }) => {
                 const value = getColorValue(colorKey)
@@ -199,94 +189,7 @@ export function ThemePanel() {
               })}
             </div>
 
-            {/* Border Radius slider */}
-            <div className="cfg-typo-level" style={{ marginTop: 10 }}>
-              <label className="cfg-typo-level__label">Corners</label>
-              <div className="cfg-typo-weight-slider">
-                <span className="cfg-typo-weight-slider__value">
-                  {borderRadiusOverride ?? parseInt(activeTheme.borderRadius)}px
-                </span>
-                <input
-                  type="range"
-                  min="0"
-                  max="24"
-                  step="2"
-                  value={borderRadiusOverride ?? parseInt(activeTheme.borderRadius)}
-                  onChange={e => setBorderRadiusOverride(Number(e.target.value))}
-                  className="cfg-vibe-slider cfg-vibe-slider--sm"
-                />
-                <div className="cfg-typo-weight-slider__labels">
-                  <span>Square</span>
-                  <span>Round</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Button Style */}
-            <div className="cfg-typo-level" style={{ marginTop: 8 }}>
-              <label className="cfg-typo-level__label">Buttons</label>
-              <div className="cfg-typo-level__chips">
-                {BUTTON_STYLES.map(s => (
-                  <button
-                    key={s.id}
-                    className={`cfg-typo-chip cfg-typo-chip--sm ${buttonStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
-                    onClick={() => setButtonStyle(s.id)}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Card Style */}
-            <div className="cfg-typo-level" style={{ marginTop: 8 }}>
-              <label className="cfg-typo-level__label">Cards</label>
-              <div className="cfg-typo-level__chips">
-                {CARD_STYLES.map(s => (
-                  <button
-                    key={s.id}
-                    className={`cfg-typo-chip cfg-typo-chip--sm ${cardStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
-                    onClick={() => setCardStyle(s.id)}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Gradient */}
-            <div className="cfg-typo-level" style={{ marginTop: 8 }}>
-              <label className="cfg-typo-level__label">Gradient</label>
-              <div className="cfg-typo-level__chips">
-                {GRADIENT_TYPES.map(g => (
-                  <button
-                    key={g.id}
-                    className={`cfg-typo-chip cfg-typo-chip--sm ${gradientSettings.type === g.id ? 'cfg-typo-chip--active' : ''}`}
-                    onClick={() => setGradientSettings({ type: g.id })}
-                  >
-                    {g.label}
-                  </button>
-                ))}
-              </div>
-              {gradientSettings.type !== 'none' && (
-                <div className="cfg-typo-level__color-row" style={{ marginTop: 6 }}>
-                  <input
-                    type="color"
-                    value={gradientSettings.colors[0]}
-                    onChange={e => setGradientSettings({ colors: [e.target.value, gradientSettings.colors[1]] })}
-                    className="cfg-typo-level__color-picker"
-                  />
-                  <input
-                    type="color"
-                    value={gradientSettings.colors[1]}
-                    onChange={e => setGradientSettings({ colors: [gradientSettings.colors[0], e.target.value] })}
-                    className="cfg-typo-level__color-picker"
-                  />
-                </div>
-              )}
-            </div>
-
-            {hasOverrides && (
+            {hasColorOverrides && (
               <button className="cfg-colors-reset" style={{ marginTop: 8 }} onClick={clearColorOverrides}>
                 Reset Colors
               </button>
