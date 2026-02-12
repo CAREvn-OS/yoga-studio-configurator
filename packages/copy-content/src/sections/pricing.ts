@@ -12,7 +12,7 @@
 
 import type { CopyAlternatives } from './hero';
 
-export const pricingCopy: CopyAlternatives = {
+export const pricingCopyEn: CopyAlternatives = {
   /* ------------------------------------------------------------------ */
   /*  Section header                                                     */
   /* ------------------------------------------------------------------ */
@@ -240,3 +240,157 @@ export const pricingCopy: CopyAlternatives = {
     '<li>Personalized practice design</li><li>Breathwork & meditation included</li><li>5-pack: $425</li><li>10-pack: $800</li>',
   ],
 };
+
+export const pricingCopyVi: CopyAlternatives = {
+  'pricing-eyebrow': [
+    'Gói Thành Viên',
+    'Bảng Giá',
+    'Đầu Tư',
+    'Gói Cho Mọi Ngân Sách',
+    'Chọn Con Đường Của Bạn',
+    'Thành Viên',
+  ],
+
+  'pricing-heading': [
+    'Bảng Giá Đơn Giản, Minh Bạch',
+    'Tìm Gói Phù Hợp Với Bạn',
+    'Thành Viên Phù Hợp Với Phong Cách Sống',
+    'Gói Dễ Tiếp Cận Cho Mọi Người',
+    'Đầu Tư Cho Bản Thân',
+    'Duy Trì Thực Hành Của Bạn',
+  ],
+
+  'pricing-subtitle': [
+    'Không phí đăng ký, không hợp đồng ràng buộc. Hủy hoặc tạm dừng thành viên bất cứ lúc nào với thông báo trước 30 ngày.',
+    'Chưa biết chọn gói nào? Bắt đầu với lớp dùng thử miễn phí và chúng tôi sẽ giúp bạn tìm ra. Không áp lực, hứa luôn.',
+    'Mỗi hạng thành viên được thiết kế để mang lại giá trị vượt trội trong khi tôn trọng thời gian và sở thích của bạn.',
+    'Chúng tôi có chính sách giá linh hoạt và giảm giá sinh viên vì tin rằng chi phí không nên ngăn ai khỏi thảm tập. Hỏi chúng tôi về chương trình hỗ trợ.',
+    'Hãy nghĩ về thành viên không như chi phí mà là khoản đầu tư có lợi nhuận cao nhất trong năm — cho năng lượng, tập trung và sức khỏe lâu dài.',
+    'Thực hành đều đặn là nền tảng của sự phát triển. Các gói thành viên được thiết kế để hỗ trợ cam kết bền vững với sức khỏe của bạn.',
+  ],
+
+  'pricing-1-name': [
+    'Lẻ',
+    'Buổi Lẻ',
+    'Buổi Đơn',
+    'Trả Theo Buổi',
+    'Một Buổi',
+    'Một Lần Đến',
+  ],
+
+  'pricing-1-price': ['750.000₫', '750.000₫', '800.000₫', '700.000₫', '750.000₫', '750.000₫'],
+
+  'pricing-1-period': ['mỗi buổi', 'mỗi lần đến', 'mỗi buổi', 'mỗi buổi', 'mỗi buổi', 'mỗi buổi'],
+
+  'pricing-1-desc': [
+    'Tham gia bất kỳ lớp nhóm nào trong lịch học mà không cần cam kết dài hạn.',
+    'Ghé bất cứ lúc nào bạn muốn — không cần thành viên, không ràng buộc.',
+    'Toàn quyền tham gia bất kỳ lớp nhóm nào, bao gồm lớp reformer cao cấp.',
+    'Hoàn hảo nếu lịch trình không cố định. Chỉ cần đặt chỗ khi thuận tiện.',
+    'Thử bất kỳ lớp nào để xem phù hợp với mục tiêu trước khi cam kết gói.',
+    'Lời mời mở để tham gia bất kỳ lớp nào gọi tên bạn, bất cứ khi nào cảm hứng đến.',
+  ],
+
+  'pricing-1-features': [
+    '<li>Tham gia mọi lớp nhóm</li><li>Thảm và dụng cụ được cung cấp</li><li>Đặt lịch trực tuyến</li>',
+    '<li>Bất kỳ lớp nào, bất kỳ lúc nào</li><li>Đầy đủ thiết bị</li><li>Đặt lịch online dễ dàng</li>',
+    '<li>Mọi hình thức lớp nhóm</li><li>Thiết bị cao cấp được cung cấp</li><li>Tiện nghi miễn phí</li>',
+    '<li>Mọi lớp – mọi trình độ</li><li>Thiết bị được cung cấp</li><li>Không cần cam kết</li>',
+    '<li>Toàn quyền tham gia lớp</li><li>Thiết bị bao gồm</li><li>Đo thành phần cơ thể miễn phí</li>',
+    '<li>Mọi buổi nhóm</li><li>Thảm & dụng cụ được cung cấp</li><li>Trà thảo mộc sau buổi tập</li>',
+  ],
+
+  'pricing-2-name': [
+    'Khởi Đầu',
+    'Thiết Yếu',
+    '8 Buổi Tinh Tuyển',
+    'Cộng Đồng',
+    'Nền Tảng',
+    'Gốc Rễ',
+  ],
+
+  'pricing-2-price': ['3.000.000₫', '3.000.000₫', '3.500.000₫', '2.300.000₫', '3.000.000₫', '3.000.000₫'],
+
+  'pricing-2-period': ['mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng'],
+
+  'pricing-2-desc': [
+    'Tám buổi mỗi tháng — lý tưởng cho thành viên tập hai lần mỗi tuần.',
+    'Hai lớp mỗi tuần giữ năng lượng tốt. Gói khởi đầu phổ biến nhất!',
+    'Tám buổi được tuyển chọn mỗi tháng mang lại nhịp cân bằng giữa sức mạnh và phục hồi.',
+    'Gói hàng tháng hợp lý nhất, với giá linh hoạt cho người cần hỗ trợ.',
+    'Nhịp hai buổi mỗi tuần — liều lượng hiệu quả tối thiểu để xây dựng sức mạnh và dẻo dai đo được.',
+    'Nhịp thực hành đều đặn, bền vững cho phép cơ thể và tâm trí hấp thụ lợi ích từ mỗi buổi.',
+  ],
+
+  'pricing-2-features': [
+    '<li>8 buổi mỗi tháng</li><li>Mọi loại lớp</li><li>Chuyển tối đa 2 buổi chưa dùng</li><li>Giảm 10% đồ bán lẻ</li>',
+    '<li>8 buổi mỗi tháng</li><li>Mọi loại lớp</li><li>Chuyển tối đa 2 buổi</li><li>Giảm 10% mua sắm</li>',
+    '<li>8 buổi tinh tuyển</li><li>Mọi hình thức kể cả reformer</li><li>Chuyển 2 buổi</li><li>Quà chào mừng miễn phí</li>',
+    '<li>8 buổi mỗi tháng</li><li>Giá linh hoạt có sẵn</li><li>Chuyển 2 buổi</li><li>Vé mời bạn mỗi tháng</li>',
+    '<li>8 buổi mỗi tháng</li><li>Mọi loại lớp</li><li>Đánh giá thể lực hàng quý</li><li>Bảng theo dõi tiến trình</li>',
+    '<li>8 buổi mỗi tháng</li><li>Mọi loại lớp</li><li>Chuyển 2 buổi</li><li>Bản ghi thiền dẫn hàng tháng</li>',
+  ],
+
+  'pricing-3-name': [
+    'Không Giới Hạn',
+    'Tất Cả',
+    'Uy Tín',
+    'Toàn Quyền',
+    'Hiệu Suất',
+    'Tận Tâm',
+  ],
+
+  'pricing-3-price': ['4.600.000₫', '4.600.000₫', '5.800.000₫', '4.200.000₫', '4.600.000₫', '4.600.000₫'],
+
+  'pricing-3-period': ['mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng', 'mỗi tháng'],
+
+  'pricing-3-desc': [
+    'Tham gia không giới hạn mọi lớp nhóm. Giá trị tốt nhất cho người tập chuyên tâm.',
+    'Đến bất cứ lúc nào — sáng, trưa hay tối. Đây là studio của bạn; hãy sử dụng như thể nó thuộc về bạn.',
+    'Toàn quyền tham gia lịch học, đặt lịch ưu tiên và lời mời độc quyền đến sự kiện dành cho thành viên.',
+    'Lớp không giới hạn với giá chúng tôi nỗ lực giữ công bằng. Vì thực hành không nên bị giới hạn.',
+    'Khối lượng tập không giới hạn cho khả năng thích nghi tối đa. Lý tưởng cho người có mục tiêu sức mạnh hoặc dẻo dai tham vọng.',
+    'Đắm mình hoàn toàn trong thực hành. Tham gia hàng ngày nếu bạn muốn — để vận động trở thành lối sống.',
+  ],
+
+  'pricing-3-features': [
+    '<li>Lớp nhóm không giới hạn</li><li>Đặt lịch ưu tiên (trước 48h)</li><li>Giảm 15% đồ bán lẻ</li><li>Vé mời khách miễn phí hàng tháng</li>',
+    '<li>Không giới hạn – mọi hình thức</li><li>Đặt sớm 48h</li><li>Giảm 15% mua sắm</li><li>Mời bạn miễn phí mỗi tháng</li>',
+    '<li>Buổi tập không giới hạn</li><li>Đặt ưu tiên 72h</li><li>Phòng chờ VIP</li><li>Workshop dành cho thành viên</li><li>Giảm 20% mua sắm</li>',
+    '<li>Lớp không giới hạn</li><li>Đặt lịch ưu tiên</li><li>2 vé mời khách miễn phí mỗi tháng</li><li>Tham gia sự kiện cộng đồng</li>',
+    '<li>Buổi tập không giới hạn</li><li>Đặt lịch ưu tiên</li><li>Đo thành phần cơ thể hàng tháng</li><li>Đánh giá tiến trình hàng quý với HLV</li>',
+    '<li>Lớp không giới hạn</li><li>Đặt lịch ưu tiên</li><li>Buổi thiền riêng hàng tháng</li><li>Workshop sức khỏe theo mùa</li>',
+  ],
+
+  'pricing-4-name': [
+    'Tập Riêng',
+    'Buổi 1-1',
+    'Theo Yêu Cầu',
+    'Buổi Cá Nhân',
+    'Huấn Luyện Cao Cấp',
+    'Hướng Dẫn Cá Nhân',
+  ],
+
+  'pricing-4-price': ['2.200.000₫', '2.200.000₫', '2.800.000₫', '2.000.000₫', '2.200.000₫', '2.200.000₫'],
+
+  'pricing-4-period': ['mỗi buổi', 'mỗi buổi', 'mỗi buổi', 'mỗi buổi', 'mỗi buổi', 'mỗi buổi'],
+
+  'pricing-4-desc': [
+    'Buổi tập 1-1 hoàn toàn phù hợp với mục tiêu, lịch trình và nhu cầu thể chất. Gói 5 hoặc 10 buổi với giá ưu đãi.',
+    'Sự quan tâm trọn vẹn từ giáo viên chuyên gia trong không gian riêng. Tuyệt vời cho phục hồi, đặt mục tiêu hoặc đơn giản là chiều chuộng bản thân.',
+    'Trải nghiệm hoàn toàn theo yêu cầu — giáo viên riêng, chương trình riêng, lịch riêng. Có thể tập tại studio hoặc tại nhà.',
+    'Buổi tập cá nhân cho ai muốn được hướng dẫn thêm, dù đang phục hồi chấn thương hay chuẩn bị cho sự kiện. Gói ưu đãi có sẵn.',
+    'Chương trình thiết kế riêng với theo dõi tiến trình chi tiết, phân tích video và đánh giá định kỳ để đảm bảo bạn luôn tiến về phía trước.',
+    'Buổi tập 1-1 sâu sắc kết hợp asana, hơi thở và thiền định, phù hợp với cơ thể và cảnh quan nội tâm riêng biệt của bạn.',
+  ],
+
+  'pricing-4-features': [
+    '<li>Chương trình tùy chỉnh hoàn toàn</li><li>Lịch linh hoạt</li><li>Gói 5: 10.000.000₫ (tiết kiệm 1.000.000₫)</li><li>Gói 10: 18.500.000₫ (tiết kiệm 3.500.000₫)</li>',
+    '<li>Mục tiêu của bạn, nhịp của bạn</li><li>Giờ linh hoạt</li><li>Gói 5: 10.000.000₫</li><li>Gói 10: 18.500.000₫</li>',
+    '<li>Thiết kế chương trình riêng</li><li>Tại studio hoặc tại nhà</li><li>Gói 5: 13.000.000₫</li><li>Gói 10: 24.500.000₫</li>',
+    '<li>Tùy chỉnh cho bạn</li><li>Lịch linh hoạt</li><li>Gói 5: 9.000.000₫</li><li>Gói 10: 16.500.000₫</li>',
+    '<li>Chương trình phân kỳ</li><li>Phân tích video vận động</li><li>Gói 5: 10.000.000₫</li><li>Gói 10: 18.500.000₫</li>',
+    '<li>Thiết kế thực hành cá nhân</li><li>Bao gồm hơi thở & thiền</li><li>Gói 5: 10.000.000₫</li><li>Gói 10: 18.500.000₫</li>',
+  ],
+};
+

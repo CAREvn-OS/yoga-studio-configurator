@@ -2,7 +2,7 @@ import type { PanelId } from '@care/shared-types'
 import { useConfiguratorStore } from '../store/configuratorStore'
 
 interface DockButton {
-  id: PanelId | 'preview'
+  id: PanelId
   label: string
   icon: JSX.Element
 }
@@ -67,25 +67,12 @@ const BUTTONS: DockButton[] = [
     ),
   },
   {
-    id: 'preview',
-    label: 'Preview',
+    id: 'settings',
+    label: 'Settings',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
         <circle cx="12" cy="12" r="3" />
-      </svg>
-    ),
-  },
-  {
-    id: 'share',
-    label: 'Share',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="18" cy="5" r="3" />
-        <circle cx="6" cy="12" r="3" />
-        <circle cx="18" cy="19" r="3" />
-        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
       </svg>
     ),
   },
@@ -95,15 +82,6 @@ export function Dock() {
   const dockOpen = useConfiguratorStore(s => s.dockOpen)
   const activePanel = useConfiguratorStore(s => s.activePanel)
   const openPanel = useConfiguratorStore(s => s.openPanel)
-  const togglePreviewMode = useConfiguratorStore(s => s.togglePreviewMode)
-
-  const handleClick = (btn: DockButton) => {
-    if (btn.id === 'preview') {
-      togglePreviewMode()
-    } else {
-      openPanel(btn.id as PanelId)
-    }
-  }
 
   return (
     <div className={`cfg-dock-wrapper ${dockOpen ? 'cfg-dock-wrapper--open' : ''}`}>
@@ -112,7 +90,7 @@ export function Dock() {
           <button
             key={btn.id}
             className={`cfg-dock-btn ${activePanel === btn.id ? 'cfg-dock-btn--active' : ''}`}
-            onClick={() => handleClick(btn)}
+            onClick={() => openPanel(btn.id)}
             aria-label={btn.label}
           >
             {btn.icon}

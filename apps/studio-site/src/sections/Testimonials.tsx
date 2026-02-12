@@ -1,9 +1,11 @@
 import { CopyElement } from '../components/CopyElement'
 import { MediaSlot } from '../components/MediaSlot'
 import { useConfiguratorStore } from '@care/configurator'
+import { t } from '../i18n'
 
 export function Testimonials() {
   const count = useConfiguratorStore(s => s.sectionItems.testimonials ?? 3)
+  const language = useConfiguratorStore(s => s.language)
   const items = Array.from({ length: count }, (_, i) => i + 1)
 
   return (
@@ -35,7 +37,7 @@ export function Testimonials() {
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            See our reviews on Google
+            {t(language, 'testimonials.googleReviews')}
           </a>
         </div>
       </div>

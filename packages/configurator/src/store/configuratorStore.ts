@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, GradientSettings, MediaSlotSettings } from '@care/shared-types'
+import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, GradientSettings, MediaSlotSettings, Language } from '@care/shared-types'
 import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
@@ -53,6 +53,7 @@ interface ConfiguratorState {
   cardStyle: CardStyle
   gradientSettings: GradientSettings
   previewMode: boolean
+  language: Language
 
   // Actions
   toggleDock: () => void
@@ -91,6 +92,7 @@ interface ConfiguratorState {
   setCardStyle: (style: CardStyle) => void
   setGradientSettings: (settings: Partial<GradientSettings>) => void
   togglePreviewMode: () => void
+  setLanguage: (lang: Language) => void
   showToast: (message: string) => void
   exportConfig: () => string
   restoreConfig: (config: Record<string, any>) => void
@@ -133,6 +135,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   cardStyle: 'flat' as CardStyle,
   gradientSettings: { type: 'none', colors: ['#faf8f5', '#e8ddd0'] } as GradientSettings,
   previewMode: false,
+  language: 'vi' as Language,
 
   // --- Actions ---
 
@@ -405,6 +408,8 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null, dockOpen: false }
     }),
 
+  setLanguage: (lang) => set({ language: lang }),
+
   showToast: (message) => {
     const prev = get().toastTimeout
     if (prev) clearTimeout(prev)
@@ -435,6 +440,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       buttonStyle: s.buttonStyle,
       cardStyle: s.cardStyle,
       gradientSettings: s.gradientSettings,
+      language: s.language,
       logoUpload: s.logoUpload ? {
         name: s.logoUpload.name, type: s.logoUpload.type, size: s.logoUpload.size,
         remotePath: s.logoUpload.remotePath, remoteUrl: s.logoUpload.remoteUrl,
@@ -485,6 +491,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.buttonStyle) updates.buttonStyle = config.buttonStyle as ButtonStyle
     if (config.cardStyle) updates.cardStyle = config.cardStyle as CardStyle
     if (config.gradientSettings) updates.gradientSettings = config.gradientSettings as GradientSettings
+    updates.language = (config.language === 'en' ? 'en' : 'vi') as Language
     // Restore media references using remote URLs (blob URLs are not persisted)
     if (config.mediaUploads) {
       const restored: Record<string, MediaUpload> = {}

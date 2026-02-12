@@ -1,6 +1,10 @@
 import { CopyElement } from '../components/CopyElement'
+import { useConfiguratorStore } from '@care/configurator'
+import { t } from '../i18n'
 
 export function Contact() {
+  const language = useConfiguratorStore(s => s.language)
+
   return (
     <section className="contact" id="contact">
       <div className="contact__inner">
@@ -15,32 +19,32 @@ export function Contact() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
             </svg>
-            WhatsApp
+            {t(language, 'contact.whatsapp')}
           </a>
           <a href="https://t.me/yourstudio" className="contact__messenger-link" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13" />
               <polygon points="22 2 15 22 11 13 2 9 22 2" />
             </svg>
-            Telegram
+            {t(language, 'contact.telegram')}
           </a>
         </div>
 
         <div className="contact__details reveal">
-          <div className="contact__detail">123 Wellness Street, District 2</div>
+          <div className="contact__detail">{t(language, 'contact.address')}</div>
           <div className="contact__detail-sep" />
-          <div className="contact__detail">Open 6am — 9pm Daily</div>
+          <div className="contact__detail">{t(language, 'contact.hours')}</div>
         </div>
 
         {/* Contact form */}
         <form className="contact__form reveal" onSubmit={e => e.preventDefault()}>
           <div className="contact__form-row">
-            <input type="text" className="contact__input" placeholder="Your name" aria-label="Your name" />
-            <input type="email" className="contact__input" placeholder="Email address" aria-label="Email address" />
+            <input type="text" className="contact__input" placeholder={t(language, 'contact.yourName')} aria-label={t(language, 'contact.yourName')} />
+            <input type="email" className="contact__input" placeholder={t(language, 'contact.email')} aria-label={t(language, 'contact.email')} />
           </div>
-          <textarea className="contact__textarea" placeholder="Your message…" aria-label="Your message" />
+          <textarea className="contact__textarea" placeholder={t(language, 'contact.message')} aria-label={t(language, 'contact.message')} />
           <div className="contact__form-submit">
-            <button type="submit" className="btn btn--primary">Send Message</button>
+            <button type="submit" className="btn btn--primary">{t(language, 'contact.send')}</button>
           </div>
         </form>
 
@@ -50,7 +54,7 @@ export function Contact() {
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
-          Google Maps Embed
+          {t(language, 'contact.mapEmbed')}
         </div>
 
         <div className="contact__cta reveal">

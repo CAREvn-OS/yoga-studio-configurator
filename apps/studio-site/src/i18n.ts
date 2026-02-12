@@ -1,0 +1,58 @@
+import type { Language } from '@care/shared-types'
+
+const strings: Record<Language, Record<string, string>> = {
+  vi: {
+    'nav.about': 'Giới thiệu',
+    'nav.schedule': 'Lịch học',
+    'nav.instructors': 'Huấn luyện viên',
+    'nav.pricing': 'Bảng giá',
+    'nav.contact': 'Liên hệ',
+    'nav.bookClass': 'Đặt lớp',
+    'contact.yourName': 'Tên của bạn',
+    'contact.email': 'Địa chỉ email',
+    'contact.message': 'Tin nhắn của bạn…',
+    'contact.send': 'Gửi tin nhắn',
+    'contact.address': '123 Đường Wellness, Quận 2',
+    'contact.hours': 'Mở cửa 6h — 21h hàng ngày',
+    'contact.mapEmbed': 'Bản đồ Google Maps',
+    'contact.whatsapp': 'WhatsApp',
+    'contact.telegram': 'Telegram',
+    'footer.studio': 'Studio Của Bạn',
+    'footer.rights': 'Bảo lưu mọi quyền.',
+    'footer.tagline': 'Yoga & Pilates',
+    'pricing.getStarted': 'Bắt đầu',
+    'testimonials.googleReviews': 'Xem đánh giá trên Google',
+    'logo.alt': 'Logo',
+    'nav.toggleMenu': 'Mở/đóng menu',
+    'backToTop': 'Lên đầu trang',
+  },
+  en: {
+    'nav.about': 'About',
+    'nav.schedule': 'Schedule',
+    'nav.instructors': 'Instructors',
+    'nav.pricing': 'Pricing',
+    'nav.contact': 'Contact',
+    'nav.bookClass': 'Book a Class',
+    'contact.yourName': 'Your name',
+    'contact.email': 'Email address',
+    'contact.message': 'Your message…',
+    'contact.send': 'Send Message',
+    'contact.address': '123 Wellness Street, District 2',
+    'contact.hours': 'Open 6am — 9pm Daily',
+    'contact.mapEmbed': 'Google Maps Embed',
+    'contact.whatsapp': 'WhatsApp',
+    'contact.telegram': 'Telegram',
+    'footer.studio': 'Your Studio',
+    'footer.rights': 'All rights reserved.',
+    'footer.tagline': 'Yoga & Pilates',
+    'pricing.getStarted': 'Get Started',
+    'testimonials.googleReviews': 'See our reviews on Google',
+    'logo.alt': 'Logo',
+    'nav.toggleMenu': 'Toggle menu',
+    'backToTop': 'Back to top',
+  },
+}
+
+export function t(lang: Language, key: string): string {
+  return strings[lang]?.[key] ?? strings.en[key] ?? key
+}

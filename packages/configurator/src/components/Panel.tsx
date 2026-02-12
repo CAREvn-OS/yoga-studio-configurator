@@ -5,16 +5,16 @@ import { LayoutPanel } from '../panels/LayoutPanel'
 import { SectionsPanel } from '../panels/SectionsPanel'
 import { VibePanel } from '../panels/VibePanel'
 import { TypographyPanel } from '../panels/TypographyPanel'
-import { SharePanel } from '../panels/SharePanel'
+import { SettingsPanel } from '../panels/SettingsPanel'
 
-const PANEL_TITLES: Record<string, string> = {
-  theme: 'Theme',
-  copy: 'Copy',
-  layout: 'Layout',
-  sections: 'Sections',
-  vibe: 'Vibe',
-  typography: 'Typography',
-  share: 'Share',
+const PANEL_TITLES: Record<string, Record<string, string>> = {
+  theme: { vi: 'Giao diện', en: 'Theme' },
+  copy: { vi: 'Nội dung', en: 'Copy' },
+  layout: { vi: 'Bố cục', en: 'Layout' },
+  sections: { vi: 'Mục', en: 'Sections' },
+  vibe: { vi: 'Phong cách', en: 'Vibe' },
+  typography: { vi: 'Kiểu chữ', en: 'Typography' },
+  settings: { vi: 'Cài đặt', en: 'Settings' },
 }
 
 function PanelContent({ panel }: { panel: string }) {
@@ -31,8 +31,8 @@ function PanelContent({ panel }: { panel: string }) {
       return <VibePanel />
     case 'typography':
       return <TypographyPanel />
-    case 'share':
-      return <SharePanel />
+    case 'settings':
+      return <SettingsPanel />
     default:
       return null
   }
@@ -41,13 +41,14 @@ function PanelContent({ panel }: { panel: string }) {
 export function Panel() {
   const activePanel = useConfiguratorStore(s => s.activePanel)
   const closePanel = useConfiguratorStore(s => s.closePanel)
+  const language = useConfiguratorStore(s => s.language)
 
   return (
     <div className={`cfg-panel-wrapper ${activePanel ? 'cfg-panel-wrapper--open' : ''}`}>
       {activePanel && (
         <div className="cfg-panel">
           <div className="cfg-panel-header">
-            <h3 className="cfg-panel-title">{PANEL_TITLES[activePanel] ?? activePanel}</h3>
+            <h3 className="cfg-panel-title">{PANEL_TITLES[activePanel]?.[language] ?? activePanel}</h3>
             <button className="cfg-panel-close" onClick={closePanel} aria-label="Close panel">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" />

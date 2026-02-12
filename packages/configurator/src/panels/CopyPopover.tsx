@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { allCopy } from '@care/copy-content'
+import { allCopyVi, allCopyEn } from '@care/copy-content'
 import { useConfiguratorStore } from '../store/configuratorStore'
 
 export function CopyPopover() {
@@ -12,13 +12,16 @@ export function CopyPopover() {
   const clearCustomCopy = useConfiguratorStore(s => s.clearCustomCopy)
   const setActiveCopyElement = useConfiguratorStore(s => s.setActiveCopyElement)
 
+  const language = useConfiguratorStore(s => s.language)
+
   const [customText, setCustomText] = useState('')
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
   const [visible, setVisible] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
 
   const elementId = activeCopyElement
-  const alternatives = elementId ? allCopy[elementId] ?? [] : []
+  const copyMap = language === 'vi' ? allCopyVi : allCopyEn
+  const alternatives = elementId ? copyMap[elementId] ?? [] : []
   const currentIndex = elementId ? (copySelections[elementId] ?? 0) : 0
   const hasCustom = elementId ? !!customCopy[elementId] : false
 
@@ -116,7 +119,7 @@ export function CopyPopover() {
       style={{ top: position.top, left: position.left }}
     >
       <div className="cfg-copy-popover__header">
-        <span className="cfg-copy-popover__title">Choose Copy</span>
+        <span className="cfg-copy-popover__title">{language === 'vi' ? 'Chọn Nội Dung' : 'Choose Copy'}</span>
         <button className="cfg-copy-popover__close" onClick={handleClose} aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -138,12 +141,12 @@ export function CopyPopover() {
       </div>
 
       <div className="cfg-copy-popover__custom">
-        <span className="cfg-copy-popover__custom-label">Custom</span>
+        <span className="cfg-copy-popover__custom-label">{language === 'vi' ? 'Tùy chỉnh' : 'Custom'}</span>
         <textarea
           className="cfg-copy-popover__textarea"
           value={customText}
           onChange={e => setCustomText(e.target.value)}
-          placeholder="Type custom text..."
+          placeholder={language === 'vi' ? 'Nhập nội dung tùy chỉnh...' : 'Type custom text...'}
           rows={2}
         />
         <div className="cfg-copy-popover__actions">
@@ -151,10 +154,10 @@ export function CopyPopover() {
             className="cfg-copy-popover__btn cfg-copy-popover__btn--apply"
             onClick={handleApplyCustom}
           >
-            Apply
+            {language === 'vi' ? 'Áp dụng' : 'Apply'}
           </button>
           <button className="cfg-copy-popover__btn" onClick={handleClearCustom}>
-            Clear
+            {language === 'vi' ? 'Xóa' : 'Clear'}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useConfiguratorStore } from '@care/configurator'
 import { applyTheme } from '@care/theme-engine'
+import { t } from './i18n'
 import { Navbar } from './components/Navbar'
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
@@ -91,6 +92,7 @@ function ScrollProgress() {
 }
 
 function BackToTop() {
+  const language = useConfiguratorStore(s => s.language)
   useEffect(() => {
     const btn = document.getElementById('back-to-top')
     const onScroll = () => {
@@ -101,7 +103,7 @@ function BackToTop() {
   }, [])
 
   return (
-    <button id="back-to-top" className="back-to-top" aria-label="Back to top"
+    <button id="back-to-top" className="back-to-top" aria-label={t(language, 'backToTop')}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
       <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--color-stone)" strokeWidth="1.5" fill="none">
         <polyline points="18 15 12 9 6 15" />

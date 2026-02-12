@@ -12,7 +12,9 @@
 
 import type { CopyAlternatives } from './hero';
 
-export const navCopy: CopyAlternatives = {
+export type { CopyAlternatives };
+
+export const navCopyEn: CopyAlternatives = {
   'nav-logo': [
     'Studio Align',
     'The Movement Collective',
@@ -20,5 +22,16 @@ export const navCopy: CopyAlternatives = {
     'Open Mat Studio',
     'Kinetic Studio',
     'Prana & Form',
+  ],
+};
+
+export const navCopyVi: CopyAlternatives = {
+  'nav-logo': [
+    'Studio Align',
+    'C\u1ed9ng \u0110\u1ed3ng V\u1eadn \u0110\u1ed9ng',
+    'Atelier C\u01a1 Th\u1ec3 & H\u01a1i Th\u1edf',
+    'Studio M\u1edf',
+    'Kinetic Studio',
+    'Prana & H\u00ecnh Th\u1ec3',
   ],
 };

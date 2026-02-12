@@ -1,5 +1,6 @@
 import { CopyElement } from '../components/CopyElement'
 import { useConfiguratorStore } from '@care/configurator'
+import { t } from '../i18n'
 
 interface PricingProps {
   layout: string
@@ -7,6 +8,7 @@ interface PricingProps {
 
 export function Pricing({ layout }: PricingProps) {
   const count = useConfiguratorStore(s => s.sectionItems.pricing ?? 4)
+  const language = useConfiguratorStore(s => s.language)
   const tiers = Array.from({ length: count }, (_, i) => i + 1)
 
   return (
@@ -25,7 +27,7 @@ export function Pricing({ layout }: PricingProps) {
               </div>
               <CopyElement id={`pricing-${i}-desc`} as="p" className="pricing__desc" />
               <CopyElement id={`pricing-${i}-features`} as="ul" className="pricing__features" />
-              <a href="#contact" className="btn btn--outline pricing__cta">Get Started</a>
+              <a href="#contact" className="btn btn--outline pricing__cta">{t(language, 'pricing.getStarted')}</a>
             </div>
           ))}
         </div>
