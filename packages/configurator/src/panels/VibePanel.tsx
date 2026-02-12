@@ -18,18 +18,42 @@ export function VibePanel() {
         Choose a <strong>motion personality</strong> for your site.
       </p>
 
-      {/* Live Preview Strip */}
+      {/* Live Preview — mini webpage mockup */}
       <div className="cfg-vibe-preview">
         <div className={`cfg-vibe-preview__scene vibe-${vibe.preset}`}>
-          <div className="cfg-vibe-preview__card">
-            <div className="cfg-vibe-preview__img" />
-            <div className="cfg-vibe-preview__lines">
-              <div className="cfg-vibe-preview__line cfg-vibe-preview__line--title" />
-              <div className="cfg-vibe-preview__line" />
+          {/* Navbar */}
+          <div className="cfg-vp__nav">
+            <div className="cfg-vp__nav-logo" />
+            <div className="cfg-vp__nav-links">
+              <div className="cfg-vp__nav-link" />
+              <div className="cfg-vp__nav-link" />
+              <div className="cfg-vp__nav-link" />
             </div>
           </div>
-          <div className="cfg-vibe-preview__btn">Button</div>
-          <div className="cfg-vibe-preview__circle" />
+          {/* Hero */}
+          <div className="cfg-vp__hero">
+            <div className="cfg-vp__hero-heading" />
+            <div className="cfg-vp__hero-sub" />
+            <div className="cfg-vp__hero-btn" />
+          </div>
+          {/* Card row */}
+          <div className="cfg-vp__cards">
+            <div className="cfg-vp__card">
+              <div className="cfg-vp__card-img" />
+              <div className="cfg-vp__card-line" />
+              <div className="cfg-vp__card-line cfg-vp__card-line--short" />
+            </div>
+            <div className="cfg-vp__card">
+              <div className="cfg-vp__card-img" />
+              <div className="cfg-vp__card-line" />
+              <div className="cfg-vp__card-line cfg-vp__card-line--short" />
+            </div>
+            <div className="cfg-vp__card">
+              <div className="cfg-vp__card-img" />
+              <div className="cfg-vp__card-line" />
+              <div className="cfg-vp__card-line cfg-vp__card-line--short" />
+            </div>
+          </div>
         </div>
       </div>
 
