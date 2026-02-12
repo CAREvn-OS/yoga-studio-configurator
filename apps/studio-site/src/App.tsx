@@ -16,6 +16,7 @@ import { StudioTour } from './sections/StudioTour'
 import { Events } from './sections/Events'
 import { Blog } from './sections/Blog'
 import { Partners } from './sections/Partners'
+import { SocialMedia } from './sections/SocialMedia'
 import { FAQ } from './sections/FAQ'
 
 // Maps typography categories to CSS selectors
@@ -43,12 +44,11 @@ const FONT_FAMILY_MAP: Record<string, string> = {
 }
 
 const VIBE_CLASSES: Record<string, string> = {
-  zen: 'vibe-zen',
-  pulse: 'vibe-pulse',
-  bloom: 'vibe-bloom',
-  drift: 'vibe-drift',
-  spark: 'vibe-spark',
-  wave: 'vibe-wave',
+  serene: 'vibe-serene',
+  breathe: 'vibe-breathe',
+  spring: 'vibe-spring',
+  flow: 'vibe-flow',
+  snap: 'vibe-snap',
 }
 
 type SectionEntry = {
@@ -70,6 +70,7 @@ function buildSectionRegistry(layouts: Record<string, string>): Record<string, S
     events: { component: Events, optional: true },
     blog: { component: Blog, optional: true },
     partners: { component: Partners, optional: true },
+    socialMedia: { component: SocialMedia, optional: true },
     faq: { component: FAQ, optional: true },
     contact: { component: Contact },
   }
@@ -169,7 +170,6 @@ function VibeApplier() {
     })
     const vibeClass = VIBE_CLASSES[vibe.preset]
     if (vibeClass) document.body.classList.add(vibeClass)
-    document.documentElement.style.setProperty('--vibe-intensity', String(vibe.intensity / 100))
   }, [vibe])
   return null
 }

@@ -10,20 +10,37 @@ const CATEGORIES: { id: TypoCategory; label: string; desc: string }[] = [
   { id: 'captions', label: 'Captions', desc: 'Quotes, tags & fine print' },
 ]
 
-const FONT_STYLES: { id: string; name: string; family: string }[] = [
-  { id: 'serene', name: 'Serene', family: "'Cormorant Garamond', Georgia, serif" },
-  { id: 'modern', name: 'Modern', family: "'Outfit', 'Inter', sans-serif" },
-  { id: 'organic', name: 'Organic', family: "'Lora', 'Playfair Display', serif" },
-  { id: 'minimal', name: 'Minimal', family: "'Jost', 'Nunito Sans', sans-serif" },
-  { id: 'classic', name: 'Classic', family: "'Source Serif 4', 'Libre Baskerville', serif" },
-  { id: 'bold', name: 'Bold', family: "'DM Sans', 'Montserrat', sans-serif" },
-  { id: 'script', name: 'Script', family: "'Dancing Script', cursive" },
-  { id: 'elegant', name: 'Elegant', family: "'Great Vibes', cursive" },
-  { id: 'editorial', name: 'Editorial', family: "'Playfair Display', 'EB Garamond', serif" },
-  { id: 'geometric', name: 'Geometric', family: "'Poppins', 'Raleway', sans-serif" },
-  { id: 'literary', name: 'Literary', family: "'Bitter', 'Crimson Pro', serif" },
-  { id: 'clean', name: 'Clean', family: "'Raleway', 'Montserrat', sans-serif" },
+const FONT_GROUPS: { label: string; fonts: { id: string; name: string; family: string }[] }[] = [
+  {
+    label: 'Serif',
+    fonts: [
+      { id: 'serene', name: 'Serene', family: "'Cormorant Garamond', Georgia, serif" },
+      { id: 'organic', name: 'Organic', family: "'Lora', 'Playfair Display', serif" },
+      { id: 'classic', name: 'Classic', family: "'Source Serif 4', 'Libre Baskerville', serif" },
+      { id: 'editorial', name: 'Editorial', family: "'Playfair Display', 'EB Garamond', serif" },
+      { id: 'literary', name: 'Literary', family: "'Bitter', 'Crimson Pro', serif" },
+    ],
+  },
+  {
+    label: 'Sans',
+    fonts: [
+      { id: 'modern', name: 'Modern', family: "'Outfit', 'Inter', sans-serif" },
+      { id: 'minimal', name: 'Minimal', family: "'Jost', 'Nunito Sans', sans-serif" },
+      { id: 'bold', name: 'Bold', family: "'DM Sans', 'Montserrat', sans-serif" },
+      { id: 'geometric', name: 'Geometric', family: "'Poppins', 'Raleway', sans-serif" },
+      { id: 'clean', name: 'Clean', family: "'Raleway', 'Montserrat', sans-serif" },
+    ],
+  },
+  {
+    label: 'Decorative',
+    fonts: [
+      { id: 'script', name: 'Script', family: "'Dancing Script', cursive" },
+      { id: 'elegant', name: 'Elegant', family: "'Great Vibes', cursive" },
+    ],
+  },
 ]
+
+const ALL_FONTS = FONT_GROUPS.flatMap(g => g.fonts)
 
 function getWeightLabel(w: number): string {
   if (w <= 150) return 'Hairline'
@@ -64,7 +81,7 @@ export function TypographyPanel() {
           const isExpanded = expandedCategory === cat.id
           const settings = typoCategorySettings[cat.id]
           const hasSettings = settings && (settings.fontFamily || settings.fontWeight || settings.color || settings.letterSpacing)
-          const selectedFont = FONT_STYLES.find(f => f.id === settings?.fontFamily)
+          const selectedFont = ALL_FONTS.find(f => f.id === settings?.fontFamily)
 
           return (
             <div key={cat.id} className={`cfg-typo-cat ${isExpanded ? 'cfg-typo-cat--open' : ''}`}>
@@ -102,18 +119,23 @@ export function TypographyPanel() {
                   <div className="cfg-typo-font-color-row">
                     <div className="cfg-typo-font-color-row__fonts">
                       <label className="cfg-typo-level__label">Font</label>
-                      <div className="cfg-typo-level__chips">
-                        {FONT_STYLES.map(f => (
-                          <button
-                            key={f.id}
-                            className={`cfg-typo-chip cfg-typo-chip--sm ${settings?.fontFamily === f.id ? 'cfg-typo-chip--active' : ''}`}
-                            onClick={() => setTypoCategorySetting(cat.id, { fontFamily: f.id })}
-                            style={{ fontFamily: f.family }}
-                          >
-                            {f.name}
-                          </button>
-                        ))}
-                      </div>
+                      {FONT_GROUPS.map(group => (
+                        <div key={group.label} className="cfg-typo-font-group">
+                          <span className="cfg-typo-font-group__label">{group.label}</span>
+                          <div className="cfg-typo-level__chips">
+                            {group.fonts.map(f => (
+                              <button
+                                key={f.id}
+                                className={`cfg-typo-chip cfg-typo-chip--sm ${settings?.fontFamily === f.id ? 'cfg-typo-chip--active' : ''}`}
+                                onClick={() => setTypoCategorySetting(cat.id, { fontFamily: f.id })}
+                                style={{ fontFamily: f.family }}
+                              >
+                                {f.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                     <div className="cfg-typo-font-color-row__color">
                       <label className="cfg-typo-level__label">Color</label>

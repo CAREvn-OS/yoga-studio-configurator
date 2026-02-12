@@ -5,7 +5,7 @@ import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 const DEFAULT_SECTION_ORDER: string[] = [
   'about', 'manifesto', 'schedule', 'process', 'instructors',
   'pricing', 'studioTour', 'testimonials', 'events', 'blog',
-  'partners', 'faq', 'contact',
+  'partners', 'socialMedia', 'faq', 'contact',
 ]
 
 const DEFAULT_SECTIONS: Record<string, boolean> = {
@@ -15,6 +15,7 @@ const DEFAULT_SECTIONS: Record<string, boolean> = {
   events: false,
   blog: false,
   partners: false,
+  socialMedia: false,
   faq: false,
 }
 
@@ -112,7 +113,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   colorOverrides: null,
   typographyOverride: null,
   typoCategorySettings: {},
-  vibe: { preset: 'zen', intensity: 40 },
+  vibe: { preset: 'serene' },
   copySelections: {},
   customCopy: {},
   layouts: {},
@@ -454,12 +455,28 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.colorOverrides) updates.colorOverrides = config.colorOverrides
     if (config.typographyOverride) updates.typographyOverride = config.typographyOverride
     if (config.typoCategorySettings) updates.typoCategorySettings = config.typoCategorySettings
-    if (config.vibe) updates.vibe = config.vibe
+    if (config.vibe) {
+      // Migrate old vibe format: strip intensity, remap old preset names
+      const vibeMap: Record<string, string> = {
+        zen: 'serene', pulse: 'breathe', bloom: 'spring',
+        drift: 'flow', spark: 'snap', wave: 'flow',
+      }
+      const oldPreset = config.vibe.preset
+      updates.vibe = { preset: vibeMap[oldPreset] ?? oldPreset }
+    }
     if (config.copySelections) updates.copySelections = config.copySelections
     if (config.customCopy) updates.customCopy = config.customCopy
     if (config.layouts) updates.layouts = config.layouts
     if (config.sections) updates.sections = config.sections
-    if (config.sectionOrder) updates.sectionOrder = config.sectionOrder
+    if (config.sectionOrder) {
+      // Migrate: ensure new sections exist in saved order
+      const order = [...config.sectionOrder]
+      if (!order.includes('socialMedia')) {
+        const partnersIdx = order.indexOf('partners')
+        order.splice(partnersIdx >= 0 ? partnersIdx + 1 : order.length - 1, 0, 'socialMedia')
+      }
+      updates.sectionOrder = order
+    }
     if (config.sectionItems) updates.sectionItems = config.sectionItems
     if (config.imageDisplayStyle) updates.imageDisplayStyle = config.imageDisplayStyle as ImageDisplayStyle
     if (config.logoScale !== undefined) updates.logoScale = config.logoScale

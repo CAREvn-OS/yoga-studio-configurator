@@ -14,13 +14,14 @@ const SECTION_LABELS: Record<string, string> = {
   events: 'Events',
   blog: 'Blog',
   partners: 'Partners',
+  socialMedia: 'Social Media',
   faq: 'FAQ',
   contact: 'Contact',
 }
 
 // Sections that can be toggled off
 const OPTIONAL_SECTIONS = new Set([
-  'manifesto', 'process', 'studioTour', 'events', 'blog', 'partners', 'faq',
+  'manifesto', 'process', 'studioTour', 'events', 'blog', 'partners', 'socialMedia', 'faq',
 ])
 
 export function SectionsPanel() {

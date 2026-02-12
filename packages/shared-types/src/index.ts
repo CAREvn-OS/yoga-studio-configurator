@@ -78,10 +78,9 @@ export interface GradientSettings {
   colors: [string, string]
 }
 
-// Vibe system — 6 global presets with intensity
+// Vibe system — 5 curated presets, fixed intensity
 export interface VibeSettings {
   preset: string
-  intensity: number // 0–100
 }
 
 export type PanelId = 'theme' | 'preview' | 'layout' | 'sections' | 'vibe' | 'typography' | 'share'

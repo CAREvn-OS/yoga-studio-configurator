@@ -382,4 +382,26 @@ export const optionalCopy: CopyAlternatives = {
   'partner-3-name': ['Manduka', 'Manduka', 'Manduka', 'Manduka', 'Manduka', 'Manduka'],
   'partner-4-name': ['Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga', 'Alo Yoga'],
   'partner-5-name': ['STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates', 'STOTT Pilates'],
+
+  /* ================================================================== */
+  /*  SOCIAL MEDIA                                                       */
+  /* ================================================================== */
+
+  'social-eyebrow': [
+    'Connect With Us',
+    'Follow Along',
+    'Stay Connected',
+    'Join the Conversation',
+    'Follow Our Journey',
+    'Find Us Online',
+  ],
+
+  'social-heading': [
+    'Follow Us on Social Media',
+    'Be Part of the Story',
+    'Stay in the Loop',
+    'Join Our Online Community',
+    'Follow Our Movement',
+    'Stay Inspired Between Sessions',
+  ],
 };

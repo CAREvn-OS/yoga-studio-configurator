@@ -385,6 +385,123 @@
 }
 .faq__item--open .faq__a { max-height: 300px; padding-bottom: 1.5rem; }
 
+/* ===== SOCIAL MEDIA ===== */
+.social-media { padding: 5rem 3rem; text-align: center; }
+.social-media__inner { max-width: 600px; margin: 0 auto; }
+.social-media__links {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 1.5rem; margin-top: 2rem;
+}
+.social-media__link {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  text-decoration: none; color: var(--color-stone);
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 0.8rem 1.2rem; border-radius: var(--border-radius);
+}
+.social-media__link:hover {
+  color: var(--color-accent);
+  transform: translateY(-2px);
+}
+.social-media__icon {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(196, 181, 164, 0.2); border-radius: 50%;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.social-media__link:hover .social-media__icon {
+  border-color: var(--color-accent);
+  background: rgba(196, 181, 164, 0.06);
+}
+.social-media__icon svg { width: 18px; height: 18px; }
+.social-media__label {
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--font-body);
+}
+
+/* ===== CONTACT — ENHANCED ===== */
+.contact__messengers {
+  display: flex; justify-content: center; gap: 1.2rem; margin-top: 1.2rem;
+}
+.contact__messenger-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  text-decoration: none; color: var(--color-stone);
+  font-size: 0.85rem; font-family: var(--font-body);
+  padding: 0.5rem 1rem; border-radius: var(--border-radius);
+  border: 1px solid rgba(196, 181, 164, 0.2);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.contact__messenger-link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.contact__messenger-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.contact__form {
+  max-width: 480px; margin: 2.5rem auto 0;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.contact__form-row {
+  display: flex; gap: 1rem;
+}
+.contact__input,
+.contact__textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--color-warm);
+  background: transparent;
+  border: 1px solid rgba(196, 181, 164, 0.25);
+  border-radius: var(--border-radius);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.contact__input::placeholder,
+.contact__textarea::placeholder {
+  color: var(--color-sand);
+  opacity: 0.6;
+}
+.contact__input:focus,
+.contact__textarea:focus {
+  border-color: var(--color-accent);
+}
+.contact__textarea {
+  min-height: 120px; resize: vertical;
+}
+.contact__form-submit {
+  align-self: center;
+}
+
+.contact__map-placeholder {
+  max-width: 480px; margin: 2.5rem auto 0;
+  height: 200px;
+  border: 2px dashed rgba(196, 181, 164, 0.25);
+  border-radius: var(--border-radius);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.6rem;
+  color: var(--color-sand); opacity: 0.6;
+  font-family: var(--font-body); font-size: 0.82rem;
+}
+.contact__map-placeholder svg { opacity: 0.4; }
+
+/* ===== TESTIMONIALS — REVIEWS LINK ===== */
+.testimonials__reviews-link {
+  text-align: center; margin-top: 2.5rem;
+}
+.testimonials__google-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  text-decoration: none; color: var(--color-stone);
+  font-size: 0.85rem; font-family: var(--font-body);
+  padding: 0.6rem 1.2rem; border-radius: var(--border-radius);
+  border: 1px solid rgba(196, 181, 164, 0.2);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.testimonials__google-link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.testimonials__google-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .pricing__grid { grid-template-columns: repeat(2, 1fr); }
@@ -399,6 +516,8 @@
   .testimonials__cards { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
   .contact__details { flex-direction: column; gap: 1rem; }
   .contact__detail-sep { display: none; }
+  .contact__form-row { flex-direction: column; }
+  .contact__messengers { flex-wrap: wrap; }
 }
 @media (max-width: 650px) {
   .hero { padding: 6rem 1.5rem; min-height: 92vh; }
@@ -412,6 +531,8 @@
   .pricing__grid { grid-template-columns: 1fr; }
   .testimonials { padding: 5rem 1.5rem; }
   .contact { padding: 5rem 1.5rem; }
+  .social-media { padding: 4rem 1.5rem; }
+  .social-media__links { gap: 1rem; }
   .process__steps { grid-template-columns: 1fr; }
   .events__grid { grid-template-columns: 1fr; }
   .blog__grid { grid-template-columns: 1fr; }
