@@ -12,7 +12,6 @@ const S: Record<string, Record<Language, string>> = {
   'style.corners': { vi: 'Bo góc', en: 'Corners' },
   'style.buttons': { vi: 'Nút', en: 'Buttons' },
   'style.cards': { vi: 'Thẻ', en: 'Cards' },
-  'style.gradient': { vi: 'Chuyển màu', en: 'Gradient' },
 
   // ── Order buttons ──
   'order.up': { vi: 'Lên', en: 'Up' },
@@ -34,6 +33,7 @@ const S: Record<string, Record<Language, string>> = {
   'sec.socialMedia': { vi: 'Mạng xã hội', en: 'Social Media' },
   'sec.faq': { vi: 'Câu hỏi', en: 'FAQ' },
   'sec.contact': { vi: 'Liên hệ', en: 'Contact' },
+  'sec.nav': { vi: 'Menu', en: 'Nav' },
 
   // ── Layout options ──
   'lo.center': { vi: 'Giữa', en: 'Center' },
@@ -88,6 +88,30 @@ const S: Record<string, Record<Language, string>> = {
   'dock.typography': { vi: 'Kiểu chữ', en: 'Typography' },
   'dock.vibe': { vi: 'Phong cách', en: 'Vibe' },
   'dock.settings': { vi: 'Cài đặt', en: 'Settings' },
+  'dock.back': { vi: 'Quay lại', en: 'Back' },
+
+  // ── Typography strip ──
+  'typo.headers': { vi: 'Tiêu đề', en: 'Headers' },
+  'typo.subheaders': { vi: 'Phụ đề', en: 'Subheaders' },
+  'typo.body': { vi: 'Nội dung', en: 'Body' },
+  'typo.buttons': { vi: 'Nút', en: 'Buttons' },
+  'typo.captions': { vi: 'Chú thích', en: 'Captions' },
+  'typo.weight': { vi: 'Độ đậm', en: 'Weight' },
+  'typo.color': { vi: 'Màu', en: 'Color' },
+  'typo.spacing': { vi: 'Khoảng cách', en: 'Spacing' },
+
+  // ── Vibe strip ──
+  'vibe.normal': { vi: 'Bình thường', en: 'Normal' },
+  'vibe.serene': { vi: 'Tĩnh lặng', en: 'Serene' },
+  'vibe.breathe': { vi: 'Hít thở', en: 'Breathe' },
+  'vibe.spring': { vi: 'Mùa xuân', en: 'Spring' },
+  'vibe.flow': { vi: 'Uyển chuyển', en: 'Flow' },
+  'vibe.snap': { vi: 'Nhanh', en: 'Snap' },
+
+  // ── Settings strip ──
+  'settings.language': { vi: 'Ngôn ngữ', en: 'Language' },
+  'settings.preview': { vi: 'Xem trước', en: 'Preview' },
+  'settings.export': { vi: 'Xuất cấu hình', en: 'Export' },
 
   // ── Tutorial ──
   'tut.skip': { vi: 'Bỏ qua', en: 'Skip' },

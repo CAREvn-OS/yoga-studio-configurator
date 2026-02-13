@@ -71,19 +71,13 @@ export interface MediaSlotSettings {
 
 export type ButtonStyle = 'rounded' | 'sharp' | 'pill'
 export type CardStyle = 'flat' | 'shadow' | 'outline'
-export type GradientType = 'none' | 'linear' | 'radial' | 'diagonal' | 'mesh' | 'subtle'
 
-export interface GradientSettings {
-  type: GradientType
-  colors: [string, string]
-}
-
-// Vibe system — 5 curated presets, fixed intensity
+// Vibe system — 6 presets (normal + 5 animated)
 export interface VibeSettings {
   preset: string
 }
 
-export type PanelId = 'theme' | 'typography' | 'vibe' | 'settings'
+export type DockMode = 'theme' | 'typography' | 'vibe' | 'settings'
 
 export type Language = 'vi' | 'en'
 

@@ -46,6 +46,7 @@ const FONT_FAMILY_MAP: Record<string, string> = {
 }
 
 const VIBE_CLASSES: Record<string, string> = {
+  normal: 'vibe-normal',
   serene: 'vibe-serene',
   breathe: 'vibe-breathe',
   spring: 'vibe-spring',
@@ -181,7 +182,6 @@ function StylizeApplier() {
   const borderRadiusOverride = useConfiguratorStore(s => s.borderRadiusOverride)
   const buttonStyle = useConfiguratorStore(s => s.buttonStyle)
   const cardStyle = useConfiguratorStore(s => s.cardStyle)
-  const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
   const logoScale = useConfiguratorStore(s => s.logoScale)
 
   useEffect(() => {
@@ -207,27 +207,6 @@ function StylizeApplier() {
     body.classList.add(`card-style-${cardStyle}`)
   }, [cardStyle])
 
-  useEffect(() => {
-    const root = document.documentElement
-    const body = document.body
-    if (gradientSettings.type === 'none') {
-      body.classList.remove('gradient-enabled')
-      root.style.removeProperty('--gradient-bg')
-      return
-    }
-    body.classList.add('gradient-enabled')
-    const [c1, c2] = gradientSettings.colors
-    let gradient = ''
-    switch (gradientSettings.type) {
-      case 'linear': gradient = `linear-gradient(180deg, ${c1}, ${c2})`; break
-      case 'radial': gradient = `radial-gradient(ellipse at center, ${c1}, ${c2})`; break
-      case 'diagonal': gradient = `linear-gradient(135deg, ${c1}, ${c2})`; break
-      case 'mesh': gradient = `linear-gradient(135deg, ${c1} 0%, ${c2} 50%, ${c1} 100%)`; break
-      case 'subtle': gradient = `linear-gradient(180deg, ${c1} 0%, ${c2} 30%, ${c1} 100%)`; break
-    }
-    root.style.setProperty('--gradient-bg', gradient)
-  }, [gradientSettings])
-
   return null
 }
 
@@ -245,6 +224,63 @@ function PreviewModeApplier() {
       document.body.classList.remove('preview-mode')
     }
   }, [previewMode])
+
+  return null
+}
+
+/* Hero shift: when hero blob is active, push content down for row menu room */
+function HeroShiftApplier() {
+  const activeSectionBlob = useConfiguratorStore(s => s.activeSectionBlob)
+
+  useEffect(() => {
+    const main = document.querySelector('.site-main') as HTMLElement | null
+    if (!main) return
+    if (activeSectionBlob === 'hero') {
+      main.classList.add('hero-shifted')
+    } else {
+      main.classList.remove('hero-shifted')
+    }
+    return () => main.classList.remove('hero-shifted')
+  }, [activeSectionBlob])
+
+  return null
+}
+
+/* Auto-preview: fade blobs when all are scrolled off-screen */
+function AutoPreviewWatcher() {
+  const dockOpen = useConfiguratorStore(s => s.dockOpen)
+  const previewMode = useConfiguratorStore(s => s.previewMode)
+  const setAutoPreview = useConfiguratorStore(s => s.setAutoPreview)
+
+  useEffect(() => {
+    if (!dockOpen || previewMode) {
+      setAutoPreview(false)
+      return
+    }
+
+    let ticking = false
+    const check = () => {
+      const blobs = document.querySelectorAll('.cfg-mini-blob')
+      if (blobs.length === 0) { setAutoPreview(false); return }
+      let anyVisible = false
+      blobs.forEach(blob => {
+        const rect = blob.getBoundingClientRect()
+        if (rect.bottom > 0 && rect.top < window.innerHeight) anyVisible = true
+      })
+      setAutoPreview(!anyVisible)
+    }
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(() => { check(); ticking = false })
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    check()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [dockOpen, previewMode, setAutoPreview])
 
   return null
 }
@@ -280,27 +316,31 @@ export default function App() {
       <VibeApplier />
       <StylizeApplier />
       <PreviewModeApplier />
+      <HeroShiftApplier />
+      <AutoPreviewWatcher />
       <Navbar />
-      <SectionWrapper sectionId="hero">
-        <Hero layout={layouts.hero ?? 'center'} />
-      </SectionWrapper>
-      <div className="divider">
-        <div className="divider__line" />
-        <div className="divider__diamond" />
-        <div className="divider__line" />
+      <div className="site-main">
+        <SectionWrapper sectionId="hero">
+          <Hero layout={layouts.hero ?? 'center'} />
+        </SectionWrapper>
+        <div className="divider">
+          <div className="divider__line" />
+          <div className="divider__diamond" />
+          <div className="divider__line" />
+        </div>
+        {sectionOrder.map(id => {
+          const entry = registry[id]
+          if (!entry) return null
+          if (entry.optional && !sections[id]) return null
+          const Component = entry.component
+          return (
+            <SectionWrapper key={id} sectionId={id}>
+              <Component {...(entry.props ?? {})} />
+            </SectionWrapper>
+          )
+        })}
+        <Footer />
       </div>
-      {sectionOrder.map(id => {
-        const entry = registry[id]
-        if (!entry) return null
-        if (entry.optional && !sections[id]) return null
-        const Component = entry.component
-        return (
-          <SectionWrapper key={id} sectionId={id}>
-            <Component {...(entry.props ?? {})} />
-          </SectionWrapper>
-        )
-      })}
-      <Footer />
       <BackToTop />
     </>
   )

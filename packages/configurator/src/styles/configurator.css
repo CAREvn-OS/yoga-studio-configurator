@@ -162,13 +162,76 @@
     0 8px 32px rgba(0, 0, 0, 0.45),
     0 2px 8px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  overflow: hidden;
+  overflow: visible;
+  transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 220px;
 }
 
-/* Dock edge overlay — disabled */
-.cfg-dock::before {
-  display: none;
+.cfg-dock--expanded {
+  max-width: calc(100vw - 100px);
 }
+
+/* Inner layout containers */
+.cfg-dock__root {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: cfg-dock-fade-in 0.25s ease both;
+}
+
+.cfg-dock__mode {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  animation: cfg-dock-fade-in 0.25s ease both;
+  min-width: 0;
+}
+
+.cfg-dock__strip {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  min-width: 0;
+  max-width: calc(100vw - 160px);
+}
+.cfg-dock__strip::-webkit-scrollbar { display: none; }
+
+.cfg-dock__divider {
+  width: 1px;
+  height: 22px;
+  background: var(--cfg-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+@keyframes cfg-dock-fade-in {
+  from { opacity: 0; transform: scale(0.92); filter: blur(3px); }
+  to   { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* Back button */
+.cfg-dock-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s;
+}
+.cfg-dock-back:hover { color: var(--cfg-text); background: var(--cfg-highlight); }
+.cfg-dock-back svg { width: 15px; height: 15px; }
+.cfg-dock-back--sm { width: 26px; height: 26px; }
+.cfg-dock-back--sm svg { width: 13px; height: 13px; }
 
 .cfg-dock-btn {
   position: relative;
@@ -234,104 +297,6 @@
 }
 
 
-/* ---------------------------------------------------------------
-   Panel (flyout)
-   --------------------------------------------------------------- */
-
-.cfg-panel-wrapper {
-  position: fixed;
-  bottom: 72px;
-  right: 24px;
-  z-index: var(--cfg-z);
-  width: 280px;
-  max-height: calc(100vh - 120px);
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(12px) scale(0.96);
-  transition: opacity var(--cfg-transition), transform var(--cfg-transition);
-}
-
-.cfg-panel-wrapper--open {
-  pointer-events: auto;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.cfg-panel {
-  background: var(--cfg-bg);
-  backdrop-filter: blur(var(--cfg-blur));
-  -webkit-backdrop-filter: blur(var(--cfg-blur));
-  border: 1px solid var(--cfg-border);
-  border-radius: var(--cfg-radius);
-  box-shadow: var(--cfg-shadow);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.cfg-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--cfg-border);
-}
-
-.cfg-panel-title {
-  font-family: var(--cfg-font);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--cfg-text);
-  margin: 0;
-}
-
-.cfg-panel-close {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
-  color: var(--cfg-text-dim);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  padding: 0;
-  transition: color var(--cfg-transition), background var(--cfg-transition);
-}
-
-.cfg-panel-close:hover {
-  color: var(--cfg-accent);
-  background: var(--cfg-highlight-hover);
-}
-
-.cfg-panel-close svg {
-  width: 14px;
-  height: 14px;
-}
-
-.cfg-panel-body {
-  padding: 12px 16px 16px;
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
-  scrollbar-width: thin;
-  scrollbar-color: var(--cfg-highlight-hover) transparent;
-}
-
-.cfg-panel-body::-webkit-scrollbar {
-  width: 4px;
-}
-
-.cfg-panel-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.cfg-panel-body::-webkit-scrollbar-thumb {
-  background: var(--cfg-highlight-hover);
-  border-radius: 2px;
-}
 
 
 /* ---------------------------------------------------------------
@@ -2149,12 +2114,6 @@
   flex-shrink: 0;
 }
 
-.cfg-row-menu__color-pair {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
 .cfg-row-menu__items {
   display: flex;
   align-items: center;
@@ -2196,6 +2155,73 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* ── Style animated sub-icons ── */
+.cfg-row-menu__style-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.cfg-row-menu__style-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--cfg-border);
+  background: var(--cfg-highlight);
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.cfg-row-menu__style-icon-btn:hover {
+  background: var(--cfg-highlight-hover);
+  color: var(--cfg-text);
+  border-color: var(--cfg-border-hover);
+}
+
+.cfg-style-anim-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Corners icon: rx animates 0→10→0 */
+.cfg-style-anim-icon--corners rect {
+  animation: corners-morph 2.4s ease-in-out infinite;
+}
+@keyframes corners-morph {
+  0%, 100% { rx: 0; }
+  50% { rx: 10; }
+}
+
+/* Buttons icon: scale press animation */
+.cfg-style-anim-icon--buttons {
+  animation: button-press 2s ease-in-out infinite;
+}
+@keyframes button-press {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(0.88); }
+  50% { transform: scale(1.04); }
+}
+
+/* Cards icon: shadow/outline flip */
+.cfg-style-anim-icon--cards {
+  animation: card-flip 3s ease-in-out infinite;
+}
+@keyframes card-flip {
+  0%, 100% { filter: drop-shadow(0 1px 2px rgba(255,255,255,0.15)); }
+  50% { filter: drop-shadow(0 0 0 transparent); stroke-dasharray: 4 2; }
+}
+
+.cfg-row-menu__style-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: cfg-dock-fade-in 0.25s ease both;
 }
 
 /* Mobile: full-width row */
@@ -2316,4 +2342,254 @@
 .cfg-tutorial-tooltip__dot--active {
   background: var(--cfg-accent);
   transform: scale(1.3);
+}
+
+
+/* ---------------------------------------------------------------
+   Theme Strip (inline in dock)
+   --------------------------------------------------------------- */
+
+.cfg-theme-strip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 2px;
+}
+
+.cfg-theme-strip__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.2s, transform 0.2s;
+  background: transparent;
+}
+.cfg-theme-strip__swatch:hover { transform: scale(1.15); }
+.cfg-theme-strip__swatch--active { border-color: var(--cfg-accent); transform: scale(1.1); }
+
+.cfg-theme-strip__half {
+  width: 50%;
+  height: 100%;
+}
+
+.cfg-theme-strip__color {
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cfg-theme-strip__color input[type="color"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.cfg-theme-strip__color-dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.cfg-theme-strip__color:hover .cfg-theme-strip__color-dot {
+  transform: scale(1.15);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.cfg-theme-strip__logo-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s;
+}
+.cfg-theme-strip__logo-btn:hover {
+  color: var(--cfg-text);
+  background: var(--cfg-highlight);
+}
+
+
+/* ---------------------------------------------------------------
+   Typography Strip (inline in dock)
+   --------------------------------------------------------------- */
+
+.cfg-typo-strip {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 2px;
+}
+
+.cfg-typo-strip--sub {
+  gap: 5px;
+}
+
+.cfg-typo-strip__cat {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s;
+}
+.cfg-typo-strip__cat:hover {
+  color: var(--cfg-text);
+  background: var(--cfg-highlight);
+}
+.cfg-typo-strip__cat--set {
+  color: var(--cfg-accent);
+  background: rgba(45, 32, 66, 0.25);
+}
+.cfg-typo-strip__cat svg { width: 16px; height: 16px; }
+
+.cfg-typo-strip__fonts {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  max-width: 260px;
+}
+.cfg-typo-strip__fonts::-webkit-scrollbar { display: none; }
+
+.cfg-typo-strip__control {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+
+/* ---------------------------------------------------------------
+   Vibe Strip + Animated Blobs
+   --------------------------------------------------------------- */
+
+.cfg-vibe-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.cfg-vibe-blob {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.cfg-vibe-blob:hover { transform: scale(1.18); }
+.cfg-vibe-blob--active {
+  border-color: var(--cfg-accent);
+  box-shadow: 0 0 10px 3px rgba(90, 60, 140, 0.3);
+}
+
+/* Individual vibe blob animations */
+.cfg-vibe-blob--normal { animation: vibe-blob-pulse 3s ease-in-out infinite; }
+.cfg-vibe-blob--serene { animation: vibe-blob-morph 10s ease-in-out infinite; }
+.cfg-vibe-blob--breathe { animation: vibe-blob-breathe 4s ease-in-out infinite; }
+.cfg-vibe-blob--spring { animation: vibe-blob-spring 3s cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+.cfg-vibe-blob--flow { animation: vibe-blob-flow 5s ease-in-out infinite; }
+.cfg-vibe-blob--snap { animation: vibe-blob-snap 2s steps(3, end) infinite; }
+
+@keyframes vibe-blob-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes vibe-blob-morph {
+  0%, 100% { border-radius: 50%; }
+  25% { border-radius: 55% 45% 50% 50%; }
+  50% { border-radius: 48% 52% 55% 45%; }
+  75% { border-radius: 52% 48% 45% 55%; }
+}
+
+@keyframes vibe-blob-breathe {
+  0%, 100% { transform: scale(0.92); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes vibe-blob-spring {
+  0%, 100% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-3px) scale(1.1); }
+  40% { transform: translateY(1px) scale(0.95); }
+  60% { transform: translateY(-1px) scale(1.03); }
+}
+
+@keyframes vibe-blob-flow {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  33% { transform: translateX(2px) rotate(6deg); }
+  66% { transform: translateX(-2px) rotate(-4deg); }
+}
+
+@keyframes vibe-blob-snap {
+  0% { border-radius: 50%; transform: scale(1); }
+  33% { border-radius: 40% 60% 55% 45%; transform: scale(1.08); }
+  66% { border-radius: 55% 45% 40% 60%; transform: scale(0.96); }
+  100% { border-radius: 50%; transform: scale(1); }
+}
+
+
+/* ---------------------------------------------------------------
+   Settings Strip (inline in dock)
+   --------------------------------------------------------------- */
+
+.cfg-settings-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 2px;
+}
+
+.cfg-settings-strip__btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--cfg-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s;
+  font-family: var(--cfg-font);
+}
+.cfg-settings-strip__btn:hover {
+  color: var(--cfg-text);
+  background: var(--cfg-highlight);
+}
+.cfg-settings-strip__btn--active {
+  color: var(--cfg-accent);
+  background: var(--cfg-active);
+}
+.cfg-settings-strip__btn svg { width: 16px; height: 16px; }
+
+.cfg-settings-strip__flag {
+  font-size: 18px;
+  line-height: 1;
 }

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PanelId, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, GradientSettings, MediaSlotSettings, Language } from '@care/shared-types'
+import type { DockMode, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, MediaSlotSettings, Language } from '@care/shared-types'
 import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
@@ -22,11 +22,12 @@ const DEFAULT_SECTIONS: Record<string, boolean> = {
 interface ConfiguratorState {
   // UI
   dockOpen: boolean
-  activePanel: PanelId | null
+  dockMode: DockMode | null
   copyMode: boolean
   activeCopyElement: string | null
   activeSectionBlob: string | null
   activeRowCategory: string | null
+  autoPreview: boolean
 
   // Tutorial
   tutorialStep: number
@@ -57,14 +58,12 @@ interface ConfiguratorState {
   borderRadiusOverride: number | null
   buttonStyle: ButtonStyle
   cardStyle: CardStyle
-  gradientSettings: GradientSettings
   previewMode: boolean
   language: Language
 
   // Actions
   toggleDock: () => void
-  openPanel: (panel: PanelId) => void
-  closePanel: () => void
+  setDockMode: (mode: DockMode | null) => void
   setCopyMode: (on: boolean) => void
   setActiveCopyElement: (id: string | null) => void
   setTheme: (id: string) => void
@@ -96,9 +95,9 @@ interface ConfiguratorState {
   setBorderRadiusOverride: (value: number | null) => void
   setButtonStyle: (style: ButtonStyle) => void
   setCardStyle: (style: CardStyle) => void
-  setGradientSettings: (settings: Partial<GradientSettings>) => void
   setActiveSectionBlob: (id: string | null) => void
   setActiveRowCategory: (cat: string | null) => void
+  setAutoPreview: (on: boolean) => void
   setTutorialStep: (step: number) => void
   completeTutorial: () => void
   togglePreviewMode: () => void
@@ -112,11 +111,12 @@ interface ConfiguratorState {
 export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   // UI defaults
   dockOpen: false,
-  activePanel: null,
+  dockMode: null,
   copyMode: true,
   activeCopyElement: null,
   activeSectionBlob: null,
   activeRowCategory: null,
+  autoPreview: false,
 
   // Tutorial
   tutorialStep: 0,
@@ -131,7 +131,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   colorOverrides: null,
   typographyOverride: null,
   typoCategorySettings: {},
-  vibe: { preset: 'serene' },
+  vibe: { preset: 'normal' },
   copySelections: {},
   customCopy: {},
   layouts: {},
@@ -149,7 +149,6 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   borderRadiusOverride: null,
   buttonStyle: 'rounded' as ButtonStyle,
   cardStyle: 'flat' as CardStyle,
-  gradientSettings: { type: 'none', colors: ['#faf8f5', '#e8ddd0'] } as GradientSettings,
   previewMode: false,
   language: 'vi' as Language,
 
@@ -158,21 +157,13 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   toggleDock: () =>
     set(s => {
       if (s.dockOpen) {
-        return { dockOpen: false, activePanel: null, activeCopyElement: null, activeSectionBlob: null }
+        return { dockOpen: false, dockMode: null, activeCopyElement: null, activeSectionBlob: null }
       }
-      return { dockOpen: true }
+      return { dockOpen: true, activeSectionBlob: null }
     }),
 
-  openPanel: (panel) =>
-    set(s => {
-      if (s.activePanel === panel) {
-        return { activePanel: null }
-      }
-      return { activePanel: panel, activeSectionBlob: null }
-    }),
-
-  closePanel: () =>
-    set({ activePanel: null }),
+  setDockMode: (mode) =>
+    set({ dockMode: mode, activeSectionBlob: null }),
 
   setCopyMode: (on) =>
     set({ copyMode: on, activeCopyElement: null }),
@@ -299,6 +290,26 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
             [slotId]: { ...s.mediaUploads[slotId], remotePath: result.path, remoteUrl: result.url },
           },
         }))
+        // Auto image optimization: generate responsive WebP variants
+        try {
+          const { processImage, uploadBlob } = await import('@care/media-storage')
+          const variants = await processImage(file)
+          const ts = Date.now()
+          const [mobileRes, tabletRes, desktopRes] = await Promise.all([
+            uploadBlob(variants.mobile, `uploads/${slotId}_${ts}_mobile.webp`),
+            uploadBlob(variants.tablet, `uploads/${slotId}_${ts}_tablet.webp`),
+            uploadBlob(variants.desktop, `uploads/${slotId}_${ts}_desktop.webp`),
+          ])
+          if (mobileRes && tabletRes && desktopRes) {
+            get().setMediaUploadResponsiveUrls(slotId, {
+              mobile: mobileRes.url,
+              tablet: tabletRes.url,
+              desktop: desktopRes.url,
+            })
+          }
+        } catch {
+          // Image optimization failed silently
+        }
       } catch {
         // Supabase unavailable
       }
@@ -408,16 +419,14 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   setCardStyle: (style) =>
     set({ cardStyle: style }),
 
-  setGradientSettings: (settings) =>
-    set(s => ({
-      gradientSettings: { ...s.gradientSettings, ...settings } as GradientSettings,
-    })),
-
   setActiveSectionBlob: (id) =>
-    set({ activeSectionBlob: id, activeRowCategory: null }),
+    set({ activeSectionBlob: id, activeRowCategory: null, dockOpen: false, dockMode: null }),
 
   setActiveRowCategory: (cat) =>
     set({ activeRowCategory: cat }),
+
+  setAutoPreview: (on) =>
+    set({ autoPreview: on }),
 
   setTutorialStep: (step) => set({ tutorialStep: step }),
 
@@ -429,9 +438,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   togglePreviewMode: () =>
     set(s => {
       if (s.previewMode) {
-        return { previewMode: false, copyMode: true, dockOpen: true, activePanel: null, activeCopyElement: null }
+        return { previewMode: false, copyMode: true, dockOpen: true, dockMode: null, activeCopyElement: null }
       }
-      return { previewMode: true, copyMode: false, activePanel: null, activeCopyElement: null, activeSectionBlob: null, dockOpen: false }
+      return { previewMode: true, copyMode: false, dockMode: null, activeCopyElement: null, activeSectionBlob: null, dockOpen: false }
     }),
 
   setLanguage: (lang) => set({ language: lang }),
@@ -465,7 +474,6 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       borderRadiusOverride: s.borderRadiusOverride,
       buttonStyle: s.buttonStyle,
       cardStyle: s.cardStyle,
-      gradientSettings: s.gradientSettings,
       language: s.language,
       logoUpload: s.logoUpload ? {
         name: s.logoUpload.name, type: s.logoUpload.type, size: s.logoUpload.size,
@@ -492,6 +500,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       const vibeMap: Record<string, string> = {
         zen: 'serene', pulse: 'breathe', bloom: 'spring',
         drift: 'flow', spark: 'snap', wave: 'flow',
+        serene: 'serene',
       }
       const oldPreset = config.vibe.preset
       updates.vibe = { preset: vibeMap[oldPreset] ?? oldPreset }
@@ -516,7 +525,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.borderRadiusOverride !== undefined) updates.borderRadiusOverride = config.borderRadiusOverride
     if (config.buttonStyle) updates.buttonStyle = config.buttonStyle as ButtonStyle
     if (config.cardStyle) updates.cardStyle = config.cardStyle as CardStyle
-    if (config.gradientSettings) updates.gradientSettings = config.gradientSettings as GradientSettings
+    // Gradient settings ignored (removed)
     updates.language = (config.language === 'en' ? 'en' : 'vi') as Language
     // Restore media references using remote URLs (blob URLs are not persisted)
     if (config.mediaUploads) {

@@ -1,6 +1,5 @@
 import { Pill } from './components/Pill'
 import { Dock } from './components/Dock'
-import { Panel } from './components/Panel'
 import { Toast } from './components/Toast'
 import { CopyPopover } from './panels/CopyPopover'
 import { SectionRowMenu } from './panels/SectionRowMenu'
@@ -18,7 +17,6 @@ export function Configurator() {
     <>
       <Pill />
       <Dock />
-      <Panel />
       <Toast />
       {copyMode && activeCopyElement && <CopyPopover />}
       {activeSectionBlob && <SectionRowMenu />}

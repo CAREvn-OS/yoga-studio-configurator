@@ -1,9 +1,15 @@
-import type { PanelId } from '@care/shared-types'
+import { useRef } from 'react'
+import type { DockMode } from '@care/shared-types'
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { ct } from '../i18n/cfgStrings'
+import { ThemeStrip } from '../panels/ThemeStrip'
+import { TypographyStrip } from '../panels/TypographyStrip'
+import { VibeStrip } from '../panels/VibeStrip'
+import { SettingsStrip } from '../panels/SettingsStrip'
 
+/* ── Root icon definitions ── */
 interface DockButton {
-  id: PanelId
+  id: DockMode
   labelKey: string
   icon: JSX.Element
 }
@@ -14,10 +20,7 @@ const BUTTONS: DockButton[] = [
     labelKey: 'dock.theme',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="13.5" cy="6.5" r="2.5" />
-        <circle cx="17.5" cy="10.5" r="2.5" />
-        <circle cx="8.5" cy="7.5" r="2.5" />
-        <circle cx="6.5" cy="12.5" r="2.5" />
+        <circle cx="13.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="10.5" r="2.5" /><circle cx="8.5" cy="7.5" r="2.5" /><circle cx="6.5" cy="12.5" r="2.5" />
         <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
       </svg>
     ),
@@ -27,9 +30,7 @@ const BUTTONS: DockButton[] = [
     labelKey: 'dock.typography',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="4 7 4 4 20 4 20 7" />
-        <line x1="9" y1="20" x2="15" y2="20" />
-        <line x1="12" y1="4" x2="12" y2="20" />
+        <polyline points="4 7 4 4 20 4 20 7" /><line x1="9" y1="20" x2="15" y2="20" /><line x1="12" y1="4" x2="12" y2="20" />
       </svg>
     ),
   },
@@ -54,29 +55,71 @@ const BUTTONS: DockButton[] = [
   },
 ]
 
+/* ── Mode content map ── */
+function DockModeContent({ mode }: { mode: DockMode }) {
+  switch (mode) {
+    case 'theme': return <ThemeStrip />
+    case 'typography': return <TypographyStrip />
+    case 'vibe': return <VibeStrip />
+    case 'settings': return <SettingsStrip />
+    default: return null
+  }
+}
+
+/* ── Back arrow SVG ── */
+const BackIcon = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+)
+
+/* ── Main component ── */
 export function Dock() {
   const dockOpen = useConfiguratorStore(s => s.dockOpen)
-  const activePanel = useConfiguratorStore(s => s.activePanel)
-  const openPanel = useConfiguratorStore(s => s.openPanel)
+  const dockMode = useConfiguratorStore(s => s.dockMode)
+  const setDockMode = useConfiguratorStore(s => s.setDockMode)
   const language = useConfiguratorStore(s => s.language)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const isExpanded = dockMode !== null
 
   return (
     <div className={`cfg-dock-wrapper ${dockOpen ? 'cfg-dock-wrapper--open' : ''}`}>
-      <div className="cfg-dock">
-        {BUTTONS.map(btn => {
-          const label = ct(language, btn.labelKey)
-          return (
+      <div className={`cfg-dock ${isExpanded ? 'cfg-dock--expanded' : ''}`}>
+        {dockMode === null ? (
+          /* ── Root: 4 mode icons ── */
+          <div className="cfg-dock__root" key="root">
+            {BUTTONS.map(btn => {
+              const label = ct(language, btn.labelKey)
+              return (
+                <button
+                  key={btn.id}
+                  className="cfg-dock-btn"
+                  onClick={() => setDockMode(btn.id)}
+                  aria-label={label}
+                >
+                  {btn.icon}
+                  <span className="cfg-tooltip">{label}</span>
+                </button>
+              )
+            })}
+          </div>
+        ) : (
+          /* ── Expanded: back arrow + mode strip ── */
+          <div className="cfg-dock__mode" key={`mode-${dockMode}`}>
             <button
-              key={btn.id}
-              className={`cfg-dock-btn ${activePanel === btn.id ? 'cfg-dock-btn--active' : ''}`}
-              onClick={() => openPanel(btn.id)}
-              aria-label={label}
+              className="cfg-dock-back"
+              onClick={() => setDockMode(null)}
+              aria-label={ct(language, 'dock.back')}
             >
-              {btn.icon}
-              <span className="cfg-tooltip">{label}</span>
+              {BackIcon}
             </button>
-          )
-        })}
+            <div className="cfg-dock__divider" />
+            <div className="cfg-dock__strip" ref={scrollRef}>
+              <DockModeContent mode={dockMode} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

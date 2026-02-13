@@ -35,19 +35,34 @@ body.anim-slide .reveal.visible { transform: translateX(0); }
    resting-state styles with baked-in sweet-spot values.
    =================================================================== */
 
-/* --- SERENE: Soft fades, micro-shadows, ultra subtle --- */
+/* --- NORMAL: Beautiful, clean, no scroll-reveal animations --- */
+body.vibe-normal .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+body.vibe-normal .reveal.visible { opacity: 1; transform: none; }
+body.vibe-normal .btn:hover { transform: translateY(-1px); transition: all 0.3s ease; }
+body.vibe-normal .card:hover,
+body.vibe-normal [class*="card"]:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+/* --- SERENE: Very slow, barely-there fade. 6s duration. Almost imperceptible. --- */
 body.vibe-serene .reveal {
-  transform: translateY(5px);
-  transition-duration: 0.96s;
+  transform: translateY(3px);
+  opacity: 0;
+  transition-duration: 6s;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-body.vibe-serene .reveal.visible { transform: translateY(0); }
-body.vibe-serene section { transition: opacity 0.6s ease; }
-body.vibe-serene .btn:hover { transform: translateY(-1px); transition: all 0.4s ease; }
+body.vibe-serene .reveal.visible { transform: translateY(0); opacity: 1; }
+body.vibe-serene section { transition: opacity 1.2s ease; }
+body.vibe-serene .btn:hover { transform: translateY(-0.5px); transition: all 0.8s ease; }
 
 body.vibe-serene .card,
 body.vibe-serene [class*="card"] {
-  transition: opacity 0.6s ease, box-shadow 0.6s ease;
+  transition: opacity 1.2s ease, box-shadow 1.2s ease;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
 }
 body.vibe-serene .card:hover,
@@ -55,58 +70,59 @@ body.vibe-serene [class*="card"]:hover {
   opacity: 0.988;
 }
 body.vibe-serene .media-slot__img {
-  transition: transform 0.6s ease;
+  transition: transform 1.2s ease;
   filter: saturate(0.97);
 }
 body.vibe-serene .media-slot__img:hover {
-  transform: scale(1.006);
+  transform: scale(1.003);
 }
 
 
-/* --- BREATHE: Gentle living motion, continuous pulse --- */
+/* --- BREATHE: Pronounced scale breathing (0.92→1.08). Visible inhale/exhale. 4s cycle. --- */
 body.vibe-breathe .reveal {
-  transform: translateY(12px) scale(0.988);
-  transition-duration: 0.74s;
+  transform: translateY(10px) scale(0.92);
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
 }
 body.vibe-breathe .reveal.visible { transform: translateY(0) scale(1); }
 body.vibe-breathe img:hover,
 body.vibe-breathe .media-slot:hover {
-  transform: scale(1.018);
-  transition: transform 0.6s ease;
+  transform: scale(1.03);
+  transition: transform 0.8s ease;
 }
 body.vibe-breathe .btn:hover {
-  transform: scale(1.024);
-  transition: all 0.3s ease;
+  transform: scale(1.04);
+  transition: all 0.4s ease;
 }
 
 @keyframes breathe-pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.004); }
+  50% { transform: scale(1.012); }
 }
 body.vibe-breathe .card,
 body.vibe-breathe [class*="card"] {
-  animation: breathe-pulse 3.6s ease-in-out infinite;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  animation: breathe-pulse 4s ease-in-out infinite;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 body.vibe-breathe .card:hover,
 body.vibe-breathe [class*="card"]:hover {
-  transform: scale(1.009);
-  box-shadow: 0 2.4px 10px rgba(0, 0, 0, 0.08);
+  transform: scale(1.015);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
 }
 body.vibe-breathe .media-slot__img {
-  animation: breathe-pulse 4.6s ease-in-out infinite;
-  transition: transform 0.6s ease;
+  animation: breathe-pulse 4s ease-in-out infinite;
+  transition: transform 0.8s ease;
 }
 body.vibe-breathe .media-slot__img:hover {
-  transform: scale(1.018);
+  transform: scale(1.03);
 }
 
 
-/* --- SPRING: Elastic reveals, playful overshoot --- */
+/* --- SPRING: Big bouncy overshoot. Elements enter from below with visible bounce-back. --- */
 body.vibe-spring .reveal {
-  transform: translateY(14px) scale(0.964);
-  transition-duration: 1s;
-  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(36px) scale(0.94);
+  transition-duration: 1.1s;
+  transition-timing-function: cubic-bezier(0.22, 1.8, 0.36, 1);
 }
 body.vibe-spring .reveal.visible { transform: translateY(0) scale(1); }
 body.vibe-spring img:hover {
@@ -137,10 +153,10 @@ body.vibe-spring .btn {
 }
 
 
-/* --- FLOW: Fluid horizontal glide + gentle rotation --- */
+/* --- FLOW: Horizontal slide-in with gentle rotation. Completely different direction. --- */
 body.vibe-flow .reveal {
-  transform: translateX(-18px) rotate(-0.6deg);
-  transition-duration: 0.98s;
+  transform: translateX(-30px) rotate(-1.2deg);
+  transition-duration: 1.1s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 body.vibe-flow .reveal.visible { transform: translateX(0) rotate(0deg); }
@@ -192,10 +208,10 @@ body.vibe-flow .btn {
 }
 
 
-/* --- SNAP: Crisp, punchy entrances with overshoot --- */
+/* --- SNAP: Near-instant pop with tiny scale overshoot. Very fast (0.3s). Camera shutter feel. --- */
 body.vibe-snap .reveal {
-  transform: translateY(19px) scale(0.952);
-  transition-duration: 0.5s;
+  transform: translateY(12px) scale(0.92);
+  transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 body.vibe-snap .reveal.visible { transform: translateY(0) scale(1); }

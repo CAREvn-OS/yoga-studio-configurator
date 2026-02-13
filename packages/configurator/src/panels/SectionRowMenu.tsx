@@ -1,9 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type JSX } from 'react'
 import { createPortal } from 'react-dom'
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
-import { BUTTON_STYLES, CARD_STYLES, GRADIENT_TYPES } from './ThemePanel'
+import type { ButtonStyle, CardStyle } from '@care/shared-types'
 import { ct } from '../i18n/cfgStrings'
+
+/* Style constants */
+const BUTTON_STYLES: { id: ButtonStyle; label: string }[] = [
+  { id: 'rounded', label: 'Rounded' },
+  { id: 'sharp', label: 'Sharp' },
+  { id: 'pill', label: 'Pill' },
+]
+
+const CARD_STYLES: { id: CardStyle; label: string }[] = [
+  { id: 'flat', label: 'Flat' },
+  { id: 'shadow', label: 'Shadow' },
+  { id: 'outline', label: 'Outline' },
+]
 
 /* ── Layout options per section ── */
 const LAYOUT_OPTIONS: Record<string, { id: string; labelKey: string }[]> = {
@@ -68,6 +81,29 @@ const TabIcons = {
   ),
 }
 
+/* ── Animated style sub-icons ── */
+const StyleSubIcons = {
+  corners: (
+    <svg className="cfg-style-anim-icon cfg-style-anim-icon--corners" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="4" />
+    </svg>
+  ),
+  buttons: (
+    <svg className="cfg-style-anim-icon cfg-style-anim-icon--buttons" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="7" width="18" height="10" rx="5" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>
+  ),
+  cards: (
+    <svg className="cfg-style-anim-icon cfg-style-anim-icon--cards" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <line x1="2" y1="10" x2="22" y2="10" />
+    </svg>
+  ),
+}
+
+type StyleSub = 'corners' | 'buttons' | 'cards'
+
 /* ── Component ── */
 export function SectionRowMenu() {
   const sectionId = useConfiguratorStore(s => s.activeSectionBlob)
@@ -87,8 +123,9 @@ export function SectionRowMenu() {
   const setButtonStyle = useConfiguratorStore(s => s.setButtonStyle)
   const cardStyle = useConfiguratorStore(s => s.cardStyle)
   const setCardStyle = useConfiguratorStore(s => s.setCardStyle)
-  const gradientSettings = useConfiguratorStore(s => s.gradientSettings)
-  const setGradientSettings = useConfiguratorStore(s => s.setGradientSettings)
+
+  // Style sub-icon state
+  const [styleSub, setStyleSub] = useState<StyleSub | null>(null)
 
   // Items
   const sectionItems = useConfiguratorStore(s => s.sectionItems)
@@ -107,11 +144,23 @@ export function SectionRowMenu() {
   // Position near the slimed-up blob
   useEffect(() => {
     if (!sectionId) return
+
+    // Special case: nav blob — position near the nav blob button
+    if (sectionId === 'nav') {
+      const navBlob = document.querySelector('.cfg-mini-blob--nav')
+      if (navBlob) {
+        const rect = navBlob.getBoundingClientRect()
+        setPos({ top: rect.bottom + window.scrollY + 8, left: Math.max(12, rect.left) })
+      } else {
+        setPos({ top: 80, left: 60 })
+      }
+      return
+    }
+
     const el = document.querySelector(`[data-section-id="${sectionId}"]`)
     if (!el) return
     const rect = el.getBoundingClientRect()
     const scrollY = window.scrollY
-    // Row menu sits at the top of the section (where blob slimed to), offset to the right of blob
     setPos({
       top: rect.top + scrollY - 18,
       left: Math.max(12, rect.left + 50),
@@ -151,15 +200,19 @@ export function SectionRowMenu() {
   const canMoveUp = sectionIndex > 0
   const canMoveDown = sectionIndex >= 0 && sectionIndex < sectionOrder.length - 1
 
-  const toggleCat = (cat: string) => setActiveRowCategory(activeRowCategory === cat ? null : cat)
+  const toggleCat = (cat: string) => {
+    setActiveRowCategory(activeRowCategory === cat ? null : cat)
+    setStyleSub(null) // reset style sub-icon when switching tabs
+  }
 
   /* ── Tabs ── */
+  const isNav = sectionId === 'nav'
   const tabs: { id: string; icon: JSX.Element; labelKey: string }[] = []
-  if (layoutOpts) tabs.push({ id: 'layout', icon: TabIcons.layout, labelKey: 'cat.layout' })
+  if (!isNav && layoutOpts) tabs.push({ id: 'layout', icon: TabIcons.layout, labelKey: 'cat.layout' })
   tabs.push({ id: 'style', icon: TabIcons.style, labelKey: 'cat.style' })
-  if (itemCfg && isOn) tabs.push({ id: 'items', icon: TabIcons.items, labelKey: 'cat.items' })
-  if (sectionId !== 'hero' && sectionIndex >= 0) tabs.push({ id: 'order', icon: TabIcons.order, labelKey: 'cat.order' })
-  if (isOptional) tabs.push({ id: 'toggle', icon: TabIcons.toggle, labelKey: 'cat.toggle' })
+  if (!isNav && itemCfg && isOn) tabs.push({ id: 'items', icon: TabIcons.items, labelKey: 'cat.items' })
+  if (!isNav && sectionId !== 'hero' && sectionIndex >= 0) tabs.push({ id: 'order', icon: TabIcons.order, labelKey: 'cat.order' })
+  if (!isNav && isOptional) tabs.push({ id: 'toggle', icon: TabIcons.toggle, labelKey: 'cat.toggle' })
 
   /* ── Content renderers ── */
   const renderContent = () => {
@@ -181,61 +234,62 @@ export function SectionRowMenu() {
         )
 
       case 'style':
+        // When no sub-icon selected, show 3 animated icons
+        if (!styleSub) {
+          return (
+            <div className="cfg-row-menu__content cfg-row-menu__style-icons">
+              {(['corners', 'buttons', 'cards'] as StyleSub[]).map(sub => (
+                <button
+                  key={sub}
+                  className="cfg-row-menu__style-icon-btn"
+                  onClick={() => setStyleSub(sub)}
+                  title={ct(language, `style.${sub}`)}
+                >
+                  {StyleSubIcons[sub]}
+                </button>
+              ))}
+            </div>
+          )
+        }
+
+        // Sub-icon expanded: show back arrow + inline controls
         return (
-          <div className="cfg-row-menu__content">
-            {/* Corners */}
-            <span className="cfg-row-menu__label">{ct(language, 'style.corners')}</span>
-            <div className="cfg-row-menu__slider">
-              <input
-                type="range" min="0" max="24" step="2"
-                value={borderRadiusOverride ?? 8}
-                onChange={e => setBorderRadiusOverride(Number(e.target.value))}
-                className="cfg-vibe-slider cfg-vibe-slider--sm"
-                style={{ width: 60 }}
-              />
-              <span className="cfg-row-menu__slider-val">{borderRadiusOverride ?? 8}px</span>
-            </div>
-
-            {/* Buttons */}
-            <span className="cfg-row-menu__label">{ct(language, 'style.buttons')}</span>
-            <div className="cfg-row-menu__chips">
-              {BUTTON_STYLES.map(s => (
-                <button key={s.id}
-                  className={`cfg-typo-chip cfg-typo-chip--sm ${buttonStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
-                  onClick={() => setButtonStyle(s.id)}
-                >{ct(language, `chip.${s.id}`)}</button>
-              ))}
-            </div>
-
-            {/* Cards */}
-            <span className="cfg-row-menu__label">{ct(language, 'style.cards')}</span>
-            <div className="cfg-row-menu__chips">
-              {CARD_STYLES.map(s => (
-                <button key={s.id}
-                  className={`cfg-typo-chip cfg-typo-chip--sm ${cardStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
-                  onClick={() => setCardStyle(s.id)}
-                >{ct(language, `chip.${s.id}`)}</button>
-              ))}
-            </div>
-
-            {/* Gradient */}
-            <span className="cfg-row-menu__label">{ct(language, 'style.gradient')}</span>
-            <div className="cfg-row-menu__chips">
-              {GRADIENT_TYPES.map(g => (
-                <button key={g.id}
-                  className={`cfg-typo-chip cfg-typo-chip--sm ${gradientSettings.type === g.id ? 'cfg-typo-chip--active' : ''}`}
-                  onClick={() => setGradientSettings({ type: g.id })}
-                >{ct(language, `chip.${g.id}`)}</button>
-              ))}
-            </div>
-            {gradientSettings.type !== 'none' && (
-              <div className="cfg-row-menu__color-pair">
-                <input type="color" value={gradientSettings.colors[0]}
-                  onChange={e => setGradientSettings({ colors: [e.target.value, gradientSettings.colors[1]] })}
-                  className="cfg-typo-level__color-picker" />
-                <input type="color" value={gradientSettings.colors[1]}
-                  onChange={e => setGradientSettings({ colors: [gradientSettings.colors[0], e.target.value] })}
-                  className="cfg-typo-level__color-picker" />
+          <div className="cfg-row-menu__content cfg-row-menu__style-sub">
+            <button className="cfg-dock-back cfg-dock-back--sm" onClick={() => setStyleSub(null)}>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            {styleSub === 'corners' && (
+              <div className="cfg-row-menu__slider">
+                <input
+                  type="range" min="0" max="24" step="2"
+                  value={borderRadiusOverride ?? 8}
+                  onChange={e => setBorderRadiusOverride(Number(e.target.value))}
+                  className="cfg-vibe-slider cfg-vibe-slider--sm"
+                  style={{ width: 70 }}
+                />
+                <span className="cfg-row-menu__slider-val">{borderRadiusOverride ?? 8}px</span>
+              </div>
+            )}
+            {styleSub === 'buttons' && (
+              <div className="cfg-row-menu__chips">
+                {BUTTON_STYLES.map(s => (
+                  <button key={s.id}
+                    className={`cfg-typo-chip cfg-typo-chip--sm ${buttonStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
+                    onClick={() => setButtonStyle(s.id)}
+                  >{ct(language, `chip.${s.id}`)}</button>
+                ))}
+              </div>
+            )}
+            {styleSub === 'cards' && (
+              <div className="cfg-row-menu__chips">
+                {CARD_STYLES.map(s => (
+                  <button key={s.id}
+                    className={`cfg-typo-chip cfg-typo-chip--sm ${cardStyle === s.id ? 'cfg-typo-chip--active' : ''}`}
+                    onClick={() => setCardStyle(s.id)}
+                  >{ct(language, `chip.${s.id}`)}</button>
+                ))}
               </div>
             )}
           </div>

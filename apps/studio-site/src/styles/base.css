@@ -234,13 +234,8 @@ body.card-style-outline [class*="card"] {
   box-shadow: none;
 }
 
-/* ===== GRADIENT BACKGROUNDS ===== */
-body.gradient-enabled .hero {
-  background: var(--gradient-bg) !important;
-}
-body.gradient-enabled section:nth-child(even) {
-  background: var(--gradient-bg);
-}
+/* ===== HERO SHIFT (room for row menu above hero) ===== */
+.hero-shifted { padding-top: 50px; transition: padding-top 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 
 /* ===== PREVIEW MODE ===== */
 body.preview-mode .cfg-dock-wrapper,
@@ -296,4 +291,17 @@ body.preview-mode .media-slot--uploadable:hover { outline: none; }
   .nav__links a { font-size: 0.85rem; letter-spacing: 0.18em; color: var(--color-warm); }
   .nav__toggle { display: block; z-index: 101; position: relative; }
   .back-to-top { display: none; }
+
+  /* Nav blob row */
+  .nav__blob-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    list-style: none;
+  }
+  .cfg-mini-blob--nav {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
 }
