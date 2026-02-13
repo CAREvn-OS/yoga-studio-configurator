@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { DockMode, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, MediaSlotSettings, Language } from '@care/shared-types'
+import type { DockMode, MediaUpload, ThemeColors, TypoCategory, TypoCategorySettings, VibeSettings, ImageDisplayStyle, ButtonStyle, CardStyle, MediaSlotSettings, Language, SeoOverrides } from '@care/shared-types'
 import { SECTION_ITEM_CONFIGS } from '@care/shared-types'
 
 const DEFAULT_SECTION_ORDER: string[] = [
@@ -61,6 +61,7 @@ interface ConfiguratorState {
   cardStyle: CardStyle
   previewMode: boolean
   language: Language
+  seoOverrides: SeoOverrides
 
   // Actions
   toggleDock: () => void
@@ -105,6 +106,7 @@ interface ConfiguratorState {
   restartTutorial: () => void
   togglePreviewMode: () => void
   setLanguage: (lang: Language) => void
+  setSeoOverride: (field: keyof SeoOverrides, value: string) => void
   showToast: (message: string) => void
   dismissToast: () => void
   exportConfig: () => string
@@ -156,6 +158,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   cardStyle: 'flat' as CardStyle,
   previewMode: false,
   language: 'vi' as Language,
+  seoOverrides: { studioName: '', description: '', city: '' },
 
   // --- Actions ---
 
@@ -458,6 +461,9 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
 
   setLanguage: (lang) => set({ language: lang }),
 
+  setSeoOverride: (field, value) =>
+    set(s => ({ seoOverrides: { ...s.seoOverrides, [field]: value } })),
+
   showToast: (message) => {
     const prev = get().toastTimeout
     if (prev) clearTimeout(prev)
@@ -494,6 +500,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       buttonStyle: s.buttonStyle,
       cardStyle: s.cardStyle,
       language: s.language,
+      seoOverrides: s.seoOverrides,
       logoUpload: s.logoUpload ? {
         name: s.logoUpload.name, type: s.logoUpload.type, size: s.logoUpload.size,
         remotePath: s.logoUpload.remotePath, remoteUrl: s.logoUpload.remoteUrl,
@@ -546,6 +553,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     if (config.cardStyle) updates.cardStyle = config.cardStyle as CardStyle
     // Gradient settings ignored (removed)
     updates.language = (config.language === 'en' ? 'en' : 'vi') as Language
+    if (config.seoOverrides) updates.seoOverrides = config.seoOverrides
     // Restore media references using remote URLs (blob URLs are not persisted)
     if (config.mediaUploads) {
       const restored: Record<string, MediaUpload> = {}

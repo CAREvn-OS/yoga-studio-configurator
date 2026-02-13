@@ -79,6 +79,12 @@ export interface VibeSettings {
   preset: VibePreset
 }
 
+export interface SeoOverrides {
+  studioName: string
+  description: string
+  city: string
+}
+
 export type DockMode = 'theme' | 'typography' | 'vibe' | 'settings'
 
 export type Language = 'vi' | 'en'

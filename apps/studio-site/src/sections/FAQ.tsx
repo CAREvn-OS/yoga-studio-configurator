@@ -10,15 +10,15 @@ export function FAQ() {
   return (
     <section className="faq" id="faq">
       <div className="faq__inner">
-        <p className="section-eyebrow reveal">Common Questions</p>
+        <CopyElement id="faq-eyebrow" as="p" className="section-eyebrow reveal" />
         <CopyElement id="faq-heading" as="h2" className="section-heading reveal" />
         <div className="faq__items">
           {items.map(i => (
             <div className={`faq__item reveal ${openItem === i ? 'faq__item--open' : ''}`} key={i}>
-              <div className="faq__q" onClick={() => setOpenItem(openItem === i ? null : i)}>
+              <button className="faq__q" onClick={() => setOpenItem(openItem === i ? null : i)} aria-expanded={openItem === i}>
                 <CopyElement id={`faq-${i}-q`} as="span" />
                 <span className="faq__icon" />
-              </div>
+              </button>
               <div className="faq__a">
                 <CopyElement id={`faq-${i}-a`} as="p" />
               </div>

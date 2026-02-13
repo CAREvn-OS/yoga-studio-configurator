@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carevn-os.github.io/yoga-studio-configurator/sitemap.xml

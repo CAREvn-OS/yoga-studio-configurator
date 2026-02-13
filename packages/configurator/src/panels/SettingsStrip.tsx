@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { ct } from '../i18n/cfgStrings'
 import type { Language } from '@care/shared-types'
@@ -10,6 +11,9 @@ export function SettingsStrip() {
   const exportConfig = useConfiguratorStore(s => s.exportConfig)
   const showToast = useConfiguratorStore(s => s.showToast)
   const restartTutorial = useConfiguratorStore(s => s.restartTutorial)
+  const seoOverrides = useConfiguratorStore(s => s.seoOverrides)
+  const setSeoOverride = useConfiguratorStore(s => s.setSeoOverride)
+  const [showSeo, setShowSeo] = useState(false)
 
   const handleCopy = async () => {
     const json = exportConfig()
@@ -31,6 +35,47 @@ export function SettingsStrip() {
 
   const nextLang = language === 'vi' ? 'en' : 'vi'
 
+  if (showSeo) {
+    return (
+      <div className="cfg-settings-strip">
+        {/* Back arrow */}
+        <button
+          className="cfg-dock-back cfg-dock-back--sm"
+          onClick={() => setShowSeo(false)}
+          title={ct(language, 'dock.back')}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        <div className="cfg-seo-fields">
+          <input
+            className="cfg-seo-input"
+            type="text"
+            value={seoOverrides.studioName}
+            onChange={e => setSeoOverride('studioName', e.target.value)}
+            placeholder={ct(language, 'seo.studioName')}
+          />
+          <input
+            className="cfg-seo-input"
+            type="text"
+            value={seoOverrides.description}
+            onChange={e => setSeoOverride('description', e.target.value)}
+            placeholder={ct(language, 'seo.description')}
+          />
+          <input
+            className="cfg-seo-input"
+            type="text"
+            value={seoOverrides.city}
+            onChange={e => setSeoOverride('city', e.target.value)}
+            placeholder={ct(language, 'seo.city')}
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="cfg-settings-strip">
       {/* Language toggle */}
@@ -50,6 +95,17 @@ export function SettingsStrip() {
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+        </svg>
+      </button>
+
+      {/* SEO */}
+      <button
+        className="cfg-settings-strip__btn"
+        onClick={() => setShowSeo(true)}
+        title={ct(language, 'settings.seo')}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       </button>
 

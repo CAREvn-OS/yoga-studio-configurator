@@ -135,6 +135,15 @@ export const optionalCopyEn: CopyAlternatives = {
   /*  FAQ                                                                */
   /* ================================================================== */
 
+  'faq-eyebrow': [
+    'FAQ',
+    'Got Questions?',
+    'Your Questions Answered',
+    'Common Questions',
+    'Answers You Need',
+    'Clarity & Guidance',
+  ],
+
   'faq-heading': [
     'Frequently Asked Questions',
     'Got Questions? We\u2019ve Got Answers.',
@@ -526,6 +535,15 @@ export const optionalCopyVi: CopyAlternatives = {
   /* ================================================================== */
   /*  CÂU HỎI THƯỜNG GẶP                                                */
   /* ================================================================== */
+
+  'faq-eyebrow': [
+    'Câu Hỏi',
+    'Bạn Thắc Mắc?',
+    'Giải Đáp Thắc Mắc',
+    'Câu Hỏi Phổ Biến',
+    'Những Điều Cần Biết',
+    'Sáng Tỏ & Hướng Dẫn',
+  ],
 
   'faq-heading': [
     'Câu Hỏi Thường Gặp',

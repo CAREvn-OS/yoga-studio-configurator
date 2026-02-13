@@ -10,6 +10,19 @@ interface MediaSlotProps {
   children?: React.ReactNode
 }
 
+function deriveAlt(slotId: string, fileName: string): string {
+  if (slotId.startsWith('hero-bg')) return 'Studio hero image'
+  if (slotId.startsWith('instructor')) return 'Instructor photo'
+  if (slotId.startsWith('testimonial')) return 'Client photo'
+  if (slotId.startsWith('schedule')) return 'Class image'
+  if (slotId.startsWith('event')) return 'Event image'
+  if (slotId.startsWith('blog')) return 'Article image'
+  if (slotId.startsWith('partner')) return 'Partner logo'
+  if (slotId.startsWith('studioTour')) return 'Studio space photo'
+  // Fallback: clean filename
+  return fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')
+}
+
 export function MediaSlot({ slotId, type = 'image', aspectRatio, className, children }: MediaSlotProps) {
   const media = useConfiguratorStore(s => s.mediaUploads[slotId])
   const setMediaUpload = useConfiguratorStore(s => s.setMediaUpload)
@@ -83,7 +96,7 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
               src={displayUrl}
               srcSet={srcSetStr}
               sizes={sizesStr}
-              alt={media.name}
+              alt={deriveAlt(slotId, media.name)}
               className="media-slot__img"
               loading={slotId.startsWith('hero') ? 'eager' : 'lazy'}
               style={Object.keys(imgStyle).length > 0 ? imgStyle : undefined}

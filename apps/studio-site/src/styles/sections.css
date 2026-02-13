@@ -375,6 +375,7 @@
   font-weight: 400; color: var(--color-warm); cursor: pointer;
   display: flex; justify-content: space-between; align-items: center;
   transition: color 0.3s ease;
+  background: none; border: none; width: 100%; text-align: left;
 }
 .faq__q:hover { color: var(--color-accent); }
 .faq__icon::after { content: '+'; font-family: var(--font-body); font-weight: 300; font-size: 1.3rem; color: var(--color-sand); transition: transform 0.3s ease; display: inline-block; }

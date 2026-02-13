@@ -20,6 +20,7 @@ import { Blog } from './sections/Blog'
 import { Partners } from './sections/Partners'
 import { SocialMedia } from './sections/SocialMedia'
 import { FAQ } from './sections/FAQ'
+import { HeadManager } from './components/HeadManager'
 
 // Maps typography categories to CSS selectors
 const TYPO_CATEGORY_SELECTORS: Record<string, string> = {
@@ -318,8 +319,9 @@ export default function App() {
       <PreviewModeApplier />
       <HeroShiftApplier />
       <AutoPreviewWatcher />
+      <HeadManager />
       <Navbar />
-      <div className="site-main">
+      <main className="site-main">
         <SectionWrapper sectionId="hero">
           <Hero layout={layouts.hero ?? 'center'} />
         </SectionWrapper>
@@ -340,7 +342,7 @@ export default function App() {
           )
         })}
         <Footer />
-      </div>
+      </main>
       <BackToTop />
     </>
   )

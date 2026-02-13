@@ -114,6 +114,13 @@ const S: Record<string, Record<Language, string>> = {
   'settings.export': { vi: 'Xuất cấu hình', en: 'Export' },
   'settings.help': { vi: 'Hướng dẫn', en: 'Tutorial' },
 
+  // ── SEO ──
+  'settings.seo': { vi: 'SEO', en: 'SEO' },
+  'seo.studioName': { vi: 'Tên studio', en: 'Studio name' },
+  'seo.description': { vi: 'Mô tả', en: 'Description' },
+  'seo.city': { vi: 'Thành phố', en: 'City' },
+  'seo.auto': { vi: 'Tự động từ nội dung', en: 'Auto from content' },
+
   // ── Pill aria-labels ──
   'pill.exitPreview': { vi: 'Thoát xem trước', en: 'Exit preview' },
   'pill.close': { vi: 'Đóng cấu hình', en: 'Close configurator' },

@@ -2637,3 +2637,39 @@
   font-size: 18px;
   line-height: 1;
 }
+
+
+/* ---------------------------------------------------------------
+   SEO Fields (inline in settings strip)
+   --------------------------------------------------------------- */
+
+.cfg-seo-fields {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.cfg-seo-input {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--cfg-border);
+  border-radius: var(--cfg-radius-sm);
+  background: var(--cfg-highlight);
+  color: var(--cfg-text);
+  font-family: var(--cfg-font);
+  font-size: 11px;
+  flex: 1;
+  min-width: 0;
+  outline: none;
+  transition: border-color var(--cfg-transition);
+}
+
+.cfg-seo-input::placeholder {
+  color: var(--cfg-text-muted);
+}
+
+.cfg-seo-input:focus {
+  border-color: var(--cfg-accent);
+}
