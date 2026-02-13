@@ -106,6 +106,7 @@ interface ConfiguratorState {
   togglePreviewMode: () => void
   setLanguage: (lang: Language) => void
   showToast: (message: string) => void
+  dismissToast: () => void
   exportConfig: () => string
   restoreConfig: (config: Record<string, any>) => void
   initPersistence: () => void
@@ -464,6 +465,12 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
       set({ toastMessage: null, toastTimeout: null })
     }, 2800)
     set({ toastMessage: message, toastTimeout: timeout })
+  },
+
+  dismissToast: () => {
+    const prev = get().toastTimeout
+    if (prev) clearTimeout(prev)
+    set({ toastMessage: null, toastTimeout: null })
   },
 
   exportConfig: () => {

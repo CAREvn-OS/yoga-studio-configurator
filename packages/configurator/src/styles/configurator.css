@@ -1030,6 +1030,8 @@
 .cfg-toast--visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 

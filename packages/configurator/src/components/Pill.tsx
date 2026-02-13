@@ -30,8 +30,8 @@ export function Pill() {
     <button
       className={`cfg-pill ${dockOpen ? 'cfg-pill--open' : ''} ${previewMode ? 'cfg-pill--preview' : ''}`}
       onClick={handleClick}
-      aria-label={previewMode ? 'Exit preview' : dockOpen ? 'Close configurator' : 'Open configurator'}
-      title={previewMode ? 'Exit Preview' : 'Configurator'}
+      aria-label={ct(language, previewMode ? 'pill.exitPreview' : dockOpen ? 'pill.close' : 'pill.open')}
+      title={ct(language, previewMode ? 'pill.exitPreview' : dockOpen ? 'pill.close' : 'pill.open')}
     >
       <div className="cfg-pill__blob" />
       {previewMode && showHint && (

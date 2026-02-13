@@ -114,6 +114,11 @@ const S: Record<string, Record<Language, string>> = {
   'settings.export': { vi: 'Xuất cấu hình', en: 'Export' },
   'settings.help': { vi: 'Hướng dẫn', en: 'Tutorial' },
 
+  // ── Pill aria-labels ──
+  'pill.exitPreview': { vi: 'Thoát xem trước', en: 'Exit preview' },
+  'pill.close': { vi: 'Đóng cấu hình', en: 'Close configurator' },
+  'pill.open': { vi: 'Mở cấu hình', en: 'Open configurator' },
+
   // ── Preview ──
   'preview.exit': { vi: 'Nhấn để thoát', en: 'Tap to exit' },
 

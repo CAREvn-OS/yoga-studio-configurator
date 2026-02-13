@@ -49,8 +49,20 @@ const COLOR_KEYS: (keyof ThemeColors)[] = [
   'sectionDarkText',
 ]
 
+/** Opacity variants generated as CSS custom properties for themed decorative CSS. */
+const OPACITY_VARIANTS: Record<string, number[]> = {
+  sand:        [6, 8, 10, 12, 15, 20, 25, 30],
+  accent:      [8, 12, 20, 40],
+  accentLight: [40],
+  warm:        [6],
+  stone:       [8, 60],
+}
+
 /** Section IDs that may receive light-mode overrides in contrast themes. */
 const ALL_CONTRAST_SECTIONS = ['about', 'experience', 'services', 'schedule', 'pricing', 'testimonials']
+
+/** Timer for smooth theme transition class removal. */
+let _transitionTid: ReturnType<typeof setTimeout> | null = null
 
 /**
  * Apply a theme to the document by setting CSS custom properties and data attributes.
@@ -75,13 +87,23 @@ export function applyTheme(
 
   // ── 0. Smooth transition class ────────────────────────────────────────────
   root.classList.add('theme-transitioning')
-  clearTimeout((applyTheme as any).__tid)
-  ;(applyTheme as any).__tid = setTimeout(() => root.classList.remove('theme-transitioning'), 450)
+  if (_transitionTid) clearTimeout(_transitionTid)
+  _transitionTid = setTimeout(() => { root.classList.remove('theme-transitioning'); _transitionTid = null }, 450)
 
   // ── 1. Colors ──────────────────────────────────────────────────────────────
   for (const key of COLOR_KEYS) {
     const value = (colorOverrides && colorOverrides[key]) || theme.colors[key]
     root.style.setProperty(`--color-${camelToKebab(key as string)}`, value)
+  }
+
+  // ── 1b. Opacity variants for themed decorative CSS ────────────────────────
+  for (const [colorKey, opacities] of Object.entries(OPACITY_VARIANTS)) {
+    const hex = (colorOverrides && colorOverrides[colorKey as keyof ThemeColors])
+      || theme.colors[colorKey as keyof ThemeColors]
+    if (!hex) continue
+    for (const pct of opacities) {
+      root.style.setProperty(`--color-${camelToKebab(colorKey)}-${pct}`, hexToRgba(hex, pct / 100))
+    }
   }
 
   // ── 2. Typography ──────────────────────────────────────────────────────────

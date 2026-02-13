@@ -73,8 +73,10 @@ export type ButtonStyle = 'rounded' | 'sharp' | 'pill'
 export type CardStyle = 'flat' | 'shadow' | 'outline'
 
 // Vibe system — 6 presets (normal + 5 animated)
+export type VibePreset = 'normal' | 'serene' | 'breathe' | 'spring' | 'flow' | 'snap'
+
 export interface VibeSettings {
-  preset: string
+  preset: VibePreset
 }
 
 export type DockMode = 'theme' | 'typography' | 'vibe' | 'settings'
