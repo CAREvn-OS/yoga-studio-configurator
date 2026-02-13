@@ -1,6 +1,14 @@
 import { useConfiguratorStore } from '@care/configurator'
 import { allCopyVi, allCopyEn } from '@care/copy-content'
 
+/** Strip all HTML tags except safe formatting ones */
+const SAFE_TAGS = /^(li|ul|ol|strong|em|b|i|br|span|p)$/i
+function sanitizeHtml(html: string): string {
+  return html.replace(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/gi, (match, tag) => {
+    return SAFE_TAGS.test(tag) ? match : ''
+  })
+}
+
 const placeholderMapVi: Record<string, string> = {
   name: 'Mục mới', title: 'Tiêu đề mới', desc: 'Thêm mô tả tại đây',
   quote: '"Cảm nhận của bạn tại đây"', author: 'Tên', detail: 'Chi tiết',
@@ -65,7 +73,7 @@ export function CopyElement({ id, as: Tag = 'span', className }: CopyElementProp
       data-copy-id={id}
       className={`${className ?? ''} ${copyMode ? 'copy-target' : ''} ${isCopyActive ? 'copy-active' : ''}`}
       onClick={handleClick}
-      dangerouslySetInnerHTML={{ __html: displayText }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText) }}
     />
   )
 }

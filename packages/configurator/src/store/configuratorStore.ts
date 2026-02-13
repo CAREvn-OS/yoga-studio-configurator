@@ -28,6 +28,7 @@ interface ConfiguratorState {
   activeSectionBlob: string | null
   activeRowCategory: string | null
   autoPreview: boolean
+  saveStatus: 'idle' | 'saving' | 'saved' | 'error'
 
   // Tutorial
   tutorialStep: number
@@ -98,8 +99,10 @@ interface ConfiguratorState {
   setActiveSectionBlob: (id: string | null) => void
   setActiveRowCategory: (cat: string | null) => void
   setAutoPreview: (on: boolean) => void
+  setSaveStatus: (status: 'idle' | 'saving' | 'saved' | 'error') => void
   setTutorialStep: (step: number) => void
   completeTutorial: () => void
+  restartTutorial: () => void
   togglePreviewMode: () => void
   setLanguage: (lang: Language) => void
   showToast: (message: string) => void
@@ -117,6 +120,7 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   activeSectionBlob: null,
   activeRowCategory: null,
   autoPreview: false,
+  saveStatus: 'idle' as 'idle' | 'saving' | 'saved' | 'error',
 
   // Tutorial
   tutorialStep: 0,
@@ -428,11 +432,19 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   setAutoPreview: (on) =>
     set({ autoPreview: on }),
 
+  setSaveStatus: (status) =>
+    set({ saveStatus: status }),
+
   setTutorialStep: (step) => set({ tutorialStep: step }),
 
   completeTutorial: () => {
     if (typeof window !== 'undefined') localStorage.setItem('cfg_tutorial_complete', 'true')
     set({ tutorialComplete: true, tutorialStep: 0 })
+  },
+
+  restartTutorial: () => {
+    if (typeof window !== 'undefined') localStorage.removeItem('cfg_tutorial_complete')
+    set({ tutorialComplete: false, tutorialStep: 0 })
   },
 
   togglePreviewMode: () =>
@@ -573,9 +585,22 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
         const unsub = useConfiguratorStore.subscribe(() => {
           if (!ipHash) return
           if (saveTimer) clearTimeout(saveTimer)
+          set({ saveStatus: 'saving' })
           saveTimer = setTimeout(() => {
             const configJson = get().exportConfig()
-            saveConfig(ipHash!, configJson).catch(() => {})
+            saveConfig(ipHash!, configJson)
+              .then(() => {
+                set({ saveStatus: 'saved' })
+                setTimeout(() => {
+                  if (get().saveStatus === 'saved') set({ saveStatus: 'idle' })
+                }, 2000)
+              })
+              .catch(() => {
+                set({ saveStatus: 'error' })
+                setTimeout(() => {
+                  if (get().saveStatus === 'error') set({ saveStatus: 'idle' })
+                }, 3000)
+              })
           }, 3000)
         })
 

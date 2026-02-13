@@ -73,6 +73,11 @@ export function applyTheme(
 
   const root = document.documentElement
 
+  // ── 0. Smooth transition class ────────────────────────────────────────────
+  root.classList.add('theme-transitioning')
+  clearTimeout((applyTheme as any).__tid)
+  ;(applyTheme as any).__tid = setTimeout(() => root.classList.remove('theme-transitioning'), 450)
+
   // ── 1. Colors ──────────────────────────────────────────────────────────────
   for (const key of COLOR_KEYS) {
     const value = (colorOverrides && colorOverrides[key]) || theme.colors[key]

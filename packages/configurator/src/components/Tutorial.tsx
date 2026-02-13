@@ -65,6 +65,16 @@ export function Tutorial() {
     return () => clearTimeout(timer)
   }, [tutorialComplete, tutorialStep, setTutorialStep])
 
+  // Escape key to skip/close tutorial
+  useEffect(() => {
+    if (tutorialComplete || tutorialStep < 1) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { completeTutorial() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [tutorialComplete, tutorialStep, completeTutorial])
+
   // Update spotlight position when step changes
   const updatePosition = useCallback(() => {
     if (tutorialStep < 1 || tutorialStep > STEPS.length) return

@@ -85,6 +85,7 @@ export function MediaSlot({ slotId, type = 'image', aspectRatio, className, chil
               sizes={sizesStr}
               alt={media.name}
               className="media-slot__img"
+              loading={slotId.startsWith('hero') ? 'eager' : 'lazy'}
               style={Object.keys(imgStyle).length > 0 ? imgStyle : undefined}
             />
           ) : (

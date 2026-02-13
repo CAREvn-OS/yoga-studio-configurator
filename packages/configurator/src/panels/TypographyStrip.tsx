@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useConfiguratorStore } from '../store/configuratorStore'
 import { ct } from '../i18n/cfgStrings'
 import type { TypoCategory } from '@care/shared-types'
+
+/* ── Lazy-load non-critical fonts when typography strip mounts ── */
+let fontsInjected = false
+function injectExtraFonts() {
+  if (fontsInjected) return
+  fontsInjected = true
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Poppins:wght@300;400;500&family=Raleway:wght@300;400;500&family=Bitter:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap'
+  document.head.appendChild(link)
+}
 
 /* ── Category icon definitions ── */
 const CATEGORIES: { id: TypoCategory; icon: JSX.Element; labelKey: string }[] = [
@@ -53,6 +64,9 @@ export function TypographyStrip() {
   const typoCategorySettings = useConfiguratorStore(s => s.typoCategorySettings)
   const setTypoCategorySetting = useConfiguratorStore(s => s.setTypoCategorySetting)
   const language = useConfiguratorStore(s => s.language)
+
+  // Load extra fonts on first mount of typography mode
+  useEffect(() => { injectExtraFonts() }, [])
 
   if (activeCat) {
     /* ── Sub-strip: inline controls for selected category ── */

@@ -112,6 +112,10 @@ const S: Record<string, Record<Language, string>> = {
   'settings.language': { vi: 'Ngôn ngữ', en: 'Language' },
   'settings.preview': { vi: 'Xem trước', en: 'Preview' },
   'settings.export': { vi: 'Xuất cấu hình', en: 'Export' },
+  'settings.help': { vi: 'Hướng dẫn', en: 'Tutorial' },
+
+  // ── Preview ──
+  'preview.exit': { vi: 'Nhấn để thoát', en: 'Tap to exit' },
 
   // ── Tutorial ──
   'tut.skip': { vi: 'Bỏ qua', en: 'Skip' },

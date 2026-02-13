@@ -234,6 +234,11 @@ body.card-style-outline [class*="card"] {
   box-shadow: none;
 }
 
+/* ===== SMOOTH THEME TRANSITION ===== */
+.theme-transitioning *:not(input):not([class^="cfg-"]) {
+  transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+
 /* ===== HERO SHIFT (room for row menu above hero) ===== */
 .hero-shifted { padding-top: 50px; transition: padding-top 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 
