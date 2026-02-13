@@ -1,16 +1,17 @@
 import type { PanelId } from '@care/shared-types'
 import { useConfiguratorStore } from '../store/configuratorStore'
+import { ct } from '../i18n/cfgStrings'
 
 interface DockButton {
   id: PanelId
-  label: string
+  labelKey: string
   icon: JSX.Element
 }
 
 const BUTTONS: DockButton[] = [
   {
     id: 'theme',
-    label: 'Theme',
+    labelKey: 'dock.theme',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="13.5" cy="6.5" r="2.5" />
@@ -23,7 +24,7 @@ const BUTTONS: DockButton[] = [
   },
   {
     id: 'typography',
-    label: 'Typography',
+    labelKey: 'dock.typography',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="4 7 4 4 20 4 20 7" />
@@ -34,7 +35,7 @@ const BUTTONS: DockButton[] = [
   },
   {
     id: 'vibe',
-    label: 'Vibe',
+    labelKey: 'dock.vibe',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z" />
@@ -43,7 +44,7 @@ const BUTTONS: DockButton[] = [
   },
   {
     id: 'settings',
-    label: 'Settings',
+    labelKey: 'dock.settings',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="3" />
@@ -57,21 +58,25 @@ export function Dock() {
   const dockOpen = useConfiguratorStore(s => s.dockOpen)
   const activePanel = useConfiguratorStore(s => s.activePanel)
   const openPanel = useConfiguratorStore(s => s.openPanel)
+  const language = useConfiguratorStore(s => s.language)
 
   return (
     <div className={`cfg-dock-wrapper ${dockOpen ? 'cfg-dock-wrapper--open' : ''}`}>
       <div className="cfg-dock">
-        {BUTTONS.map(btn => (
-          <button
-            key={btn.id}
-            className={`cfg-dock-btn ${activePanel === btn.id ? 'cfg-dock-btn--active' : ''}`}
-            onClick={() => openPanel(btn.id)}
-            aria-label={btn.label}
-          >
-            {btn.icon}
-            <span className="cfg-tooltip">{btn.label}</span>
-          </button>
-        ))}
+        {BUTTONS.map(btn => {
+          const label = ct(language, btn.labelKey)
+          return (
+            <button
+              key={btn.id}
+              className={`cfg-dock-btn ${activePanel === btn.id ? 'cfg-dock-btn--active' : ''}`}
+              onClick={() => openPanel(btn.id)}
+              aria-label={label}
+            >
+              {btn.icon}
+              <span className="cfg-tooltip">{label}</span>
+            </button>
+          )
+        })}
       </div>
     </div>
   )

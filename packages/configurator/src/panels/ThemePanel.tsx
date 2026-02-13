@@ -1,16 +1,17 @@
 import { useState, useMemo, useRef } from 'react'
 import { themes, applyTheme } from '@care/theme-engine'
 import { useConfiguratorStore } from '../store/configuratorStore'
+import { ct } from '../i18n/cfgStrings'
 import type { ThemeDef, ButtonStyle, CardStyle, GradientType } from '@care/shared-types'
 
-const EDITABLE_COLORS: { role: string; label: string; colorKey: string }[] = [
-  { role: 'background', label: 'Background', colorKey: 'cream' },
-  { role: 'card', label: 'Card', colorKey: 'linen' },
-  { role: 'section', label: 'Section', colorKey: 'sectionDark' },
-  { role: 'accent', label: 'Accent', colorKey: 'accent' },
+const EDITABLE_COLORS: { role: string; labelKey: string; colorKey: string }[] = [
+  { role: 'background', labelKey: 'color.background', colorKey: 'cream' },
+  { role: 'card', labelKey: 'color.card', colorKey: 'linen' },
+  { role: 'section', labelKey: 'color.section', colorKey: 'sectionDark' },
+  { role: 'accent', labelKey: 'color.accent', colorKey: 'accent' },
 ]
 
-/* Style constants exported for SectionPopover reuse */
+/* Style constants exported for SectionRowMenu reuse */
 export const BUTTON_STYLES: { id: ButtonStyle; label: string }[] = [
   { id: 'rounded', label: 'Rounded' },
   { id: 'sharp', label: 'Sharp' },
@@ -32,11 +33,11 @@ export const GRADIENT_TYPES: { id: GradientType; label: string }[] = [
   { id: 'subtle', label: 'Subtle' },
 ]
 
-const THEME_CATEGORIES: { id: string; label: string }[] = [
-  { id: 'light', label: 'Light' },
-  { id: 'dark', label: 'Dark' },
-  { id: 'warm', label: 'Warm' },
-  { id: 'cool', label: 'Cool' },
+const THEME_CATEGORIES: { id: string; labelKey: string }[] = [
+  { id: 'light', labelKey: 'theme.catLight' },
+  { id: 'dark', labelKey: 'theme.catDark' },
+  { id: 'warm', labelKey: 'theme.catWarm' },
+  { id: 'cool', labelKey: 'theme.catCool' },
 ]
 
 export function ThemePanel() {
@@ -51,6 +52,7 @@ export function ThemePanel() {
   const logoScale = useConfiguratorStore(s => s.logoScale)
   const setLogoScale = useConfiguratorStore(s => s.setLogoScale)
   const logoNaturalWidth = useConfiguratorStore(s => s.logoNaturalWidth)
+  const language = useConfiguratorStore(s => s.language)
 
   const [stylizeExpanded, setStylizeExpanded] = useState(false)
   const logoInputRef = useRef<HTMLInputElement>(null)
@@ -97,13 +99,13 @@ export function ThemePanel() {
     <div className="cfg-theme-cascade">
       {/* 1. Logo upload (top) */}
       <div style={{ marginBottom: 12 }}>
-        <div className="cfg-layout-group__label">Logo</div>
+        <div className="cfg-layout-group__label">{ct(language, 'theme.logo')}</div>
         <input ref={logoInputRef} type="file" accept="image/*" onChange={handleLogoFile} hidden />
         {logoUrl ? (
           <div className="cfg-logo-preview">
             <img src={logoUrl} alt="Logo" className="cfg-logo-preview__img" />
             <div className="cfg-typo-level" style={{ marginTop: 6 }}>
-              <label className="cfg-typo-level__label">Logo Size</label>
+              <label className="cfg-typo-level__label">{ct(language, 'theme.logoSize')}</label>
               <div className="cfg-typo-weight-slider">
                 <span className="cfg-typo-weight-slider__value">{logoScale}px</span>
                 <input
@@ -116,13 +118,13 @@ export function ThemePanel() {
                   className="cfg-vibe-slider cfg-vibe-slider--sm"
                 />
                 <div className="cfg-typo-weight-slider__labels">
-                  <span>Small</span>
-                  <span>Large</span>
+                  <span>{ct(language, 'theme.small')}</span>
+                  <span>{ct(language, 'theme.large')}</span>
                 </div>
               </div>
             </div>
             <button className="cfg-colors-reset" onClick={clearLogoUpload}>
-              Remove Logo
+              {ct(language, 'theme.removeLogo')}
             </button>
           </div>
         ) : (
@@ -135,7 +137,7 @@ export function ThemePanel() {
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            Upload Logo
+            {ct(language, 'theme.uploadLogo')}
           </button>
         )}
       </div>
@@ -147,11 +149,11 @@ export function ThemePanel() {
           onClick={() => setStylizeExpanded(!stylizeExpanded)}
         >
           <div className="cfg-typo-cat__info">
-            <span className="cfg-typo-cat__name">Colors</span>
-            <span className="cfg-typo-cat__desc">Background, card, section & accent</span>
+            <span className="cfg-typo-cat__name">{ct(language, 'theme.colors')}</span>
+            <span className="cfg-typo-cat__desc">{ct(language, 'theme.colorsDesc')}</span>
           </div>
           {hasColorOverrides && (
-            <span className="cfg-typo-cat__badge">Custom</span>
+            <span className="cfg-typo-cat__badge">{ct(language, 'theme.custom')}</span>
           )}
           <svg
             className="cfg-typo-cat__chevron"
@@ -170,11 +172,11 @@ export function ThemePanel() {
         {stylizeExpanded && (
           <div className="cfg-typo-cat__body">
             <div className="cfg-theme-colors-inline">
-              {EDITABLE_COLORS.map(({ role, label, colorKey }) => {
+              {EDITABLE_COLORS.map(({ role, labelKey, colorKey }) => {
                 const value = getColorValue(colorKey)
                 return (
                   <div key={role} className="cfg-theme-color-row">
-                    <span className="cfg-theme-color-row__label">{label}</span>
+                    <span className="cfg-theme-color-row__label">{ct(language, labelKey)}</span>
                     <div className="cfg-theme-color-row__controls">
                       <input
                         type="color"
@@ -191,7 +193,7 @@ export function ThemePanel() {
 
             {hasColorOverrides && (
               <button className="cfg-colors-reset" style={{ marginTop: 8 }} onClick={clearColorOverrides}>
-                Reset Colors
+                {ct(language, 'theme.resetColors')}
               </button>
             )}
           </div>
@@ -205,7 +207,7 @@ export function ThemePanel() {
           if (!catThemes || catThemes.length === 0) return null
           return (
             <div key={cat.id}>
-              <div className="cfg-theme-category-label">{cat.label}</div>
+              <div className="cfg-theme-category-label">{ct(language, cat.labelKey)}</div>
               {catThemes.map(theme => (
                 <button
                   key={theme.id}

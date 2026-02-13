@@ -26,6 +26,11 @@ interface ConfiguratorState {
   copyMode: boolean
   activeCopyElement: string | null
   activeSectionBlob: string | null
+  activeRowCategory: string | null
+
+  // Tutorial
+  tutorialStep: number
+  tutorialComplete: boolean
 
   // Toast
   toastMessage: string | null
@@ -93,6 +98,9 @@ interface ConfiguratorState {
   setCardStyle: (style: CardStyle) => void
   setGradientSettings: (settings: Partial<GradientSettings>) => void
   setActiveSectionBlob: (id: string | null) => void
+  setActiveRowCategory: (cat: string | null) => void
+  setTutorialStep: (step: number) => void
+  completeTutorial: () => void
   togglePreviewMode: () => void
   setLanguage: (lang: Language) => void
   showToast: (message: string) => void
@@ -108,6 +116,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   copyMode: true,
   activeCopyElement: null,
   activeSectionBlob: null,
+  activeRowCategory: null,
+
+  // Tutorial
+  tutorialStep: 0,
+  tutorialComplete: typeof window !== 'undefined' ? localStorage.getItem('cfg_tutorial_complete') === 'true' : false,
 
   // Toast
   toastMessage: null,
@@ -401,7 +414,17 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     })),
 
   setActiveSectionBlob: (id) =>
-    set({ activeSectionBlob: id }),
+    set({ activeSectionBlob: id, activeRowCategory: null }),
+
+  setActiveRowCategory: (cat) =>
+    set({ activeRowCategory: cat }),
+
+  setTutorialStep: (step) => set({ tutorialStep: step }),
+
+  completeTutorial: () => {
+    if (typeof window !== 'undefined') localStorage.setItem('cfg_tutorial_complete', 'true')
+    set({ tutorialComplete: true, tutorialStep: 0 })
+  },
 
   togglePreviewMode: () =>
     set(s => {
